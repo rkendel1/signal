@@ -1,6 +1,9 @@
 import type {
 	Condition, ConditionTrace, CriteriaDefinition, CriteriaEvaluator, EvaluationResult, ExtractedField, Interpretation
 } from '../contracts/types.ts';
+import type { PageRepresentation } from '../page/types.ts';
+import { evaluateEntityCondition, validateEntityCondition } from '../page/query.ts';
+import { canonicalJson } from './canonical.ts';
 
 /**
  * Deterministic criteria evaluation. Pure function of
@@ -55,6 +58,9 @@ export function validateCondition(c: Condition, depth = 0, count = { n: 0 }): vo
 	} else if ('text' in c) {
 		if (c.text.matches) new RegExp(c.text.matches, c.text.flags);
 		if (!c.text.contains && !c.text.matches && !c.text.fuzzy) throw new Error('text condition needs contains, matches or fuzzy');
+	} else if ('entity' in c) {
+		if (!c.entity || typeof c.entity !== 'object') throw new Error('entity condition needs an object');
+		validateEntityCondition(c.entity);
 	} else if (!('signal' in c) && !('content' in c)) throw new Error(`Unknown condition: ${JSON.stringify(c)}`);
 }
 
@@ -63,7 +69,7 @@ export class DeterministicEvaluator implements CriteriaEvaluator {
 		current: Interpretation,
 		previous: Interpretation | undefined,
 		criteria: CriteriaDefinition,
-		ctx: { now: string; normalizedText: string; contentChanged: boolean | undefined }
+		ctx: { now: string; normalizedText: string; contentChanged: boolean | undefined; page?: PageRepresentation; previousPage?: PageRepresentation }
 	): EvaluationResult {
 		validateCondition(criteria.condition);
 		const cur = fieldMap(current);
@@ -150,6 +156,13 @@ export class DeterministicEvaluator implements CriteriaEvaluator {
 				trace.push({ path: `${path}.text`, op: 'text', expected: c.text, actual: actual ?? null, result: r });
 				if (r) matchedValues[`text:${JSON.stringify(c.text)}`] = actual ?? null;
 				return r;
+			}
+			if ('entity' in c) {
+				const r = evaluateEntityCondition(c.entity, ctx.page, ctx.previousPage);
+				const shown = r.matches.slice(0, 20).map((m) => ({ id: m.id, type: m.type, name: m.name, values: m.values, ...(m.previous ? { previous: m.previous } : {}), evidenceRefs: m.evidenceRefs }));
+				trace.push({ path: `${path}.entity`, op: 'entity', expected: c.entity, actual: shown, result: r.matched, note: r.note ?? `${r.matches.length} of ${r.candidates} candidate entities matched` });
+				if (r.matched) matchedValues[`entity:${canonicalJson(c.entity)}`] = r.matches.map((m) => ({ id: m.id, values: m.values })).sort((a, b) => a.id.localeCompare(b.id));
+				return r.matched;
 			}
 			if ('signal' in c) {
 				const hits = current.signals.filter((s) =>

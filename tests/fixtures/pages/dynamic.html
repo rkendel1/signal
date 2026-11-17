@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><title>Flash deals</title></head><body>
+<h1>Flash deals</h1>
+<ul id="deals"><li class="loading">Loading deals…</li></ul>
+<script>
+  const deals = [["Trail Stove", "$59.00"], ["Titanium Mug", "$24.50"], ["Water Filter", "$34.99"]];
+  setTimeout(() => {
+    const ul = document.getElementById('deals');
+    ul.innerHTML = '';
+    for (const [name, price] of deals) {
+      const li = document.createElement('li'); li.className = 'deal';
+      li.innerHTML = '<h3></h3><span class="price"></span><p class="stock">In stock</p>';
+      li.querySelector('h3').textContent = name; li.querySelector('.price').textContent = price;
+      ul.appendChild(li);
+    }
+  }, 50);
+</script>
+</body></html>

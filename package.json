@@ -5,7 +5,9 @@
   "description": "Signal: observe authorized sources, interpret signals (incl. the Ghostpost codec), evaluate declarative criteria, record evidence-backed events, and alert. A FeltKit application.",
   "type": "module",
   "license": "MIT",
-  "engines": { "node": ">=22.18" },
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
     "dev": "feltkit dev",
     "build": "feltkit build",
@@ -19,7 +21,8 @@
     "bench": "node scripts/bench.ts"
   },
   "dependencies": {
-    "@feltdb/feltkit": "0.3.31"
+    "@feltdb/feltkit": "0.3.31",
+    "cheerio": "1.2.0"
   },
   "devDependencies": {
     "@types/node": "22.19.1",

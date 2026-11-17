@@ -1,0 +1,220 @@
+{
+  "node": "v22.23.4",
+  "fixtures": {
+    "article": {
+      "htmlBytes": 643,
+      "ms": {
+        "p50": 1.13,
+        "p95": 3.31
+      },
+      "representationBytes": 6600,
+      "entities": 3,
+      "relationships": 2,
+      "collections": 0,
+      "evidence": 10,
+      "truncated": false,
+      "byClassification": {
+        "declared": 0,
+        "semantic": 1,
+        "inferred": 2,
+        "unknown": 0
+      }
+    },
+    "discussion": {
+      "htmlBytes": 1058,
+      "ms": {
+        "p50": 1.59,
+        "p95": 3.32
+      },
+      "representationBytes": 13304,
+      "entities": 9,
+      "relationships": 8,
+      "collections": 2,
+      "evidence": 21,
+      "truncated": false,
+      "byClassification": {
+        "declared": 0,
+        "semantic": 1,
+        "inferred": 8,
+        "unknown": 0
+      }
+    },
+    "dynamic": {
+      "htmlBytes": 729,
+      "ms": {
+        "p50": 0.41,
+        "p95": 1.16
+      },
+      "representationBytes": 2375,
+      "entities": 1,
+      "relationships": 0,
+      "collections": 0,
+      "evidence": 5,
+      "truncated": false,
+      "byClassification": {
+        "declared": 0,
+        "semantic": 1,
+        "inferred": 0,
+        "unknown": 0
+      }
+    },
+    "job": {
+      "htmlBytes": 890,
+      "ms": {
+        "p50": 1.35,
+        "p95": 2.65
+      },
+      "representationBytes": 11765,
+      "entities": 4,
+      "relationships": 4,
+      "collections": 1,
+      "evidence": 21,
+      "truncated": false,
+      "byClassification": {
+        "declared": 0,
+        "semantic": 1,
+        "inferred": 3,
+        "unknown": 0
+      }
+    },
+    "jsonld-conflict": {
+      "htmlBytes": 713,
+      "ms": {
+        "p50": 0.77,
+        "p95": 2.15
+      },
+      "representationBytes": 11819,
+      "entities": 7,
+      "relationships": 7,
+      "collections": 0,
+      "evidence": 22,
+      "truncated": false,
+      "byClassification": {
+        "declared": 5,
+        "semantic": 1,
+        "inferred": 1,
+        "unknown": 0
+      }
+    },
+    "products": {
+      "htmlBytes": 1399,
+      "ms": {
+        "p50": 1.44,
+        "p95": 2.65
+      },
+      "representationBytes": 16121,
+      "entities": 6,
+      "relationships": 6,
+      "collections": 1,
+      "evidence": 29,
+      "truncated": false,
+      "byClassification": {
+        "declared": 0,
+        "semantic": 1,
+        "inferred": 5,
+        "unknown": 0
+      }
+    },
+    "table": {
+      "htmlBytes": 567,
+      "ms": {
+        "p50": 0.73,
+        "p95": 2.32
+      },
+      "representationBytes": 9864,
+      "entities": 4,
+      "relationships": 3,
+      "collections": 1,
+      "evidence": 20,
+      "truncated": false,
+      "byClassification": {
+        "declared": 0,
+        "semantic": 4,
+        "inferred": 0,
+        "unknown": 0
+      }
+    },
+    "unknown": {
+      "htmlBytes": 605,
+      "ms": {
+        "p50": 0.82,
+        "p95": 1.41
+      },
+      "representationBytes": 8416,
+      "entities": 4,
+      "relationships": 3,
+      "collections": 1,
+      "evidence": 18,
+      "truncated": false,
+      "byClassification": {
+        "declared": 0,
+        "semantic": 1,
+        "inferred": 0,
+        "unknown": 3
+      }
+    }
+  },
+  "synthetic_100_products": {
+    "htmlBytes": 18326,
+    "ms": {
+      "p50": 20.26,
+      "p95": 24.65
+    },
+    "representationBytes": 350873,
+    "entities": 121,
+    "relationships": 200,
+    "collections": 1,
+    "evidence": 705,
+    "truncated": false,
+    "byClassification": {
+      "declared": 0,
+      "semantic": 1,
+      "inferred": 120,
+      "unknown": 0
+    },
+    "entityCriteriaMs": 1.49,
+    "matches": 2
+  },
+  "synthetic_500_products": {
+    "htmlBytes": 93156,
+    "ms": {
+      "p50": 93.37,
+      "p95": 102.47
+    },
+    "representationBytes": 1690515,
+    "entities": 521,
+    "relationships": 1000,
+    "collections": 1,
+    "evidence": 3505,
+    "truncated": false,
+    "byClassification": {
+      "declared": 0,
+      "semantic": 1,
+      "inferred": 520,
+      "unknown": 0
+    },
+    "entityCriteriaMs": 1.85,
+    "matches": 4
+  },
+  "synthetic_1000_products": {
+    "htmlBytes": 186626,
+    "ms": {
+      "p50": 213.54,
+      "p95": 246.08
+    },
+    "representationBytes": 3364803,
+    "entities": 1021,
+    "relationships": 2000,
+    "collections": 1,
+    "evidence": 7005,
+    "truncated": false,
+    "byClassification": {
+      "declared": 0,
+      "semantic": 1,
+      "inferred": 1020,
+      "unknown": 0
+    },
+    "entityCriteriaMs": 5.71,
+    "matches": 8
+  }
+}

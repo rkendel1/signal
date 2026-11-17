@@ -15,6 +15,9 @@
  *   Acknowledgement — a person or app acknowledged an event
  */
 
+import type { EntityCondition } from '../page/query.ts';
+import type { PageRepresentation } from '../page/types.ts';
+
 export type Iso8601 = string;
 
 export interface Principal {
@@ -163,6 +166,8 @@ export interface Interpretation {
 	extractionVersion: string; // sha of the rules used
 	fields: ExtractedField[];
 	signals: DetectedSignal[];
+	/** The universal page representation built from this observation (HTML content only). */
+	page?: { ref: string; revision: string; entities: number; schema: string };
 }
 
 // ---------------------------------------------------------------------------
@@ -182,7 +187,9 @@ export type Condition =
 	| { field: string; op: FieldOp; value?: unknown; caseSensitive?: boolean }
 	| { text: { contains?: string; matches?: string; flags?: string; fuzzy?: { term: string; maxDistance: number } } }
 	| { signal: { codec?: string; kind?: string; payloadContains?: string } }
-	| { content: 'changed' | 'unchanged' };
+	| { content: 'changed' | 'unchanged' }
+	/** Evaluated against the observation's signal.page/v1 representation (lib/page/query.ts). */
+	| { entity: EntityCondition };
 
 export interface CriteriaDefinition {
 	schema: 'signal.criteria/v1';
@@ -223,7 +230,7 @@ export interface CriteriaEvaluator {
 		current: Interpretation,
 		previous: Interpretation | undefined,
 		criteria: CriteriaDefinition,
-		ctx: { now: Iso8601; normalizedText: string; contentChanged: boolean | undefined }
+		ctx: { now: Iso8601; normalizedText: string; contentChanged: boolean | undefined; page?: PageRepresentation; previousPage?: PageRepresentation }
 	): EvaluationResult;
 }
 
@@ -294,7 +301,7 @@ export interface MatchedEvent {
 	matched: ConditionTrace[];
 	/** Relevant extracted content (never a replacement for evidence). */
 	excerpts: Array<{ field?: string; text: string }>;
-	evidence: { observationRef: string; normalizedTextRef: string; contentHash: string };
+	evidence: { observationRef: string; normalizedTextRef: string; contentHash: string; pageRef?: string; pageRevision?: string };
 	provenance: Provenance;
 	/** Deterministic interpretation ⇒ 1. */
 	confidence: number;

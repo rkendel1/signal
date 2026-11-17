@@ -4,6 +4,11 @@ Each entry is **missing or limited functionality**, with evidence. *Platform* me
 
 Severity: **High** blocks a stated outcome · **Medium** limits a supported use · **Low** is a quality or completeness gap.
 
+**Still open after M5** (unchanged; not solved by page intelligence):
+- **G-PLAT-1:** no scheduled fetching.
+- **G-OVL-1:** no overlay host for third-party sites.
+- **G-PLAT-3:** no JSON field type. The page representation is stored as canonical JSON in Files, with an index row in FeltDB.
+
 ## Platform gaps
 
 | ID | Gap | Severity | Evidence | Proposed resolution |
@@ -34,3 +39,16 @@ Severity: **High** blocks a stated outcome · **Medium** limits a supported use 
 | G-API-1 | **Not exposed as AppPort capabilities:** `observe` (actions cannot be capabilities), `evidence`, `acknowledge`, `history` | Low | FeltKit `app.action` docs | Expose read-only ones with `returns` schemas. For `observe`, a capability mutation that enqueues once G-PLAT-1 lands |
 | G-OBS-1 | **Site-specific DOM reconstruction** (X.com, Facebook splits) is simplified to "nearest block textContent". Not verified on those sites | Low | EXTRACTION_AUDIT | Port the userscript's X.com adapter when the extension host exists |
 | G-TEST-1 | **Not measured:** real-site behaviour, memory under long overlay sessions, webhook latency | Low | ACCEPTANCE_REPORT | – |
+
+## Page intelligence gaps (M5)
+
+| ID | Gap | Severity | Evidence | Proposed resolution |
+|---|---|---|---|---|
+| G-PAGE-1 | **No server-side rendering.** A static fetch sees only server-sent HTML. Dynamic content needs a browser-rendered snapshot pushed by a caller (`pages:push`, `monitors:push`) | Medium | `tests/pages.test.ts` "dynamic content": 0 products from the static fetch, 3 from the Chromium snapshot | A rendering component (FeltKit `components`, `network: egress`, headless Chromium) that pushes snapshots. Needs G-PLAT-1 for scheduling. Not built |
+| G-PAGE-2 | **Representation size is about 10–18× the HTML** (3.4 MB for a 1,000-product page), mostly per-value evidence | Medium | `docs/bench-pages.json` | Options: deduplicate evidence text, cap evidence per entity, or store evidence separately. Changing it trades traceability for size; a decision is needed |
+| G-PAGE-3 | **Heuristics are English-leaning:** labels, availability phrases, class hints, relative dates | Medium | `lib/page/vocab.ts`, `values.ts` | Add vocabulary rows per language (tables, not code) |
+| G-PAGE-4 | **Real-site quality not measured.** 8 synthetic fixtures; no precision/recall on live pages | Medium | ACCEPTANCE_REPORT | A labelled corpus of saved real pages and a measured scorecard per extractor version |
+| G-PAGE-5 | **No reviewable mapping proposals.** Unknown structures are retained, but there is no workflow to propose and accept a new mapping (human- or AI-suggested) | Low | – | A `mappings` collection: proposals → explicit acceptance → deterministic rule tables. Models may propose, never decide |
+| G-PAGE-6 | **Identity stability depends on the key.** Locator-keyed entities (no name, url or sku) get new ids when the DOM moves, so `changed`/`added` see them as new | Low | PAGE_INTELLIGENCE §2 Identity | Better keys from collection position + content fingerprint. Documented today |
+| G-PAGE-7 | **Partial structural coverage:** no shadow DOM in static HTML (cheerio sees none; the overlay does), no iframes, simple RDFa only (no `prefix`/CURIE expansion beyond stripping), no PDF/image/OCR content | Low | `lib/page/extract.ts` | Extend per need |
+| G-PAGE-8 | **Revision depends on observation time for relative dates.** Pages showing "3 hours ago" get a new revision every observation, because the inferred absolute time changes | Low | `values.ts parseDate` | Exclude inferred relative values from the revision hash, or keep the raw string only |

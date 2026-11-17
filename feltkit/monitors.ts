@@ -9,7 +9,7 @@ import { newId, sha256 } from "../lib/core/canonical.ts";
 import { runCycle } from "../lib/core/cycle.ts";
 import { normalizeContent } from "../lib/interpret/normalize.ts";
 import { HttpSource } from "../lib/sources/sources.ts";
-import { TENANT, json, netPolicy, parse, parseCriteria, requireFound, signalDecoders } from "./_shared.js";
+import { TENANT, isHtml, json, netPolicy, parse, parseCriteria, readPage, requireFound, signalDecoders, storeObservation, storePage } from "./_shared.js";
 
 const MAX_BODY = 5_000_000;
 
@@ -88,7 +88,9 @@ export const push = app.mutation({
   handler: async (ctx, { monitorId, content }) => {
     const m = requireFound(await ctx.db.get(monitors, monitorId), "That monitor");
     const src = requireFound(await ctx.db.get(sources, m.sourceId), "Its source");
-    if (/^https?:/i.test(src.locator)) fail("FAILED_PRECONDITION", "HTTP sources are observed by Signal (monitors:observe), not pushed.");
+    // http_page sources are fetched by Signal itself; dom/text/json sources carry content the caller observed
+    // (a dom source's locator may well be the page URL it was rendered from).
+    if (src.type === "http_page") fail("FAILED_PRECONDITION", "HTTP sources are observed by Signal (monitors:observe), not pushed.");
     const bytes = new TextEncoder().encode(content);
     const obs: Observation = {
       schema: "signal.observation/v1", observationId: newId("obs"), tenantId: TENANT, sourceId: src.id, observedAt: new Date().toISOString(),
@@ -140,19 +142,7 @@ async function recordObservation(ctx: Ctx, monitorId: string, obs: Observation, 
   const owner = m.ownerId;
 
   // Evidence first: the exact bytes observed, content-addressed by hash in metadata.
-  if (obs.status === "ok" && body !== undefined) {
-    const f = await ctx.services.files.upload({
-      name: `${obs.observationId}.raw`, contentType: obs.contentType ?? "text/plain", content: body,
-      metadata: { kind: "signal.evidence.raw", observationId: obs.observationId, sha256: obs.contentHash! },
-    });
-    obs.evidenceRef = `files:${f.id}`;
-  }
-  await ctx.db.insert(observations, {
-    observationId: obs.observationId, sourceId: obs.sourceId, monitorId, observedAt: obs.observedAt, status: obs.status,
-    ...(obs.evidenceRef ? { evidenceRef: obs.evidenceRef } : {}), ...(obs.contentHash ? { contentHash: obs.contentHash } : {}),
-    ...(obs.contentType ? { contentType: obs.contentType } : {}), ...(obs.byteLength !== undefined ? { byteLength: obs.byteLength } : {}),
-    provenance: json(obs.provenance), ...(obs.error ? { error: json(obs.error) } : {}), ownerId: owner,
-  });
+  await storeObservation(ctx as never, obs, body, owner, monitorId);
   if (obs.status !== "ok" || body === undefined) {
     return { outcome: `observation_${obs.status}`, eventId: null, observationId: obs.observationId };
   }
@@ -165,12 +155,17 @@ async function recordObservation(ctx: Ctx, monitorId: string, obs: Observation, 
     metadata: { kind: "signal.evidence.normalized", observationId: obs.observationId, sha256: sha256(normalizedText) },
   });
   const [prevRec] = m.lastInterpretationId ? await ctx.db.find(interpretations, { interpretationId: m.lastInterpretationId }) : [];
+  const previousInterpretation = prevRec ? parse<Interpretation>(prevRec.body) : undefined;
+  // Universal page representation (HTML only): what exists on the page, before anyone decides what matters.
+  const page = isHtml(obs.contentType) ? await storePage(ctx as never, obs, body, { id: src.id, locator: src.locator }, owner) : undefined;
+  const previousPage = previousInterpretation?.page ? await readPage(ctx as never, previousInterpretation.page.ref) : undefined;
   const now = new Date().toISOString();
   const out = runCycle({
     tenantId: TENANT, monitor: { id: monitorId, ownerId: owner }, source: { id: src.id, locator: src.locator }, criteria: crit,
     observation: obs, rawBody: body, normalizedText, normalizedTextRef: `files:${nf.id}`,
     state: { matched: m.matched, lastDedupKey: m.lastDedupKey, lastEventAt: m.lastEventAt, lastInterpretationId: m.lastInterpretationId, lastContentHash: m.lastContentHash },
-    previous: prevRec ? parse<Interpretation>(prevRec.body) : undefined, decoders: signalDecoders(), now,
+    previous: previousInterpretation, decoders: signalDecoders(), now,
+    ...(page ? { page: { representation: page.representation, ref: page.ref } } : {}), ...(previousPage ? { previousPage } : {}),
   });
 
   await ctx.db.insert(interpretations, { interpretationId: out.interpretation.interpretationId, observationId: obs.observationId, body: json(out.interpretation), ownerId: owner });

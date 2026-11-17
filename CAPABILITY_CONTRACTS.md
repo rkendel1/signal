@@ -18,7 +18,7 @@ A signal is not an alert, a detection is not an interpretation, and an interpret
 | # | Fact | Collection (`feltkit/app.ts`) | Identity | Written |
 |---|---|---|---|---|
 | 1 | We looked at a source | `signal_observations` + evidence in **Files** (`files:<id>`, metadata `sha256`) | `obs_…` (random, unique) | Once |
-| 2 | We extracted / detected something | `signal_interpretations` | `int_` + hash(observation, rules, decoders) (unique) | Once |
+| 2 | We extracted / detected something | `signal_interpretations` (+ `signal_pages` index; the `signal.page/v1` JSON in **Files**) | `int_` + hash(observation, rules, decoders) (unique) | Once |
 | 3 | Criteria were evaluated | `signal_evaluations` (full trace, `outcome`, per-monitor `seq`) | `evl_` + hash(monitor, observation, criteria id+version) (unique) | Once, **including non-matches and suppressions** |
 | 4 | Something mattered | `signal_events` | `evt_` + the same basis (unique). Callers address events by FeltKit record id | Once |
 | 5 | People were told | AppPort `notifications` + `notification_deliveries` | idempotency key `signal.event:<evt>:<recipient>` | By AppPort, after commit |
@@ -83,6 +83,7 @@ Condition =
   | {text: {contains? | matches?(+flags) | fuzzy?: {term, maxDistance}}}        // over normalized text
   | {signal: {codec?, kind?, payloadContains?}}                                 // decoded embedded signals
   | {content: 'changed'|'unchanged'}                                            // whole-content hash change
+  | {entity: EntityCondition}                                                   // over signal.page/v1 (M5, §9)
 ```
 
 Semantics, all implemented in `core/evaluate.ts` and tested:
@@ -147,8 +148,12 @@ What Signal guarantees is that the event and its evidence are durable *before* a
 | `events:evidence` | query | `signal.events.read` | – | raw + normalized evidence; hash re-verified on read |
 | `events:acknowledge` | mutation | `signal.events.ack` | – | |
 | `events:inbox` | query | `notifications.read` | – | the caller's Signal notifications |
+| `pages:inspect` | **action** | `signal.pages.inspect` | – | fetch an http(s) source and record its `signal.page/v1` (no monitor or criteria) |
+| `pages:push` | mutation | `signal.pages.inspect` | `signal.pages.push` | `dom` sources: a rendered HTML snapshot |
+| `pages:record` | mutation | `signal.pages.inspect` | – | the atomic record step of `inspect` (hash-checked) |
+| `pages:get` / `pages:list` | query | `signal.pages.read` | – | full representation / summaries; ownership via `pageId`/`sourceId` |
 
-**Ownership** is enforced by the app's `authorize` hook for every function that takes `sourceId`, `monitorId` or `eventId`, and inside handlers for criteria. Admins are exempt. Roles (`feltkit/app.ts`): `member`, `viewer`, `agent`, `admin`.
+**Ownership** is enforced by the app's `authorize` hook for every function that takes `sourceId`, `monitorId`, `eventId` or `pageId`, and inside handlers for criteria. Admins are exempt. Roles (`feltkit/app.ts`): `member`, `viewer`, `agent`, `admin`.
 
 ## 8. Codec contract — `ghostpost-unicode/v1` wire format
 
@@ -163,3 +168,38 @@ other     = unmarked legacy payloads (pre-Dec-2025): raw DEFLATE or UTF-8
 ```
 
 Format v1 has no version byte and no integrity check. A successor format (v2: magic, version, CRC32) is proposed in `EXTRACTION_PLAN.md`. v1 decoding must remain supported indefinitely, because content already published cannot be re-encoded.
+
+## 9. Page representation and entity criteria (M5)
+
+**Record shape:** `signal.page/v1`, specified in [`PAGE_INTELLIGENCE.md`](PAGE_INTELLIGENCE.md), with normative types in [`lib/page/types.ts`](lib/page/types.ts). It is produced by `extractPage(input)` (`lib/page/extract.ts`), a pure function of `(html, locator, baseUrl, observationId, contentHash, contentType, observedAt, decoders, limits)`.
+
+**Where it lives:**
+- Built for every `ok` HTML observation, by `monitors:record`/`push` and by `pages:record`/`push`.
+- Stored as canonical JSON in Files (`metadata.kind = "signal.page"`, `revision`, `observationId`).
+- Indexed in `signal_pages` (`observationId` unique, `revision`, counts, `truncated`).
+- Referenced from the interpretation (`interpretation.page = {ref, revision, entities, schema}`) and from events (`evidence.pageRef`, `evidence.pageRevision`).
+
+**Schema changes from M2:**
+- `signal_observations.monitorId` is optional, because `pages:inspect` observations have no monitor.
+- `Condition` gains `{entity}`.
+- `CriteriaEvaluator` context gains `page` and `previousPage`.
+
+Existing criteria and records are unchanged; the 28 M2 tests pass unmodified.
+
+**`EntityCondition`** (`lib/page/query.ts`):
+
+| Field | Meaning |
+|---|---|
+| `type` | Entity type, or a list of types |
+| `where[]` | `{attr, op, value?, caseSensitive?, currency?}`. `attr` may be a dotted relationship path (`hiringOrganization.name`). `op` adds `between` / `overlaps` to the field operators |
+| `related[]` | `{rel, direction?: 'out' \| 'in', entity?: EntitySpec}` |
+| `inCollection` | `{kind?, itemType?}` |
+| `state` | `present` (default) \| `added` \| `removed`, compared by entity id with the previous observation |
+| `quantifier` | `any` (default) \| `all` \| `none` |
+| `count` | `{op, value}` |
+
+**Rules:**
+- Aliases are fixed and documented (`ATTRIBUTE_ALIASES`).
+- `null` (ambiguous or absent) values never satisfy comparisons.
+- Change operators need the same entity id in the previous representation; on the first observation they report "baseline".
+- Validation rejects unknown operators, malformed paths, bad ranges and nesting over 3.

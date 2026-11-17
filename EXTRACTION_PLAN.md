@@ -47,12 +47,16 @@ Ghostpost remains the working reference implementation. Nothing in `rkendel1/gho
 
 ## Milestones (prioritized)
 
+The milestones were renumbered when M5 was redefined as Universal Page Intelligence. The previous M5–M7 are now M6, M8 and M9.
+
 | # | Milestone | Outcome | Depends on |
 |---|---|---|---|
 | M1 | **Codec extracted** | Done: wire-compatible, panic-free, strict, tested (Rust 12, TS 9, cross-implementation fixtures) | – |
 | M2 | **Signal Core + FeltKit app** | Done: criteria, evidence, events, AppPort notifications, ownership, overlay; 28 tests | M1 |
-| M3 | **Continuous monitoring** | Due monitors observed on schedule | FeltKit job→action (G-PLAT-1) or an egress component |
+| M3 | **Continuous monitoring** | Due monitors observed on schedule; with M5, scheduled rendering for dynamic pages (G-PAGE-1) | FeltKit job→action (G-PLAT-1) or an egress component |
 | M4 | **Converge with `web-monitor`** | One product. Port web-monitor's five conditions to `signal.criteria/v1` (a mechanical mapping). Reuse its Chrome extension as the overlay host (G-OVL-1) and its local WebLLM compiler to *draft* criteria (G-CRIT-1). Retire its separate condition engine and notification wiring | M2 |
-| M5 | **Hardening** | Tenancy (G-TEN-1), DNS pinning (G-SEC-2), attested observations (G-SEC-1), webhook end-to-end (G-DEL-1), credentialed sources (G-SRC-2) | M2 |
-| M6 | **Codec v2** | Integrity and versioning (G-CODEC-1/2) | M1 |
-| M7 | **Reference resolution** | Authorized, guarded resolver (G-REF-1) | M5 |
+| M5 | **Universal Page Intelligence** | **Done**: `signal.page/v1`; deterministic, site-agnostic extraction (JSON-LD, microdata/RDFa, metadata, semantic HTML/ARIA, repeated structures, typed values); entities, relationships, collections, signals; evidence and provenance for every value; `entity` criteria in the existing evaluator; `pages:inspect/push/get/list`; 27 new tests across 8 unrelated page types (see PAGE_INTELLIGENCE.md) | M2 |
+| M6 | **Hardening** | Tenancy (G-TEN-1), DNS pinning (G-SEC-2), attested observations (G-SEC-1), webhook end-to-end (G-DEL-1), credentialed sources (G-SRC-2) | M2 |
+| M7 | **Page intelligence quality** | Labelled corpus of real pages with a measured scorecard (G-PAGE-4), more languages (G-PAGE-3), size decision (G-PAGE-2), mapping proposals with explicit acceptance (G-PAGE-5) | M5 |
+| M8 | **Codec v2** | Integrity and versioning (G-CODEC-1/2) | M1 |
+| M9 | **Reference resolution** | Authorized, guarded resolver (G-REF-1) | M6 |

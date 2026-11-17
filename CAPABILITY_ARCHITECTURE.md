@@ -31,7 +31,8 @@ Signal is a **FeltKit application** (`npm create feltkit@latest signal`). That d
 
 | Logical part (from the brief) | Where it lives | Owner |
 |---|---|---|
-| **Signal Core**: codecs, detection, normalization, criteria, event generation | `lib/codecs`, `lib/interpret`, `lib/core` (`evaluate.ts`, `cycle.ts`) | Signal. Pure and dependency-free; usable outside FeltKit |
+| **Signal Core**: codecs, detection, normalization, criteria, event generation | `lib/codecs`, `lib/interpret`, `lib/core` (`evaluate.ts`, `cycle.ts`) | Signal. Pure; usable outside FeltKit |
+| **Page Intelligence** (M5): what a page contains, before anyone says what matters | `lib/page` (`extract.ts`, `values.ts`, `vocab.ts`, `query.ts`); `feltkit/pages.ts` | Signal. Deterministic and site-agnostic; one dependency (cheerio, shared with `web-monitor`). See PAGE_INTELLIGENCE.md |
 | **Signal Sources**: browser/DOM, text, JSON, web pages | `lib/sources` (HTTP), `monitors:push` (pushed text/json/dom), overlay (DOM) | Signal |
 | **Signal Runtime**: observation lifecycle, scheduling, state | `feltkit/monitors.ts` (lifecycle + state); scheduling is **not built** (G-PLAT-1) | Signal over FeltKit |
 | **Signal Experience**: overlay, evidence, reveal | `lib/overlay/overlay.js` | Signal (the host extension is not built, G-OVL-1) |
@@ -49,7 +50,8 @@ These are logical boundaries in one deployable application. There are no microse
 2. **Record**: `monitors:record` is a mutation, and everything below happens in one FeltDB transaction.
    - Verify `sha256(body) == observation.contentHash`, so the evidence cannot be swapped between steps.
    - Store the raw bytes and the normalized text in **Files**, with `sha256` metadata.
-   - `runCycle()` (pure) produces the interpretation, the evaluation and, if warranted, an event and the next state.
+   - For HTML, `extractPage()` builds `signal.page/v1`. It is stored in Files and indexed in `signal_pages`, and the previous observation's representation is loaded for change criteria.
+   - `runCycle()` (pure) produces the interpretation (including the page reference), the evaluation and, if warranted, an event and the next state.
    - Insert the observation, interpretation, evaluation (with per-monitor `seq`) and event, and patch the monitor's condition state. A concurrent record for the same monitor conflicts, so it cannot produce a second event from the same prior state (tested).
    - Stage notifications (idempotency key per event and recipient) and the `signal.event` webhook.
 3. **Commit, then deliver.** AppPort performs the staged effects. A failed delivery never touches the event.

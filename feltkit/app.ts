@@ -23,13 +23,13 @@ export const app = feltkit({
     // Members define what they care about and receive alerts. Ownership of each source,
     // criteria and monitor is enforced by `authorize` below, not by the role alone.
     member: [
-      "signal.sources.*", "signal.criteria.*", "signal.monitors.*", "signal.events.*",
+      "signal.sources.*", "signal.criteria.*", "signal.monitors.*", "signal.events.*", "signal.pages.*",
       "files.read", "files.write", "notifications.*", "webhooks.emit", "webhooks.deliver",
     ],
     // Viewers read events and their evidence (their own; see authorize).
-    viewer: ["signal.events.read", "files.read", "notifications.read"],
+    viewer: ["signal.events.read", "signal.pages.read", "files.read", "notifications.read"],
     // Agents may read and run monitors they are delegated, never define or delete them.
-    agent: ["signal.events.read", "signal.monitors.read", "signal.monitors.run", "files.read", "files.write", "notifications.send", "webhooks.emit", "webhooks.deliver"],
+    agent: ["signal.events.read", "signal.pages.read", "signal.monitors.read", "signal.monitors.run", "files.read", "files.write", "notifications.send", "webhooks.emit", "webhooks.deliver"],
     admin: ["signal.*", "webhooks.*", "jobs.*", "schedules.*", "configuration.*", "apikeys.*", "credential.*", "files.*", "notifications.*"],
   },
   auth: { accounts: { roles: ["member"] } },
@@ -63,7 +63,7 @@ export const app = feltkit({
       return !rec || rec.ownerId === principal.id; // missing records are reported NOT_FOUND by the handler
     };
     const checks: Array<[string, unknown]> = [
-      ["signal_sources", a.sourceId], ["signal_monitors", a.monitorId], ["signal_events", a.eventId],
+      ["signal_sources", a.sourceId], ["signal_monitors", a.monitorId], ["signal_events", a.eventId], ["signal_pages", a.pageId],
     ];
     for (const [c, id] of checks) if (!(await owned(c, id))) return { allowed: false, code: "FORBIDDEN", reason: `not the owner (${fn})` };
     return true;
@@ -116,7 +116,7 @@ export const monitors = app.collection("signal_monitors", {
 export const observations = app.collection("signal_observations", {
   observationId: s.string(),
   sourceId: s.string(),
-  monitorId: s.string(),
+  monitorId: s.optional(s.string()), // absent for pages:inspect observations
   observedAt: s.string(),
   status: s.union([s.literal("ok"), s.literal("not_modified"), s.literal("denied"), s.literal("error")]),
   evidenceRef: s.optional(s.string()), // Files id of the exact bytes observed
@@ -159,3 +159,24 @@ export const events = app.collection("signal_events", {
   body: s.string(), // canonical JSON of signal.event/v1
   ownerId: s.string(),
 }, { unique: [["eventId"]], indexes: [{ fields: ["ownerId", "occurredAt"] }, { fields: ["sourceLocator"] }, { fields: ["monitorId"] }] });
+
+/**
+ * Index of signal.page/v1 representations. The representation itself (often tens of KB)
+ * is stored in Files beside the evidence it was derived from; it is a derived projection,
+ * never the authority — the raw observed bytes are.
+ */
+export const pages = app.collection("signal_pages", {
+  observationId: s.string(),
+  sourceId: s.string(),
+  locator: s.string(),
+  observedAt: s.string(),
+  revision: s.string(),
+  extractorVersion: s.string(),
+  pageRef: s.string(), // files:<id> of the canonical JSON representation
+  entities: s.integer(),
+  relationships: s.integer(),
+  collections: s.integer(),
+  signals: s.integer(),
+  truncated: s.boolean(),
+  ownerId: s.string(),
+}, { unique: [["observationId"]], indexes: [{ fields: ["sourceId", "observedAt"] }, { fields: ["ownerId"] }] });

@@ -5,6 +5,10 @@ import { canonicalJson } from "../lib/core/canonical.ts";
 import type { NetPolicy } from "../lib/sources/net-guard.ts";
 import { GhostpostUnicodeDecoder } from "../lib/codecs/ghostpost-unicode.ts";
 import { InvisibleUnicodeDetector } from "../lib/codecs/invisible-unicode.ts";
+import { extractPage } from "../lib/page/extract.ts";
+import type { PageRepresentation } from "../lib/page/types.ts";
+import { observations, pages } from "./app.js";
+
 
 export const TENANT = "default"; // single-tenant app; FeltKit `auth.tenant` would scope this (GAP G-TEN-1)
 
@@ -49,4 +53,56 @@ export function observationFromRecord(r: Record<string, unknown>): Observation {
     byteLength: r.byteLength as number | undefined, provenance: parse(r.provenance as string),
     error: r.error ? parse(r.error as string) : undefined,
   };
+}
+
+// ------------------------------------------------------------------ observations + page representations
+
+
+export const isHtml = (contentType: string | undefined) => /html/i.test(contentType ?? "");
+
+type MutationCtx = {
+  db: { insert: (c: never, v: never) => Promise<string>; find: (c: never, f?: never) => Promise<any[]> };
+  services: { files: { upload: (f: { name: string; contentType: string; content: string; metadata: Record<string, string> }) => Promise<{ id: string }>; read: (id: string) => Promise<{ text: () => string | Promise<string> }> } };
+};
+
+/** Store the exact observed bytes in Files and the observation record. Returns the evidence ref. */
+export async function storeObservation(ctx: MutationCtx, obs: Observation, body: string | undefined, ownerId: string, monitorId?: string): Promise<void> {
+  if (obs.status === "ok" && body !== undefined && !obs.evidenceRef) {
+    const f = await ctx.services.files.upload({
+      name: `${obs.observationId}.raw`, contentType: obs.contentType ?? "text/plain", content: body,
+      metadata: { kind: "signal.evidence.raw", observationId: obs.observationId, sha256: obs.contentHash! },
+    });
+    obs.evidenceRef = `files:${f.id}`;
+  }
+  await ctx.db.insert(observations as never, {
+    observationId: obs.observationId, sourceId: obs.sourceId, ...(monitorId ? { monitorId } : {}), observedAt: obs.observedAt, status: obs.status,
+    ...(obs.evidenceRef ? { evidenceRef: obs.evidenceRef } : {}), ...(obs.contentHash ? { contentHash: obs.contentHash } : {}),
+    ...(obs.contentType ? { contentType: obs.contentType } : {}), ...(obs.byteLength !== undefined ? { byteLength: obs.byteLength } : {}),
+    provenance: json(obs.provenance), ...(obs.error ? { error: json(obs.error) } : {}), ownerId,
+  } as never);
+}
+
+/** Build signal.page/v1 for an HTML observation, store it in Files, and index it. */
+export async function storePage(ctx: MutationCtx, obs: Observation, body: string, source: { id: string; locator: string }, ownerId: string): Promise<{ representation: PageRepresentation; ref: string; recordId: string }> {
+  const baseUrl = obs.provenance.finalUrl ?? (/^https?:/i.test(source.locator) ? source.locator : null);
+  const representation = extractPage({
+    html: body, locator: source.locator, baseUrl, observationId: obs.observationId, contentHash: obs.contentHash!,
+    contentType: obs.contentType ?? null, observedAt: obs.observedAt, decoders: signalDecoders(),
+  });
+  const f = await ctx.services.files.upload({
+    name: `${obs.observationId}.page.json`, contentType: "application/json", content: json(representation),
+    metadata: { kind: "signal.page", observationId: obs.observationId, revision: representation.revision, schema: representation.schema },
+  });
+  const ref = `files:${f.id}`;
+  const recordId = await ctx.db.insert(pages as never, {
+    observationId: obs.observationId, sourceId: source.id, locator: source.locator, observedAt: obs.observedAt,
+    revision: representation.revision, extractorVersion: representation.extractorVersion, pageRef: ref,
+    entities: representation.entities.length, relationships: representation.relationships.length,
+    collections: representation.collections.length, signals: representation.signals.length, truncated: representation.stats.truncated, ownerId,
+  } as never);
+  return { representation, ref, recordId };
+}
+
+export async function readPage(ctx: MutationCtx, ref: string): Promise<PageRepresentation> {
+  return parse<PageRepresentation>(await (await ctx.services.files.read(ref.replace(/^files:/, ""))).text());
 }

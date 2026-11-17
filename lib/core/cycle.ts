@@ -4,6 +4,7 @@ import type {
 import { canonicalJson, contentId, sha256 } from './canonical.ts';
 import { DeterministicEvaluator, matchedLeaves } from './evaluate.ts';
 import { extractFields } from '../interpret/extract.ts';
+import type { PageRepresentation } from '../page/types.ts';
 
 /**
  * One Signal cycle's decision, as a pure function:
@@ -37,6 +38,9 @@ export interface CycleInput {
 	previous: Interpretation | undefined;
 	decoders: SignalDecoder[];
 	now: string;
+	/** The page representation of this observation and of the previous one (HTML sources). */
+	page?: { representation: PageRepresentation; ref: string };
+	previousPage?: PageRepresentation;
 }
 
 export interface CycleOutput {
@@ -66,13 +70,14 @@ export function runCycle(i: CycleInput): CycleOutput {
 		tenantId: i.tenantId, observationId: obs.observationId, sourceId: i.source.id, interpretedAt: i.now,
 		normalizedTextHash: sha256(i.normalizedText), normalizedTextRef: i.normalizedTextRef,
 		extractionVersion: sha256(canonicalJson(criteria.extract ?? [])).slice(0, 16),
-		fields, signals
+		fields, signals,
+		...(i.page ? { page: { ref: i.page.ref, revision: i.page.representation.revision, entities: i.page.representation.entities.length, schema: i.page.representation.schema } } : {})
 	};
 
 	t = performance.now();
 	const previous = i.previous && i.previous.interpretationId !== interpretation.interpretationId ? i.previous : undefined;
 	const contentChanged = i.state?.lastContentHash === undefined ? undefined : i.state.lastContentHash !== obs.contentHash;
-	const result = evaluator.evaluate(interpretation, previous, criteria, { now: i.now, normalizedText: i.normalizedText, contentChanged });
+	const result = evaluator.evaluate(interpretation, previous, criteria, { now: i.now, normalizedText: i.normalizedText, contentChanged, page: i.page?.representation, previousPage: i.previousPage });
 	const evaluate = performance.now() - t;
 
 	const s = i.state;
@@ -105,9 +110,12 @@ export function runCycle(i: CycleInput): CycleOutput {
 			occurredAt: i.now, matched: leaves,
 			excerpts: [
 				...fields.filter((f) => f.excerpt && leaves.some((l) => l.path.endsWith(`field(${f.field})`))).map((f) => ({ field: f.field, text: f.excerpt! })),
-				...leaves.filter((l) => l.op === 'text' && typeof l.actual === 'string').map((l) => ({ text: String(l.actual) }))
+				...leaves.filter((l) => l.op === 'text' && typeof l.actual === 'string').map((l) => ({ text: String(l.actual) })),
+				...leaves.filter((l) => l.op === 'entity' && Array.isArray(l.actual)).flatMap((l) => (l.actual as Array<{ type: string; name: string | null; values: Record<string, unknown[]> }>).slice(0, 10).map((m) => ({
+					text: `${m.type}${m.name ? ` “${m.name}”` : ''}: ${Object.entries(m.values).map(([k, v]) => `${k}=${v.map((x) => (x && typeof x === 'object' && 'amount' in x ? `${(x as unknown as { currency: string | null }).currency ?? ''} ${(x as unknown as { amount: number }).amount}`.trim() : typeof x === 'object' ? JSON.stringify(x) : String(x))).join('|')}`).join(', ')}`
+				})))
 			],
-			evidence: { observationRef: obs.evidenceRef!, normalizedTextRef: i.normalizedTextRef, contentHash: obs.contentHash! },
+			evidence: { observationRef: obs.evidenceRef!, normalizedTextRef: i.normalizedTextRef, contentHash: obs.contentHash!, ...(i.page ? { pageRef: i.page.ref, pageRevision: i.page.representation.revision } : {}) },
 			provenance: obs.provenance,
 			confidence: Math.min(1, ...signals.filter((x) => x.ok).map((x) => x.confidence)),
 			dedupKey: dedupKey!

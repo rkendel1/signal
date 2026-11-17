@@ -1,5 +1,94 @@
 # Signal — Acceptance Report
 
+## M5 — Universal Page Intelligence (2026-11-17)
+
+### Baseline, verified before any change
+The branch was at `80ca98d`: Rust codec 12/12, `feltkit test` 28/28, `tsc` clean.
+
+### Final verification
+
+| Command | Result |
+|---|---|
+| `cargo test --manifest-path codecs/ghostpost-unicode/Cargo.toml` | **12 passed**, 0 failed |
+| `npx feltkit test` | **55 passed**, 0 failed, 0 skipped. That is the 28 M2 tests (unmodified) plus 27 new |
+| `npx tsc --noEmit -p .` | **0 errors** |
+| `node scripts/bench-pages.ts` | [`docs/bench-pages.json`](docs/bench-pages.json) |
+| `node scripts/bench.ts` | [`docs/bench.json`](docs/bench.json), re-measured after M5 |
+
+The 27 new tests:
+- **`tests/lib/page.test.ts` (13):** extraction on 8 unrelated page types, evidence traceability, determinism, security, Ghostpost as an interpreter, value typing.
+- **`tests/lib/page-criteria.test.ts` (10):** the six requested criteria plus relationships, aliases, quantifiers and ambiguity.
+- **`tests/pages.test.ts` (4):** FeltKit end to end (inspect over HTTP, the entity-criteria pipeline, dynamic content in **real Chromium**, all fixtures through `pages:push`).
+
+### Acceptance criteria
+
+| Criterion | Evidence | Result |
+|---|---|---|
+| An unfamiliar page is inspected without a site-specific adapter | `pages:inspect` on the product page over HTTP; all 8 fixtures through `pages:push`; no site code exists | ✅ |
+| Accessible structures become a typed, categorized representation | Product, JobPosting, Article, SocialMediaPosting, Comment, TableRow, Offer, Organization, Person, Brand and Unknown, each with `classification` and the rule that produced it | ✅ |
+| Relationships between entities and attributes are preserved | Ridgeline 2 → $249.99, InStock, seller Summit Supply Co.; Canyon 1 → $179.99, OutOfStock, seller Valley Gear (one shared Summit entity for two products); replies → `inReplyTo` their post; JobPosting → `hiringOrganization`; Product → `offers` → Offer → `seller` | ✅ |
+| Every extracted value has traceable evidence | The test resolves **every** attribute's evidence locator back to exactly one element in the source HTML across 7 fixtures. JSON-LD evidence carries JSON pointers | ✅ |
+| Unknown or ambiguous structures are retained honestly | Observatory log → 3 `Unknown` entities (class-named attributes) in a collection; uncovered blocks kept as page text; `03/04/2026` → value `null` with two candidates; JSON-LD $39.95/InStock vs visible $44.95/OutOfStock → both kept, `sameAs` with explicit conflicts; invalid JSON-LD reported as a signal | ✅ |
+| Identical input ⇒ reproducible output | Byte-identical JSON on re-extraction; identical `revision` across observations (and across two live `pages:inspect` calls); a one-price change alters the revision and only that value, with entity ids stable | ✅ |
+| Criteria evaluate the representation without knowing the source site | The `entity` condition; tests use only types, attributes and relationships | ✅ |
+| A match creates an evidence-backed event through the existing pipeline | "Any product under $200" → event with matched entity Canyon 1, excerpt `Product “Canyon 1”: price=USD 179.99`, `evidence.pageRef`, hash-verified raw evidence, and an AppPort notification. A re-render is suppressed; a price drop and an availability change each produce events | ✅ |
+| Existing Ghostpost and monitoring tests still pass | The 28 M2 tests unmodified, 12 Rust tests; Ghostpost decoded as a page signal with an element locator | ✅ |
+| Tested on multiple unrelated page types | Product listing, job listing, article, discussion, table, JSON-LD with conflicting visible content, dynamic page, unknown structure | ✅ |
+| Limitations explicit | GAP_REGISTER G-PAGE-1…8; the three platform gaps kept visible | ✅ |
+
+Requested criteria examples, all tested: product under $200; job title + compensation range; page adds an organization; publication date changes; discussion post matching text; existing product changes availability.
+
+### Defects found by the new tests and fixed
+1. **Script source leaked into evidence text.** Inline `<script>` text appeared in the document-level evidence because cheerio's `.text()` includes it. Text extraction now skips script, style, template and noscript.
+2. **A session token leaked through `raw`.** The normalized URL was redacted but the "as observed" `raw` string kept `session=abc123`. Raw URL strings are now redacted too.
+3. **"Name + price ⇒ Product" overclaimed.** A fuel-price table became Products. Rule T2 now requires a product cue.
+4. **Posts with and without replies were not grouped**, because the signature included child tags. It is now tag + classes.
+5. **`monitors:push` refused `dom` sources whose locator is an http URL.** The rule is now by source type.
+
+### Measurements
+
+Extraction per fixture (30 runs each, in-process; includes Ghostpost decoding):
+
+| Fixture | HTML bytes | p50 ms | p95 ms | entities | relationships | collections | evidence | representation bytes |
+|---|---|---|---|---|---|---|---|---|
+| article | 643 | 1.13 | 3.31 | 3 | 2 | 0 | 10 | 6,600 |
+| discussion | 1,058 | 1.59 | 3.32 | 9 | 8 | 2 | 21 | 13,304 |
+| dynamic | 729 | 0.41 | 1.16 | 1 | 0 | 0 | 5 | 2,375 |
+| job | 890 | 1.35 | 2.65 | 4 | 4 | 1 | 21 | 11,765 |
+| jsonld-conflict | 713 | 0.77 | 2.15 | 7 | 7 | 0 | 22 | 11,819 |
+| products | 1,399 | 1.44 | 2.65 | 6 | 6 | 1 | 29 | 16,121 |
+| table | 567 | 0.73 | 2.32 | 4 | 3 | 1 | 20 | 9,864 |
+| unknown | 605 | 0.82 | 1.41 | 4 | 3 | 1 | 18 | 8,416 |
+
+Scale (synthetic catalog pages, 5 runs each):
+
+| Page | HTML bytes | p50 ms | p95 ms | entities | relationships | representation bytes | entity criteria ms | truncated |
+|---|---|---|---|---|---|---|---|---|
+| 100 products | 18,326 | 20.26 | 24.65 | 121 | 200 | 350,873 | 1.49 | False |
+| 500 products | 93,156 | 93.37 | 102.47 | 521 | 1000 | 1,690,515 | 1.85 | False |
+| 1,000 products | 186,626 | 213.54 | 246.08 | 1021 | 2000 | 3,364,803 | 5.71 | False |
+
+Full cycles after M5 (`docs/bench.json`, 60 cycles each, FeltKit in-process runtime, loopback HTTP):
+
+| Cycle | p50 | p95 | Before M5 (p50) | Why it changed |
+|---|---|---|---|---|
+| `monitors:observe` (HTTP, HTML) | 51.4 ms | 69.3 ms | 34.8 ms | Builds the representation, stores it in Files, and reads the previous one back |
+| `monitors:push` (text) | 21.5 ms | 34.3 ms | 20.3 ms | Not HTML, so no representation is built |
+
+Duplicate suppression is unchanged: 40 events and 20 suppressed out of 60 matching cycles, exactly as expected, with 40 notifications.
+
+**Representation size** is 10–18× the HTML (3.4 MB for 1,000 products), dominated by per-value evidence. This is a deliberate traceability trade-off and is registered as G-PAGE-2 for decision.
+
+### Not verified
+- **Real websites:** no live-site precision or recall was measured (G-PAGE-4).
+- **Non-English pages** (G-PAGE-3).
+- **Shadow DOM and iframes in static HTML** (G-PAGE-7).
+- **Server-side rendering:** dynamic content was verified only through a caller-pushed Chromium snapshot (G-PAGE-1).
+
+---
+
+## M2 — Monitoring vertical slice (accepted baseline)
+
 Environment: Linux x64, Node v22.23.4, Rust 1.97 (`wasm32-unknown-unknown`, wasm-bindgen 0.2.106), `@feltdb/feltkit` 0.3.31 (bundles `@feltdb/core` 0.21.0 and `@appport/services` 0.19.0), Playwright-driven headless Chromium. All results below were produced by commands run in this repository on 2026-11-17.
 
 ## 1. Commands and results
@@ -44,7 +133,7 @@ The 28 FeltKit tests break down as follows:
 | – | Ghostpost decoder through the same boundary | A pushed feed containing a Ghostpost post matches `{signal:{codec:'ghostpost-unicode/v1', payloadContains:'launch'}}`. The overlay reveals `Code WIDGET20 saves 20%` via WASM in the browser | ✅ |
 | – | No LLM | None in any path | ✅ |
 
-## 3. Measurements (from `docs/bench.json`)
+## 3. Measurements (M2 run; `docs/bench.json` now holds the post-M5 re-run summarized above)
 
 | Metric | p50 | p95 | Notes |
 |---|---|---|---|
