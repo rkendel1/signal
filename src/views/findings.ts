@@ -124,6 +124,7 @@ async function detail(el: HTMLElement, id: string) {
 		h('div', { class: 'row' },
 			h('button', { onclick: ack }, f.acknowledgedAt ? 'Un-acknowledge' : 'Acknowledge'),
 			f.dismissedAt ? h('button', { onclick: () => m(api.findings.dismiss, { findingId: id, dismissed: false }) }, 'Restore') : h('button', { onclick: dismiss }, 'Not relevant…'),
+			h('button', { onclick: () => m(api.notices.snoozeFinding, { findingId: id, hours: f.snoozedUntil ? 0 : 24 }) }, f.snoozedUntil ? 'Unsnooze' : 'Snooze 24 h'),
 			d.entity ? h('a', { class: 'button', href: `#/entities/${d.entity.id}` }, 'Open entity') : null,
 			h('a', { class: 'button', href: `#/criteria/${d.criteria.id}` }, 'Refine criteria')),
 		f.dismissedAt ? h('p', { class: 'muted' }, `Dismissed ${ago(f.dismissedAt)}: ${f.dismissReason}`) : null,

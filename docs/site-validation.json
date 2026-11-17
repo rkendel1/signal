@@ -1,0 +1,791 @@
+{
+  "generatedAt": "2026-11-17T22:43:39.363Z",
+  "real": true,
+  "environment": "linux/x64 node v22.23.5",
+  "pages": [
+    {
+      "name": "USGS latest earthquakes map",
+      "url": "https://earthquake.usgs.gov/earthquakes/map/",
+      "loadMs": 4565,
+      "collectMs": 2812,
+      "analyzeMs": 53,
+      "analyzerMs": 14,
+      "requestsSeen": 26,
+      "responsesAnalyzed": 8,
+      "surface": {
+        "types": [],
+        "entities": 0,
+        "jsonLdTypes": []
+      },
+      "candidates": [
+        {
+          "label": "summary/2.5_day.geojson",
+          "kind": "geojson_endpoint",
+          "verdict": "feed",
+          "score": 0.98,
+          "records": 45,
+          "declaredTotal": 45,
+          "identifier": "id",
+          "pathTemplate": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson",
+          "change": {
+            "conditional": "last-modified",
+            "maxAgeSeconds": 60,
+            "recordUpdatedField": "updated",
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "allowed",
+            "automatable": true,
+            "sameOrigin": true
+          },
+          "completeness": "complete",
+          "pagination": "none",
+          "relations": [
+            {
+              "field": "url",
+              "kind": "page_link",
+              "targetTemplate": "https://earthquake.usgs.gov/earthquakes/eventpage/{segment}"
+            },
+            {
+              "field": "detail",
+              "kind": "detail_link",
+              "targetTemplate": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/{id}.geojson"
+            }
+          ],
+          "catalog": "discovered",
+          "why": [
+            "45 records sharing 24 fields"
+          ],
+          "limitations": []
+        },
+        {
+          "label": "0/query",
+          "kind": "geojson_endpoint",
+          "verdict": "feed",
+          "score": 0.78,
+          "records": 50,
+          "declaredTotal": 95,
+          "identifier": "id",
+          "pathTemplate": "https://services.arcgis.com/{segment}/arcgis/rest/services/Plate_Boundaries_GHSC/FeatureServer/0/query",
+          "change": {
+            "conditional": "last-modified",
+            "maxAgeSeconds": 30,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "unknown",
+            "automatable": true,
+            "sameOrigin": false
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": "discovered",
+          "why": [
+            "95 records sharing 6 fields",
+            "collector trimmed 95 records to 50 for analysis"
+          ],
+          "limitations": []
+        },
+        {
+          "label": "arcgis/light-gray",
+          "kind": "json_endpoint",
+          "verdict": "feed",
+          "score": 0.61,
+          "records": 50,
+          "declaredTotal": 245,
+          "identifier": "id",
+          "pathTemplate": "https://basemapstyles-api.arcgis.com/arcgis/rest/services/styles/v2/styles/arcgis/light-gray",
+          "change": {
+            "conditional": null,
+            "maxAgeSeconds": 600,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "session",
+            "robots": "unknown",
+            "automatable": true,
+            "sameOrigin": false
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": "depends on your session: shared only if you choose to",
+          "why": [
+            "245 records sharing 5 fields",
+            "collector trimmed 245 records to 50 for analysis"
+          ],
+          "limitations": [
+            "depends on the signed-in user's session: each user must use their own access, from their browser",
+            "the request carries a credential-like parameter; its value is never shared",
+            "no change mechanism observed: every refresh must be compared in full"
+          ]
+        },
+        {
+          "label": "FeatureServer/0",
+          "kind": "json_endpoint",
+          "verdict": "metadata",
+          "score": 0.57,
+          "records": 13,
+          "declaredTotal": null,
+          "identifier": null,
+          "pathTemplate": "https://services.arcgis.com/{segment}/arcgis/rest/services/Plate_Boundaries_GHSC/FeatureServer/0/",
+          "change": {
+            "conditional": "last-modified",
+            "maxAgeSeconds": 30,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "unknown",
+            "automatable": true,
+            "sameOrigin": false
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": null,
+          "why": [
+            "records without identifiers, names, times or locations: configuration or enumerations, not entities"
+          ],
+          "limitations": []
+        },
+        {
+          "label": "sprites/sprite.json",
+          "kind": "json_endpoint",
+          "verdict": "metadata",
+          "score": 0.55,
+          "records": 22,
+          "declaredTotal": null,
+          "identifier": null,
+          "pathTemplate": "https://cdn.arcgis.com/sharing/rest/content/items/{segment}/resources/sprites/sprite.json",
+          "change": {
+            "conditional": null,
+            "maxAgeSeconds": 300,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "unknown",
+            "automatable": true,
+            "sameOrigin": false
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": null,
+          "why": [
+            "records without identifiers, names, times or locations: configuration or enumerations, not entities"
+          ],
+          "limitations": []
+        }
+      ]
+    },
+    {
+      "name": "USGS earthquake search",
+      "url": "https://earthquake.usgs.gov/earthquakes/search/",
+      "loadMs": 2657,
+      "collectMs": 247,
+      "analyzeMs": 7,
+      "analyzerMs": 0,
+      "requestsSeen": 2,
+      "responsesAnalyzed": 1,
+      "surface": {
+        "types": [],
+        "entities": 0,
+        "jsonLdTypes": []
+      },
+      "candidates": [
+        {
+          "label": "1/application.json",
+          "kind": "json_endpoint",
+          "verdict": "not_records",
+          "score": 0.46,
+          "records": 0,
+          "declaredTotal": null,
+          "identifier": null,
+          "pathTemplate": "https://earthquake.usgs.gov/fdsnws/event/1/application.json",
+          "change": {
+            "conditional": "last-modified",
+            "maxAgeSeconds": 60,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "allowed",
+            "automatable": true,
+            "sameOrigin": true
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": null,
+          "why": [
+            "no collection of records in the response"
+          ],
+          "limitations": []
+        }
+      ]
+    },
+    {
+      "name": "Hacker News front page",
+      "url": "https://news.ycombinator.com/",
+      "loadMs": 2582,
+      "collectMs": 225,
+      "analyzeMs": 178,
+      "analyzerMs": 171,
+      "requestsSeen": 1,
+      "responsesAnalyzed": 0,
+      "surface": {
+        "types": [
+          {
+            "type": "Unknown",
+            "count": 35
+          },
+          {
+            "type": "SocialMediaPosting",
+            "count": 29
+          },
+          {
+            "type": "Person",
+            "count": 28
+          },
+          {
+            "type": "WebPage",
+            "count": 1
+          }
+        ],
+        "entities": 93,
+        "jsonLdTypes": []
+      },
+      "candidates": [
+        {
+          "label": "page: SocialMediaPosting ×29, Person ×28",
+          "kind": "dom",
+          "verdict": "surface",
+          "score": 0.18,
+          "records": 57,
+          "declaredTotal": null,
+          "identifier": null,
+          "pathTemplate": null,
+          "change": {
+            "conditional": null,
+            "maxAgeSeconds": null,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "session",
+            "robots": "allowed",
+            "automatable": false,
+            "sameOrigin": true
+          },
+          "completeness": "partial",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": "discovered",
+          "why": [
+            "items recognised in the rendered page"
+          ],
+          "limitations": [
+            "what the page displayed to this user, captured by them: partial and user-initiated"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "USGS event page",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026wutnex",
+      "loadMs": 3961,
+      "collectMs": 2019,
+      "analyzeMs": 23,
+      "analyzerMs": 7,
+      "requestsSeen": 40,
+      "responsesAnalyzed": 6,
+      "surface": {
+        "types": [],
+        "entities": 0,
+        "jsonLdTypes": []
+      },
+      "candidates": [
+        {
+          "label": "contributor/index.json.php",
+          "kind": "json_endpoint",
+          "verdict": "feed",
+          "score": 0.74,
+          "records": 50,
+          "declaredTotal": 383,
+          "identifier": "id",
+          "pathTemplate": "https://earthquake.usgs.gov/data/comcat/contributor/index.json.php",
+          "change": {
+            "conditional": "last-modified",
+            "maxAgeSeconds": 86400,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "allowed",
+            "automatable": true,
+            "sameOrigin": true
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": "discovered",
+          "why": [
+            "383 records sharing 3 fields",
+            "collector trimmed 383 records to 50 for analysis"
+          ],
+          "limitations": []
+        },
+        {
+          "label": "FeatureServer/0",
+          "kind": "json_endpoint",
+          "verdict": "feed",
+          "score": 0.63,
+          "records": 14,
+          "declaredTotal": null,
+          "identifier": null,
+          "pathTemplate": "https://services.arcgis.com/{segment}/arcgis/rest/services/{segment}/FeatureServer/0",
+          "change": {
+            "conditional": "last-modified",
+            "maxAgeSeconds": 30,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "unknown",
+            "automatable": true,
+            "sameOrigin": false
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": "discovered",
+          "why": [
+            "14 records sharing 7 fields"
+          ],
+          "limitations": [
+            "no stable identifier: changes cannot be tracked per record"
+          ]
+        },
+        {
+          "label": "arcgis/streets",
+          "kind": "json_endpoint",
+          "verdict": "feed",
+          "score": 0.61,
+          "records": 50,
+          "declaredTotal": 338,
+          "identifier": "id",
+          "pathTemplate": "https://basemapstyles-api.arcgis.com/arcgis/rest/services/styles/v2/styles/arcgis/streets",
+          "change": {
+            "conditional": null,
+            "maxAgeSeconds": 600,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "session",
+            "robots": "unknown",
+            "automatable": true,
+            "sameOrigin": false
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": "depends on your session: shared only if you choose to",
+          "why": [
+            "338 records sharing 4 fields",
+            "collector trimmed 338 records to 50 for analysis"
+          ],
+          "limitations": [
+            "depends on the signed-in user's session: each user must use their own access, from their browser",
+            "the request carries a credential-like parameter; its value is never shared",
+            "no change mechanism observed: every refresh must be compared in full"
+          ]
+        },
+        {
+          "label": "detail/aka2026wutnex.geojson",
+          "kind": "json_endpoint",
+          "verdict": "detail",
+          "score": 0.84,
+          "records": 1,
+          "declaredTotal": null,
+          "identifier": "id",
+          "pathTemplate": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/{id}.geojson",
+          "change": {
+            "conditional": "last-modified",
+            "maxAgeSeconds": 60,
+            "recordUpdatedField": "updated",
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "allowed",
+            "automatable": true,
+            "sameOrigin": true
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [
+            {
+              "field": "url",
+              "kind": "page_link",
+              "targetTemplate": "https://earthquake.usgs.gov/earthquakes/eventpage/{segment}"
+            }
+          ],
+          "catalog": "discovered",
+          "why": [
+            "a single record with many fields: an entity detail representation"
+          ],
+          "limitations": []
+        },
+        {
+          "label": "FeatureServer/2",
+          "kind": "json_endpoint",
+          "verdict": "metadata",
+          "score": 0.64,
+          "records": 34,
+          "declaredTotal": null,
+          "identifier": null,
+          "pathTemplate": "https://services.arcgis.com/{segment}/arcgis/rest/services/{segment}/FeatureServer/2",
+          "change": {
+            "conditional": "last-modified",
+            "maxAgeSeconds": 30,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "unknown",
+            "automatable": true,
+            "sameOrigin": false
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": null,
+          "why": [
+            "records without identifiers, names, times or locations: configuration or enumerations, not entities"
+          ],
+          "limitations": []
+        },
+        {
+          "label": "sprites/sprite.json",
+          "kind": "json_endpoint",
+          "verdict": "metadata",
+          "score": 0.55,
+          "records": 400,
+          "declaredTotal": null,
+          "identifier": null,
+          "pathTemplate": "https://cdn.arcgis.com/sharing/rest/content/items/{segment}/resources/sprites/sprite.json",
+          "change": {
+            "conditional": null,
+            "maxAgeSeconds": 300,
+            "recordUpdatedField": null,
+            "live": null
+          },
+          "access": {
+            "auth": "public",
+            "robots": "unknown",
+            "automatable": true,
+            "sameOrigin": false
+          },
+          "completeness": "unknown",
+          "pagination": "unknown",
+          "relations": [],
+          "catalog": null,
+          "why": [
+            "records without identifiers, names, times or locations: configuration or enumerations, not entities"
+          ],
+          "limitations": []
+        }
+      ]
+    }
+  ],
+  "feeds": {
+    "summary": {
+      "feedId": "mwla47sya43176da8d6c",
+      "acquisition": "server",
+      "intervalMinutes": 1,
+      "firstAcquisitionMs": 407,
+      "records": 45,
+      "verification": {
+        "ok": true,
+        "score": 1,
+        "missing": [],
+        "identifierOk": true,
+        "records": 45
+      },
+      "status": "verified"
+    },
+    "detail": {
+      "feedId": "mwla4hal5205f78c052d",
+      "eventId": "aka2026wutnex",
+      "acquisitionMs": 70,
+      "records": 1,
+      "verification": {
+        "ok": true,
+        "score": 0.91,
+        "missing": [
+          "products.origin",
+          "products.phase-data"
+        ],
+        "identifierOk": true,
+        "records": 1
+      },
+      "identity": {
+        "entityId": "mwla4hl9021f8bb88b19",
+        "status": "probable",
+        "basis": "coordinates",
+        "reason": "the only entity within 30 m"
+      },
+      "entitySources": [
+        "earthquake.usgs.gov — summary/2.5_day.geojson (unmatched: none)",
+        "earthquake.usgs.gov — detail/aka2026wutnex.geojson (probable: coordinates)"
+      ]
+    }
+  },
+  "criteria": {
+    "strong": {
+      "name": "Magnitude 4.5+",
+      "evaluateMs": 58,
+      "entities": 45,
+      "findings": 11
+    },
+    "nearRI": {
+      "name": "Within 1,500 km of Rhode Island",
+      "evaluateMs": 54,
+      "entities": 45,
+      "findings": 0
+    },
+    "inRI": {
+      "name": "Inside Rhode Island",
+      "evaluateMs": 39,
+      "entities": 45,
+      "findings": 0
+    },
+    "sample": [
+      {
+        "entity": "26 km NW of Port-Vila, Vanuatu",
+        "criteria": "Magnitude 4.5+",
+        "summary": "All 1 required condition hold"
+      },
+      {
+        "entity": "141 km NW of Kavieng, Papua New Guinea",
+        "criteria": "Magnitude 4.5+",
+        "summary": "All 1 required condition hold"
+      },
+      {
+        "entity": "135 km S of Vilyuchinsk, Russia",
+        "criteria": "Magnitude 4.5+",
+        "summary": "All 1 required condition hold"
+      },
+      {
+        "entity": "102 km ENE of Ozernovskiy, Russia",
+        "criteria": "Magnitude 4.5+",
+        "summary": "All 1 required condition hold"
+      },
+      {
+        "entity": "south of the Kermadec Islands",
+        "criteria": "Magnitude 4.5+",
+        "summary": "All 1 required condition hold"
+      }
+    ]
+  },
+  "monitoring": [
+    {
+      "at": "2026-11-17T22:45:00.711Z",
+      "ms": 256,
+      "status": "ok",
+      "added": 0,
+      "changed": 0,
+      "retracted": 0,
+      "run": null,
+      "notices": 11
+    },
+    {
+      "at": "2026-11-17T22:46:01.039Z",
+      "ms": 322,
+      "status": "ok",
+      "added": 0,
+      "changed": 0,
+      "retracted": 0,
+      "run": null,
+      "notices": 11
+    },
+    {
+      "at": "2026-11-17T22:47:01.434Z",
+      "ms": 390,
+      "status": "ok",
+      "added": 0,
+      "changed": 0,
+      "retracted": 0,
+      "run": null,
+      "notices": 11
+    },
+    {
+      "at": "2026-11-17T22:48:01.713Z",
+      "ms": 275,
+      "status": "ok",
+      "added": 0,
+      "changed": 0,
+      "retracted": 0,
+      "run": null,
+      "notices": 11
+    },
+    {
+      "at": "2026-11-17T22:49:01.938Z",
+      "ms": 222,
+      "status": "ok",
+      "added": 0,
+      "changed": 0,
+      "retracted": 0,
+      "run": null,
+      "notices": 11
+    },
+    {
+      "at": "2026-11-17T22:50:02.234Z",
+      "ms": 292,
+      "status": "ok",
+      "added": 0,
+      "changed": 1,
+      "retracted": 0,
+      "run": {
+        "created": 0,
+        "changed": 0,
+        "closed": 0
+      },
+      "notices": 11
+    }
+  ],
+  "secondUser": {
+    "recognized": true,
+    "feedsKnown": 3,
+    "connectedWithOwnAccess": "server",
+    "ownRecords": 45,
+    "adaAnalysesVisible": 0,
+    "catalogContainsTokenValue": false,
+    "catalogBytes": 10990
+  },
+  "notes": [],
+  "catalog": [
+    {
+      "id": "mwla47ss9765d12d1f89",
+      "domain": "earthquake.usgs.gov",
+      "analyses": 3,
+      "lastAnalyzedAt": "2026-11-17T22:43:59.746Z",
+      "feeds": 3,
+      "usable": 3,
+      "production": 0,
+      "verified": 2,
+      "discovered": 1,
+      "broken": 0,
+      "best": {
+        "label": "summary/2.5_day.geojson",
+        "score": 0.98,
+        "status": "verified"
+      }
+    },
+    {
+      "id": "mwla47sz5b01038a38c2",
+      "domain": "services.arcgis.com",
+      "analyses": 0,
+      "lastAnalyzedAt": "2026-11-17T22:43:47.436Z",
+      "feeds": 2,
+      "usable": 2,
+      "production": 0,
+      "verified": 0,
+      "discovered": 2,
+      "broken": 0,
+      "best": {
+        "label": "0/query",
+        "score": 0.78,
+        "status": "discovered"
+      }
+    },
+    {
+      "id": "mwla4cked8b39df51748",
+      "domain": "news.ycombinator.com",
+      "analyses": 1,
+      "lastAnalyzedAt": "2026-11-17T22:43:53.457Z",
+      "feeds": 1,
+      "usable": 0,
+      "production": 0,
+      "verified": 0,
+      "discovered": 1,
+      "broken": 0,
+      "best": {
+        "label": "page: SocialMediaPosting ×29, Person ×28",
+        "score": 0.18,
+        "status": "discovered"
+      }
+    }
+  ],
+  "notices": [
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 141 km NW of Kavieng, Papua New Guinea"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 26 km NW of Port-Vila, Vanuatu"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 135 km S of Vilyuchinsk, Russia"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 102 km ENE of Ozernovskiy, Russia"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: south of the Kermadec Islands"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 95 km W of Alotau, Papua New Guinea"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 43 km NW of Oxford, New Zealand"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 173 km ENE of Noda, Japan"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 8 km WNW of Piti Village, Guam"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 137 km SSE of Kirakira, Solomon Islands"
+    },
+    {
+      "kind": "finding_new",
+      "severity": "warning",
+      "title": "New: 26 km E of Port-Olry, Vanuatu"
+    }
+  ]
+}

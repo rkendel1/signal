@@ -10,6 +10,8 @@ import { sourcesView } from './views/sources.ts';
 import { criteriaView } from './views/criteria.ts';
 import { entitiesView, identityView } from './views/entities.ts';
 import { activityView } from './views/activity.ts';
+import { sitesView } from './views/sites.ts';
+import { notificationsView } from './views/notifications.ts';
 
 const root = document.getElementById('app')!;
 let principal: Any = null;
@@ -21,6 +23,8 @@ const NAV: Array<[string, string, string]> = [
 	['criteria', 'Criteria', 'What you care about'],
 	['entities', 'Entities', 'Everything sources describe'],
 	['identity', 'Identity', 'Matches waiting for a decision'],
+	['notifications', 'Notifications', 'What Signal told you'],
+	['sites', 'Sites', 'How websites expose information'],
 	['activity', 'Activity', 'What Signal did, and why'],
 ];
 
@@ -31,7 +35,7 @@ async function render() {
 		do {
 			again = false;
 			const { view } = route();
-			const [summary, queue] = await Promise.all([q(api.engine.summary), q(api.entities.identityQueue)]);
+			const [summary, queue, inbox] = await Promise.all([q(api.engine.summary), q(api.entities.identityQueue), q(api.notices.summary)]);
 			const body = h('main', { class: 'content' });
 			const shell = h('div', { class: 'shell' },
 				h('header', { class: 'top' },
@@ -42,11 +46,11 @@ async function render() {
 						summary.sourcesWithIssues ? badge(`${summary.sourcesWithIssues} source${summary.sourcesWithIssues > 1 ? 's' : ''} need attention`, 'warn') : null,
 						summary.synthetic ? badge('includes synthetic data', 'synthetic') : null),
 					h('div', { class: 'who' }, principal?.displayName ?? principal?.id, ' ', h('button', { class: 'link', onclick: async () => { await client.signOut(); location.reload(); } }, 'Sign out'))),
-				h('nav', { class: 'side', 'aria-label': 'Sections' }, NAV.map(([id, label, hint]) => h('a', { href: `#/${id}`, class: view === id ? 'active' : '', title: hint }, label, id === 'identity' && queue.length ? h('span', { class: 'count' }, String(queue.length)) : null))),
+				h('nav', { class: 'side', 'aria-label': 'Sections' }, NAV.map(([id, label, hint]) => h('a', { href: `#/${id}`, class: view === id ? 'active' : '', title: hint }, label, id === 'identity' && queue.length ? h('span', { class: 'count' }, String(queue.length)) : id === 'notifications' && inbox.active ? h('span', { class: 'count' }, String(inbox.active)) : null))),
 				body);
 			const scroll = document.querySelector('.content')?.scrollTop ?? 0;
 			const detailScroll = document.querySelector('.detail')?.scrollTop ?? 0;
-			const views: Record<string, (el: HTMLElement) => Promise<void>> = { findings: findingsView, sources: sourcesView, criteria: criteriaView, entities: entitiesView, identity: identityView, activity: activityView };
+			const views: Record<string, (el: HTMLElement) => Promise<void>> = { findings: findingsView, sources: sourcesView, criteria: criteriaView, entities: entitiesView, identity: identityView, activity: activityView, sites: sitesView, notifications: notificationsView };
 			if (!summary.sources && view === 'findings') await welcome(body);
 			else await (views[view] ?? findingsView)(body);
 			root.replaceChildren(shell);

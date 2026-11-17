@@ -8,6 +8,25 @@ No language model runs anywhere in this path. Evaluation is deterministic: the s
 
 ![Findings with the evidence trail behind one of them](docs/screenshots/finding-detail.png)
 
+## Signal where you work, and what websites expose
+
+Two capabilities sit on the same engine (details: [SITE_INTELLIGENCE.md](SITE_INTELLIGENCE.md)):
+
+- **Ambient Signal.** The browser extension shows your findings and notifications on the sites you choose, in a small overlay:
+  - findings about the page you are on, and those built on your sources for that site;
+  - unread notifications;
+  - what Signal knows about the site.
+
+  You can acknowledge, snooze, dismiss, inspect evidence, connect a feed or capture the page, without opening the app. While the browser runs, the extension refreshes due feeds every minute and shows new notifications once each. The overlay reads the same durable findings and notices as the web app; it has no intelligence of its own.
+- **Shared Site Intelligence.** "Understand this site" analyzes what the page actually loaded (only requests it already made, re-issued once with your session and once without), ranks the information sources it finds, and adds their structure — never values, parameters or sessions — to a shared catalog. Other users recognise the site and connect the same feed with their own access. Every acquisition verifies the shared definition. A site that changes shape is flagged `needs_reanalysis`. Curators promote verified feeds to production.
+
+| | Catalog (shared) | Connection (yours) | Engine (yours) |
+|---|---|---|---|
+| Holds | how a site exposes information | your URL, session, schedule | observations, criteria, findings, notices |
+| Collections | `signal_sites`, `signal_site_feeds`, `signal_feed_checks` | `signal_sources` (`site_feed`) | the rest |
+
+Validated on real sites: USGS Earthquake Hazards (its map's GeoJSON feed, event detail endpoint, conditional GET, live monitoring) and Hacker News (correctly surface-only). Real-estate listing APIs are disallowed to automated agents by their sites' robots.txt and are not used (`docs/site-validation.json`).
+
 ## The model
 
 ```
@@ -104,13 +123,17 @@ feltkit/            the FeltKit application
   findings.ts         prioritized list, full evidence trail, acknowledge/dismiss, timeline
   entities.ts         side-by-side evidence, identity decisions (assign / separate)
   engine.ts           freshness sweep (a schedulable mutation), activity, summary
+  sites.ts            site analysis, the shared catalog, connections with your own access, verification, curation
+  notices.ts          notifications: inbox, acknowledge, snooze, delivery receipts, preferences
+  ambient.ts          the overlay's one question: what does Signal have for this page?
   workspace.ts        the synthetic example
 lib/
-  engine/             pure, framework-free: types, mapping, identity, criteria, evaluate, lifecycle, coverage, policy
+  engine/             pure, framework-free: types, mapping, identity, criteria, evaluate, lifecycle, coverage, policy, notify
+  site/               the site analyzer, shareable definitions, and the in-page evidence collector
   sources/            records (CSV/GeoJSON/JSON), HTTP JSON (guarded), page capture → observations, network guard
   page/               page intelligence: signal.page/v1 extraction (retained, measured)
 src/                the web app (vanilla TypeScript on the FeltKit client; live via the change stream)
-extension/          the browser capture client
+extension/          the ambient layer: overlay, service worker (relay, scheduler, notifications), capture, site analysis
 tests/              engine, page quality, the product scenario; e2e/ for browser tests
 ```
 
@@ -120,13 +143,17 @@ tests/              engine, page quality, the product scenario; e2e/ for browser
 |---|---|
 | [ASSESSMENT.md](ASSESSMENT.md) | What existed, what was kept, replaced and removed, and why |
 | [GAP_REGISTER.md](GAP_REGISTER.md) | What is missing or limited: product, platform, operational — with evidence |
+| [SITE_INTELLIGENCE.md](SITE_INTELLIGENCE.md) | Ambient Signal and the shared site catalog: what is observable, the lifecycle, the separation of catalog, connection and engine |
+| `docs/site-validation.json` | Real-site analysis, acquisition, monitoring and reuse results |
 | [FAIR_HOUSING_REVIEW.md](FAIR_HOUSING_REVIEW.md) | What the real-estate scenario uses, the guard that exists, and the policy questions still open |
 | [PAGE_INTELLIGENCE.md](PAGE_INTELLIGENCE.md), [PAGE_QUALITY.md](PAGE_QUALITY.md) | The page extractor behind browser capture, measured on real pages |
 | `docs/measurements.json` | Measured timings (synthetic data) |
 
 ## Known limits (details in GAP_REGISTER)
 
-- **No scheduled outbound fetch.** FeltKit jobs run mutations and mutations may not fetch, so HTTP sources refresh on request, not on a timer. Push sources and captures are evaluated the moment they arrive. The freshness sweep is a mutation and can be scheduled.
+- **No scheduled outbound fetch on the server.** FeltKit jobs run mutations and mutations may not fetch. Feeds are refreshed by the extension's scheduler while a browser runs, or on request. Push sources and captures are evaluated the moment they arrive.
+- **No delivery while the browser is closed.** Notifications are durable and shown when the browser or the app is next open; there is no e-mail or push channel yet.
+- **No real-estate site feeds** (disallowed to automated agents); real-estate pages are captured in your own browser.
 - **Everything has been validated on synthetic data** (and 16 real pages for extraction). No real county parcel file or real listing feed has been run end to end.
 - **One transaction per ingestion.** Measured up to 2,000 records per source; bulk imports and full re-evaluations take seconds to tens of seconds at that size (`docs/measurements.json`).
 - **No credentials for sources, no database sources.**

@@ -17,7 +17,7 @@
     "inspect": "feltkit inspect",
     "typecheck": "tsc --noEmit",
     "build:extension": "node scripts/build-extension.ts",
-    "test:e2e": "node --test tests/e2e/*.e2e.ts",
+    "test:e2e": "node --test --test-concurrency=1 tests/e2e/*.e2e.ts",
     "measure": "node scripts/measure.ts"
   },
   "dependencies": {
