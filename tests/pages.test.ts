@@ -185,3 +185,41 @@ test('a captured page larger than a stored file can be is represented: the struc
 	assert.equal(rep.entities.filter((e: any) => e.type === 'RealEstateListing').length, 40);
 	assert.equal(rep.source.contentHash.length, 64, 'what was observed is identified by its hash');
 });
+
+test('a watched intent alerts through the existing pipeline: discover condition → event → notification; same matches do not re-alert', async (t) => {
+	const { ada } = await setup(t);
+	const fx = (f: string) => readFileSync(new URL(`./fixtures/discovery/${f}`, import.meta.url), 'utf8');
+	const parent = 'https://homes.example/search'; // the watch covers the search, whatever the map position in the query
+	const sourceId = await ada.mutation(api.sources.register, { type: 'dom', locator: parent, strategy: 'manual' });
+	const intent = {
+		schema: 'signal.intent/v1', id: 'watch', version: 1, name: 'homes', target: { type: ['RealEstateListing', 'SingleFamilyResidence'] },
+		criteria: [{ id: 'price', label: 'Price $199,000–$349,000', where: { attr: 'price', op: 'between', value: [199000, 349000] } }, { id: 'numberOfBedrooms', label: 'Bedrooms 3–4', where: { attr: 'numberOfBedrooms', op: 'between', value: [3, 4] } }]
+	};
+	await ada.mutation(api.criteria.define, { definition: JSON.stringify({ id: 'watch.riverside', name: 'Homes: Price $199,000–$349,000 · Bedrooms 3–4', severity: 'info', condition: { discover: intent } }) });
+	const monitorId = await ada.mutation(api.monitors.create, { sourceId, criteriaId: 'watch.riverside', criteriaVersion: 1 });
+	const push = (f: string, q: string) => ada.mutation(api.monitors.push, { monitorId, content: fx(f), baseUrl: `${parent}?${q}` }) as Promise<{ outcome: string; eventId: string | null; pageId?: string | null }>;
+
+	const first = await push('neighborhood.html', 'south=39.74&north=39.77');
+	assert.equal(first.outcome, 'event_recorded', 'the current matches are the first alert');
+	assert.ok(first.pageId, 'the capture is also a page record');
+	const ev = await ada.query(api.events.evidence, { eventId: first.eventId! }) as any;
+	const leaf = ev.event.matched.find((m: any) => m.op === 'discover');
+	assert.deepEqual(leaf.actual.map((m: any) => m.name).sort(), ['121 Elm St', '15 Maple Dr', '48 Oak Ave', '9 Pine Ct'], '“possible” Birch Rd (no bedrooms shown) does not alert');
+	assert.ok(leaf.actual.every((m: any) => m.locators.length > 0), 'each match carries where it is on the page');
+	assert.equal(ev.raw, null, 'a captured page keeps its structure, not the page');
+	assert.ok(ev.pageRevision);
+	assert.equal((await ada.query(api.events.inbox, {}) as unknown[]).length, 1, 'notified');
+
+	assert.equal((await push('neighborhood.html', 'south=39.70&north=39.80')).outcome, 'suppressed_duplicate', 'map moved, same matches: no new alert');
+	const later = await push('neighborhood-later.html', 'south=39.74&north=39.77');
+	assert.equal(later.outcome, 'event_recorded', 'a new listing and a price change: a new alert');
+	const ev2 = await ada.query(api.events.evidence, { eventId: later.eventId! }) as any;
+	const m2 = ev2.event.matched.find((m: any) => m.op === 'discover').actual;
+	assert.ok(m2.some((m: any) => m.name === '3 Juniper Rd'));
+	assert.deepEqual(m2.find((m: any) => m.name === '48 Oak Ave').changed, ['price']);
+	assert.match((await ada.query(api.events.inbox, {}) as any[])[0].body, /^5 matches: /);
+
+	await ada.mutation(api.monitors.setEnabled, { monitorId, enabled: false });
+	await assert.rejects(push('neighborhood.html', 'x=1'), { code: 'FAILED_PRECONDITION' }, 'a stopped watch records nothing');
+	await assert.rejects(ada.mutation(api.criteria.define, { definition: JSON.stringify({ id: 'bad', name: 'bad', severity: 'info', condition: { discover: { ...intent, criteria: [{ id: 'p', label: 'p', where: { attr: 'price', op: 'decreased' } }] } } }) }), { code: 'INVALID_ARGUMENT' });
+});

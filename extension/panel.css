@@ -53,3 +53,8 @@ legend.h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; c
 .missing { margin-top: 6px; font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
 label.inline { display: inline-flex; gap: 6px; align-items: center; margin: 8px 0 0; font-size: 13px; color: var(--fg); }
 details summary { cursor: pointer; font-size: 12px; color: var(--muted); margin-top: 12px; }
+.alertbox { border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px 10px; margin-top: 14px; }
+.alertbox h2 { margin-top: 8px; }
+.watching { font-size: 13px; }
+.watching strong { display: block; margin-bottom: 2px; }
+.watching ul { margin: 4px 0 4px 18px; padding: 0; }

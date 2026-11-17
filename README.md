@@ -95,6 +95,17 @@ Then in Chrome:
 
 Results update as you change filters. The generated intent is shown under "Intent as JSON", which can also be edited by hand for derived metrics.
 
+**Alerts.** **Alert me when this matches** saves the current filters as the page's alert criteria. It publishes them as a criteria version with a `discover` condition and creates a monitor, so alerts use Signal's normal pipeline: events, de-duplication, AppPort notifications, inbox and overlay.
+
+- **Scope.** By default the alert covers the *search*: the site and path, ignoring the query. Listing sites keep map coordinates and filters in the address, so the alert keeps applying as you pan. "Exactly this address" is the alternative.
+- **When.** Each capture of a covered page is checked, including automatic checks when you open a watched page while the panel is open.
+- **What alerts.** A new alert is recorded when the set of definite matches or their values changes. "Possible" items (missing information) never alert.
+- **Where.**
+  - On the page: an "N alerts" badge, and the matching items outlined.
+  - A Chrome notification.
+  - Your Signal inbox.
+- **What you see.** The panel and the overlay state exactly what is watched ("Price $199,000–$349,000 · Bedrooms 3–4"), which address it covers, and who is notified.
+
 **Captures keep the structure, not the page.** Before sending, the extension strips script content (except JSON-LD), styles, SVG drawing data, comments and similar payload. On all 16 real evaluation pages this gives identical facts (`tests/e2e/snapshot.e2e.ts`). Signal stores the extracted structure and the content hash, not the page.
 
 **Permissions:**

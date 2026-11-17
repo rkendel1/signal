@@ -154,6 +154,9 @@ test('facets: controls come from the captured pages, computed as the evaluator s
 	assert.equal(by.priceReduction.kind, 'presence');
 	assert.equal(by.numberOfBathrooms, undefined, 'the same value everywhere filters nothing');
 	assert.equal(by.name, undefined);
+	const events = extractPage({ html: readFileSync(new URL('../fixtures/real/heldout-pyevents.html', import.meta.url), 'utf8'), locator: 'https://www.python.org/events/python-events/', baseUrl: 'https://www.python.org/events/python-events/', observationId: 'o', contentHash: 'h', contentType: 'text/html', observedAt: '2026-11-17T12:00:00.000Z' });
+	const ef = facets([events], ['Event']);
+	assert.ok(!ef.facets.some((x) => /date/i.test(x.attr) && x.kind === 'category'), 'timestamps are not offered as checkbox categories');
 	assert.equal(by.latitude, undefined, 'geography is scope, not a facet');
 	const kept = facets([hood], ['RealEstateListing', 'Event']);
 	assert.deepEqual(kept.selected, ['RealEstateListing', 'Event', 'SingleFamilyResidence'], 'a chosen type absent from these pages stays selected');

@@ -185,7 +185,8 @@ test('pushed content: structured JSON criteria, embedded Ghostpost signals, and 
 	const ev = await ada.query(api.events.evidence, { eventId: r.eventId! });
 	const sig = (ev.event.matched[0].actual as Array<{ payload: { text: string } }>)[0];
 	assert.equal(sig.payload.text, 'Launch date: 2026-12-01');
-	assert.match(ev.raw, /ignore previous instructions/, 'preserved verbatim as evidence');
+	assert.equal(ev.raw, null, 'a captured (dom) page keeps its structure and text, not the page itself');
+	assert.match(ev.normalizedText, /ignore previous instructions/, 'injected text preserved as evidence data, never acted on');
 	const [mon] = (await ada.query(api.monitors.list, {})).filter((m: { id: string }) => m.id === m2);
 	assert.deepEqual(mon.notify, ['ada'], 'monitor configuration unchanged by observed content');
 	await assert.rejects(ada.mutation(api.monitors.push, { monitorId: m1, content: 'x'.repeat(5_000_001) }));

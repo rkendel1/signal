@@ -17,6 +17,7 @@
 
 import type { EntityCondition } from '../page/query.ts';
 import type { PageRepresentation } from '../page/types.ts';
+import type { DiscoveryIntent } from '../discovery/discover.ts';
 
 export type Iso8601 = string;
 
@@ -191,7 +192,10 @@ export type Condition =
 	| { signal: { codec?: string; kind?: string; payloadContains?: string } }
 	| { content: 'changed' | 'unchanged' }
 	/** Evaluated against the observation's signal.page/v1 representation (lib/page/query.ts). */
-	| { entity: EntityCondition };
+	| { entity: EntityCondition }
+	/** A discovery intent over the page (lib/discovery): true when at least one candidate is a definite match.
+	 *  "possible" (missing information) never matches; the matched values are the matching candidates. */
+	| { discover: DiscoveryIntent };
 
 export interface CriteriaDefinition {
 	schema: 'signal.criteria/v1';
@@ -303,7 +307,7 @@ export interface MatchedEvent {
 	matched: ConditionTrace[];
 	/** Relevant extracted content (never a replacement for evidence). */
 	excerpts: Array<{ field?: string; text: string }>;
-	evidence: { observationRef: string; normalizedTextRef: string; contentHash: string; pageRef?: string; pageRevision?: string };
+	evidence: { /** absent for captured (dom) pages: the structure is kept, not the page */ observationRef?: string; normalizedTextRef: string; contentHash: string; pageRef?: string; pageRevision?: string };
 	provenance: Provenance;
 	/** Deterministic interpretation ⇒ 1. */
 	confidence: number;

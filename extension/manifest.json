@@ -5,9 +5,10 @@
 	"description": "Capture the page you are viewing into your Signal instance, discover candidates for your intent, and see alerts for the page.",
 	"minimum_chrome_version": "116",
 	"background": { "service_worker": "background.js", "type": "module" },
-	"action": { "default_title": "Open Signal" },
+	"action": { "default_title": "Open Signal", "default_icon": { "16": "icons/icon16.png", "48": "icons/icon48.png" } },
 	"side_panel": { "default_path": "panel.html" },
-	"permissions": ["sidePanel", "storage", "activeTab", "scripting", "tabs"],
+	"permissions": ["sidePanel", "storage", "activeTab", "scripting", "tabs", "notifications"],
+	"icons": { "16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
 	"optional_host_permissions": ["http://*/*", "https://*/*"],
 	"web_accessible_resources": [
 		{ "resources": ["codec/ghostpost_unicode_codec.js", "codec/ghostpost_unicode_codec_bg.wasm"], "matches": ["http://*/*", "https://*/*"] }

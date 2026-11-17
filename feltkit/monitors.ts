@@ -1,5 +1,5 @@
 import { fail, s } from "@feltdb/feltkit";
-import { app, criteria, evaluations, events, interpretations, monitors, observations, sources } from "./app.js";
+import { app, criteria, evaluations, events, interpretations, monitors, observations, pages, sources } from "./app.js";
 import { api } from "./_generated/api.js";
 
 // This module's own references: TypeScript cannot infer them inside the module that defines them.
@@ -34,6 +34,18 @@ export const create = app.mutation({
       sourceId: a.sourceId, criteriaId: a.criteriaId, criteriaVersion: a.criteriaVersion, notify, emitWebhook: a.emitWebhook ?? false,
       enabled: true, matched: false, ownerId: owner, createdAt: new Date().toISOString(),
     });
+  },
+});
+
+/** Turn a monitor on or off (e.g. when an alert is replaced by a new version, or stopped). Its history is kept. */
+export const setEnabled = app.mutation({
+  access: "signal.monitors.write",
+  args: { monitorId: s.string(), enabled: s.boolean() },
+  returns: s.object({ monitorId: s.string(), enabled: s.boolean() }),
+  handler: async (ctx, { monitorId, enabled }) => {
+    requireFound(await ctx.db.get(monitors, monitorId), "That monitor");
+    await ctx.db.patch(monitors, monitorId, { enabled });
+    return { monitorId, enabled };
   },
 });
 
@@ -82,10 +94,11 @@ export const observe = app.action({
 /** Pushed content (text/json/dom sources): e.g. an overlay or an app submitting what it can see. */
 export const push = app.mutation({
   access: "signal.monitors.run",
-  args: { monitorId: s.string(), content: s.string({ maxLength: MAX_BODY }) },
+  args: { monitorId: s.string(), content: s.string({ maxLength: MAX_BODY }), baseUrl: s.optional(s.string({ maxLength: 2048 })) },
   capability: { name: "signal.monitors.push", description: "Submit content observed by the caller for a pushed (text/json/dom) monitor and evaluate it." },
-  returns: s.object({ outcome: s.string(), eventId: s.nullable(s.string()), observationId: s.string() }),
-  handler: async (ctx, { monitorId, content }) => {
+  returns: s.object({ outcome: s.string(), eventId: s.nullable(s.string()), observationId: s.string(), pageId: s.optional(s.nullable(s.string())) }),
+  handler: async (ctx, a) => {
+    const { monitorId, content } = a;
     const m = requireFound(await ctx.db.get(monitors, monitorId), "That monitor");
     const src = requireFound(await ctx.db.get(sources, m.sourceId), "Its source");
     // http_page sources are fetched by Signal itself; dom/text/json sources carry content the caller observed
@@ -96,7 +109,7 @@ export const push = app.mutation({
       schema: "signal.observation/v1", observationId: newId("obs"), tenantId: TENANT, sourceId: src.id, observedAt: new Date().toISOString(),
       status: "ok", contentHash: sha256(bytes), byteLength: bytes.byteLength,
       contentType: src.type === "json" ? "application/json" : src.type === "dom" ? "text/html" : "text/plain",
-      provenance: { adapter: "pushed-content@1", method: "PUSH", submittedBy: ctx.auth.requirePrincipal().id },
+      provenance: { adapter: "pushed-content@1", method: "PUSH", submittedBy: ctx.auth.requirePrincipal().id, ...(src.type === "dom" && a.baseUrl && /^https?:/i.test(a.baseUrl) ? { finalUrl: a.baseUrl } : {}) },
     };
     return recordObservation(ctx, monitorId, obs, content);
   },
@@ -111,7 +124,7 @@ export const push = app.mutation({
 export const record = app.mutation({
   access: "signal.monitors.run",
   args: { monitorId: s.string(), observation: s.string(), body: s.optional(s.string({ maxLength: MAX_BODY })) },
-  returns: s.object({ outcome: s.string(), eventId: s.nullable(s.string()), observationId: s.string() }),
+  returns: s.object({ outcome: s.string(), eventId: s.nullable(s.string()), observationId: s.string(), pageId: s.optional(s.nullable(s.string())) }),
   handler: async (ctx, { monitorId, observation, body }) => {
     const obs = parse<Observation>(observation);
     if (obs.schema !== "signal.observation/v1" || typeof obs.observationId !== "string") fail("INVALID_ARGUMENT", "Not a signal.observation/v1 record.");
@@ -131,7 +144,8 @@ async function recordObservation(ctx: Ctx, monitorId: string, obs: Observation, 
   if (replay) {
     // Callers address events by record id; the evaluation stores the content-derived eventId.
     const [ev] = replay.eventId ? await ctx.db.find(events, { eventId: replay.eventId }) : [];
-    return { outcome: replay.outcome, eventId: ev?.id ?? null, observationId: obs.observationId };
+    const [pg] = await ctx.db.find(pages, { observationId: obs.observationId });
+    return { outcome: replay.outcome, eventId: ev?.id ?? null, observationId: obs.observationId, pageId: pg?.id ?? null };
   }
   const [seenObs] = await ctx.db.find(observations, { observationId: obs.observationId });
   if (seenObs) return { outcome: `observation_${seenObs.status}`, eventId: null, observationId: obs.observationId };
@@ -141,8 +155,9 @@ async function recordObservation(ctx: Ctx, monitorId: string, obs: Observation, 
   const src = requireFound(await ctx.db.get(sources, m.sourceId), "Its source");
   const owner = m.ownerId;
 
-  // Evidence first: the exact bytes observed, content-addressed by hash in metadata.
-  await storeObservation(ctx as never, obs, body, owner, monitorId);
+  // Evidence first: the exact bytes observed, content-addressed by hash in metadata. A page a person captured
+  // (dom source) keeps its structure and visible text, not the page itself.
+  await storeObservation(ctx as never, obs, body, owner, monitorId, src.type !== "dom");
   if (obs.status !== "ok" || body === undefined) {
     return { outcome: `observation_${obs.status}`, eventId: null, observationId: obs.observationId };
   }
@@ -191,6 +206,10 @@ async function recordObservation(ctx: Ctx, monitorId: string, obs: Observation, 
   if (out.event) {
     const e = out.event;
     const what = e.matched.map((l) => {
+      if (l.op === "discover" && Array.isArray(l.actual)) {
+        const ms = l.actual as Array<{ name: string | null; key: string }>;
+        return `${ms.length} match${ms.length === 1 ? "" : "es"}: ${ms.slice(0, 5).map((m) => m.name ?? m.key).join("; ")}${ms.length > 5 ? "; …" : ""}`;
+      }
       const name = (/field\(([^)]+)\)/.exec(l.path) ?? [])[1] ?? l.op;
       const prev = l.previous !== undefined && l.previous !== null ? ` (was ${String(l.previous)})` : "";
       return `${name}: ${typeof l.actual === "object" ? JSON.stringify(l.actual) : String(l.actual)}${prev}`;
@@ -198,13 +217,13 @@ async function recordObservation(ctx: Ctx, monitorId: string, obs: Observation, 
     for (const recipient of m.notify) {
       ctx.afterCommit.notifications.send({
         recipient, type: "signal.criteria_matched", title: e.criteriaName.slice(0, 200), body: `${what} — ${e.sourceLocator}`.slice(0, 2000),
-        data: { eventRecordId, eventId: e.eventId, monitorId, severity: e.severity, sourceLocator: e.sourceLocator, evidenceRef: e.evidence.observationRef },
+        data: { eventRecordId, eventId: e.eventId, monitorId, severity: e.severity, sourceLocator: e.sourceLocator, evidenceRef: e.evidence.observationRef ?? e.evidence.pageRef ?? null },
         idempotencyKey: `signal.event:${e.eventId}:${recipient}`,
       });
     }
     if (m.emitWebhook) ctx.afterCommit.webhooks.emit("signal.event", { ...e, eventRecordId });
   }
-  return { outcome: out.evaluation.outcome, eventId: eventRecordId, observationId: obs.observationId };
+  return { outcome: out.evaluation.outcome, eventId: eventRecordId, observationId: obs.observationId, pageId: page?.recordId ?? null };
 }
 
 /** Evaluation history for a monitor, in order, including non-matches and suppressions. */

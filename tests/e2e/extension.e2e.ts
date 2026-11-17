@@ -146,6 +146,27 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	const intentJson = JSON.parse(String(await panel.$eval('#intent', (t: Element) => (t as HTMLTextAreaElement).value)));
 	assert.deepEqual(intentJson.criteria.map((c: any) => [c.where.attr, c.where.op, c.where.value]), [['numberOfBedrooms', 'between', [3, 4]], ['price', 'between', [199000, 349000]]]);
 
+	// "Alert me": the current filters become this search's alert criteria, stated in words, with where alerts go.
+	assert.match(String(await panel.textContent('#watch-state')), /Not watching this page/);
+	await panel.evaluate(() => { document.getElementById('status')!.textContent = ''; });
+	await panel.click('#watch');
+	await panel.waitForFunction(() => /^Alert recorded\. Captured:.*match ·/.test(document.getElementById('status')!.textContent ?? '') || document.getElementById('status')!.classList.contains('error'));
+	assert.match(String(await statusText()), /^Alert recorded\. /, 'the current matches are the first alert');
+	const host = site.url.replace(/^https?:\/\//, '');
+	await panel.waitForFunction(() => /Watching /.test(document.getElementById('watch-state')!.textContent ?? ''));
+	const watchText = String(await panel.textContent('#watch-state'));
+	assert.ok(watchText.includes(`Watching ${host}/search — any map position or filters in the address`), `watch text: ${JSON.stringify(watchText)} status: ${await statusText()}`);
+	assert.match(watchText, /Price \$199,000–\$349,000/);
+	assert.match(watchText, /Bedrooms 3–4/);
+	assert.match(watchText, /Where: outlined on this page, a browser notification, and your Signal inbox/);
+	assert.match(watchText, /“Possible” items \(missing information\) never alert/);
+	// On the page itself: the matching listings are outlined (4: Elm, Oak, Pine, Maple; Birch is only "possible").
+	const outlined = () => page.evaluate(() => [...document.querySelectorAll<HTMLElement>('body *')].filter((e) => e.style.outline.includes('5, 150, 105')).length);
+	let n = 0;
+	for (let i = 0; i < 40 && n !== 4; i++) { await page.waitForTimeout(250); n = await outlined(); }
+	assert.equal(n, 4, 'matching items outlined on the page');
+	if (process.env.SIGNAL_SCREENSHOTS) { await page.setViewportSize({ width: 900, height: 1100 }); await page.screenshot({ path: join(process.env.SIGNAL_SCREENSHOTS, 'extension-page.png') }); }
+
 	// The page changes; the person captures it again: changes are detected against the previous capture.
 	site.set('/search', { body: served('neighborhood-later.html', site.url) });
 	await page.reload();
@@ -154,6 +175,7 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	await panel.click('#capture');
 	await panel.waitForFunction(() => /Captured:.*match ·/.test(document.getElementById('status')!.textContent ?? ''));
 	assert.match(String(await panel.textContent('#pages')), /changed since last capture/);
+	assert.match(String(await statusText()), /^Alert recorded\. /, 'a new listing and a price change: a new alert');
 	const second = await rows(); // the same filters, kept across the new capture, re-evaluated automatically
 	assert.equal(second['48 Oak Ave'], 'match · changed');
 	assert.equal(second['3 Juniper Rd'], 'match');
@@ -167,6 +189,37 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 		await panel.setViewportSize({ width: 400, height: 1400 });
 		await panel.screenshot({ path: join(process.env.SIGNAL_SCREENSHOTS, 'extension-panel.png'), fullPage: true });
 	}
+
+	// The map moves (new coordinates in the address): the watch still applies, and is checked automatically on load.
+	const watcher = createClient({ url: instance, session: 'bearer', tokens: (() => { let v: string | null = null; return { get: () => v, set: (x: string | null) => { v = x; } }; })() });
+	await watcher.signInAsDevUser('ada');
+	const parentSource = ((await watcher.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>).find((x) => x.type === 'dom' && x.locator === `${site.url}/search`)!;
+	const capturesOfSearch = async () => ((await watcher.query(api.pages.list, { sourceId: parentSource.id })) as unknown[]).length;
+	const before = await capturesOfSearch();
+	await page.goto(`${site.url}/search?south=39.70&west=-105.05&north=39.80&east=-104.90&zoom=13`);
+	let after = before;
+	for (let i = 0; i < 40 && after === before; i++) { await page.waitForTimeout(250); after = await capturesOfSearch(); }
+	assert.equal(after, before + 1, 'opening the watched search at a new map position was checked automatically');
+	await panel.waitForFunction(() => /^Checked automatically\. Captured:.*match ·/.test(document.getElementById('status')!.textContent ?? ''));
+	const alerts = (await watcher.query(api.events.forPage, { sourceLocator: `${site.url}/search` })) as unknown[];
+	assert.equal(alerts.length, 2, 'same matches as the last check: no third alert');
+	let overlay = '';
+	for (let i = 0; i < 40 && !/2 alerts/.test(overlay); i++) {
+		await page.waitForTimeout(250);
+		overlay = await page.evaluate(() => (document.querySelector('[data-signal-overlay]') ? 'present' : '')) ? 'present' : '';
+		if (overlay) {
+			const cdp0 = await ctx.newCDPSession(page);
+			const { root: d } = await cdp0.send('DOM.getDocument', { depth: -1, pierce: true });
+			const out: string[] = [];
+			const walk = (nd: any, inside: boolean) => { const here = inside || (nd.attributes ?? []).includes('data-signal-overlay'); if (here && nd.nodeType === 3 && nd.nodeValue.trim()) out.push(nd.nodeValue.trim()); for (const c of [...(nd.shadowRoots ?? []), ...(nd.children ?? [])]) if (c.nodeName !== 'STYLE') walk(c, here); };
+			walk(d, false);
+			overlay = out.join('\n');
+			await cdp0.detach();
+		}
+	}
+	assert.match(overlay, /^2 alerts$/m, 'alerts recorded for the search show on the page at its new address');
+	assert.ok(overlay.includes(`Covers: ${site.url}/search (any map position or filters in the address)`), overlay);
+	assert.match(overlay, /Alert when an item matches: Bedrooms 3–4 · Price \$199,000–\$349,000/);
 
 	// Alerts on a monitored page, through the overlay → panel relay.
 	const node = createClient({ url: instance, session: 'bearer', tokens: (() => { let v: string | null = null; return { get: () => v, set: (x: string | null) => { v = x; } }; })() });

@@ -92,10 +92,11 @@ export async function activeTab(): Promise<chrome.tabs.Tab> {
 }
 
 /** Read the rendered DOM of a tab once. Asks for that page's origin only if activeTab does not cover it. */
-export async function snapshotTab(tab: chrome.tabs.Tab): Promise<Snapshot> {
+export async function snapshotTab(tab: chrome.tabs.Tab, mayAsk = true): Promise<Snapshot> {
 	const run = () => chrome.scripting.executeScript({ target: { tabId: tab.id! }, func: snapshotPage, args: [MAX_SNAPSHOT_BYTES] });
 	let res;
-	try { res = await run(); } catch {
+	try { res = await run(); } catch (e) {
+		if (!mayAsk) throw e; // automatic checks never prompt
 		const origin = new URL(tab.url!).origin;
 		if (!(await chrome.permissions.request({ origins: [`${origin}/*`] }))) throw new Error(`Signal needs your permission to read ${origin}.`);
 		res = await run();
@@ -113,6 +114,16 @@ export function pageLocator(url: string): string {
 	return redactUrlString(u.toString());
 }
 
+/**
+ * The "parent" of a page: its site and path without the query or fragment. Listing sites keep the map
+ * position, zoom and filters in the query, so a watch scoped to the parent keeps applying as the map moves.
+ */
+export function parentLocator(url: string): string {
+	const u = new URL(url);
+	u.search = ''; u.hash = '';
+	return u.toString();
+}
+
 export interface Captured { url: string; title: string; pageId: string; previousPageId?: string; capturedAt: string; entities: number; revision: string | null; unchanged: boolean }
 
 async function domSource(client: FeltKitClient, locator: string): Promise<string> {
@@ -121,12 +132,34 @@ async function domSource(client: FeltKitClient, locator: string): Promise<string
 	return found ? found.id : (await client.mutation(api.sources.register, { type: 'dom', locator, strategy: 'manual' })) as string;
 }
 
-/** Record a snapshot as a dom observation of its page and add it to the working set. */
-export async function capture(client: FeltKitClient, snap: Snapshot): Promise<Captured> {
+export interface Alerted { eventId: string; title: string; body: string }
+
+/**
+ * Record a snapshot as a dom observation of its page and add it to the working set. When the page is
+ * watched, the capture goes through the watch's monitor, so the alert criteria are evaluated and an
+ * alert is recorded (and notified) when the matching set changes.
+ */
+export async function capture(client: FeltKitClient, snap: Snapshot): Promise<Captured & { alert?: Alerted }> {
 	const locator = pageLocator(snap.url);
-	const sourceId = await domSource(client, locator);
-	const r = (await client.mutation(api.pages.push, { sourceId, html: snap.html!, baseUrl: locator })) as { pageId: string; outcome: string; revision: string | null; entities: number };
-	if (r.outcome !== 'represented' && r.outcome !== 'already_recorded') throw new Error(`Not represented: ${r.outcome}`);
+	const found = await findWatch(client, snap.url);
+	const w = found?.watch;
+	const sourceId = w ? found!.sourceId : await domSource(client, locator);
+	let r: { pageId: string; outcome: string; revision: string | null; entities: number };
+	let alert: Alerted | undefined;
+	if (w) {
+		const m = (await client.mutation(api.monitors.push, { monitorId: w.monitorId, content: snap.html!, baseUrl: locator })) as { outcome: string; eventId: string | null; pageId?: string | null };
+		if (!m.pageId) throw new Error(`Not represented: ${m.outcome}`);
+		const pg = (await client.query(api.pages.list, { sourceId })) as Array<{ pageId: string; revision: string; entities: number }>;
+		const rec = pg.find((x) => x.pageId === m.pageId);
+		r = { pageId: m.pageId, outcome: 'represented', revision: rec?.revision ?? null, entities: rec?.entities ?? 0 };
+		if (m.eventId) {
+			const [ev] = ((await client.query(api.events.forPage, { sourceLocator: found!.locator })) as Array<{ id: string; criteriaName: string; excerpts: Array<{ text: string }> }>).filter((e) => e.id === m.eventId);
+			alert = { eventId: m.eventId, title: ev?.criteriaName ?? w.name, body: (ev?.excerpts ?? []).map((x) => x.text).slice(0, 4).join('\n') || 'Matches changed' };
+		}
+	} else {
+		r = (await client.mutation(api.pages.push, { sourceId, html: snap.html!, baseUrl: locator })) as { pageId: string; outcome: string; revision: string | null; entities: number };
+		if (r.outcome !== 'represented' && r.outcome !== 'already_recorded') throw new Error(`Not represented: ${r.outcome}`);
+	}
 	const set = await workingSet();
 	const prev = set.find((p) => p.url === locator);
 	const entry: Captured = {
@@ -135,7 +168,85 @@ export async function capture(client: FeltKitClient, snap: Snapshot): Promise<Ca
 		...(prev ? { previousPageId: prev.pageId } : {})
 	};
 	await saveWorkingSet([...set.filter((p) => p.url !== locator), entry]);
-	return entry;
+	return { ...entry, ...(alert ? { alert } : {}) };
+}
+
+// ------------------------------------------------------------------ watches: an intent that alerts (a monitor whose criteria is a discover condition)
+
+export interface Watch { monitorId: string; criteriaId: string; version: number; name: string; criteria: string[]; notify: string[] }
+const watchId = (sourceId: string) => `watch.${sourceId.replace(/[^A-Za-z0-9_.-]/g, '_')}`.slice(0, 120);
+
+/** The enabled watches on a page, read from the server (the authority), with their criteria in words. */
+export async function watchesFor(client: FeltKitClient, locator: string, sourceId?: string): Promise<Watch[]> {
+	const sid = sourceId ?? ((await client.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>).find((x) => x.type === 'dom' && x.locator === locator)?.id;
+	if (!sid) return [];
+	const ms = ((await client.query(api.monitors.list, {})) as Array<{ id: string; sourceId: string; criteriaId: string; criteriaVersion: number; enabled: boolean; notify: string[] }>)
+		.filter((m) => m.sourceId === sid && m.enabled && m.criteriaId === watchId(sid));
+	const out: Watch[] = [];
+	for (const m of ms) {
+		const c = (await client.query(api.criteria.get, { criteriaId: m.criteriaId, version: m.criteriaVersion })) as { name: string; condition: { discover?: { criteria: Array<{ label: string }> } } } | null;
+		if (!c?.condition?.discover) continue;
+		out.push({ monitorId: m.id, criteriaId: m.criteriaId, version: m.criteriaVersion, name: c.name, criteria: c.condition.discover.criteria.map((x) => x.label), notify: m.notify });
+	}
+	return out.sort((a, b) => b.version - a.version);
+}
+
+/**
+ * Watch a page for an intent: publish the intent as a new immutable criteria version
+ * ({ discover: intent }), create its monitor, and turn off the page's previous watch.
+ */
+export async function setWatch(client: FeltKitClient, locator: string, intent: DiscoveryIntent, name: string): Promise<Watch> {
+	const sourceId = await domSource(client, locator);
+	const id = watchId(sourceId);
+	const previous = await watchesFor(client, locator, sourceId);
+	let version = Math.max(0, ...previous.map((w) => w.version)) + 1;
+	for (let tries = 0; ; tries++) {
+		try {
+			await client.mutation(api.criteria.define, { definition: JSON.stringify({ schema: 'signal.criteria/v1', id, version, name, severity: 'info', notify: 'on_change', condition: { discover: { ...intent, id, version } } }) });
+			break;
+		} catch (e) {
+			if (tries < 20 && e instanceof FeltKitClientError && e.code === 'FAILED_PRECONDITION') { version++; continue; } // an earlier version exists without a monitor
+			throw e;
+		}
+	}
+	const monitorId = (await client.mutation(api.monitors.create, { sourceId, criteriaId: id, criteriaVersion: version })) as string;
+	for (const w of previous) await client.mutation(api.monitors.setEnabled, { monitorId: w.monitorId, enabled: false });
+	return (await watchesFor(client, locator, sourceId)).find((w) => w.monitorId === monitorId)!;
+}
+
+/** Locators of every page with an enabled watch (for the automatic check when such a page is opened). */
+export async function watchedPages(client: FeltKitClient): Promise<Set<string>> {
+	const srcs = new Map(((await client.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>).filter((x) => x.type === 'dom').map((x) => [x.id, x.locator]));
+	const ms = (await client.query(api.monitors.list, {})) as Array<{ sourceId: string; criteriaId: string; enabled: boolean }>;
+	return new Set(ms.filter((m) => m.enabled && m.criteriaId === watchId(m.sourceId) && srcs.has(m.sourceId)).map((m) => srcs.get(m.sourceId)!));
+}
+
+/** The watch that applies to a page: one on its parent (any query) first, else one on its exact address. */
+export async function findWatch(client: FeltKitClient, url: string): Promise<{ watch: Watch; locator: string; sourceId: string; scope: 'parent' | 'exact' } | null> {
+	const srcs = ((await client.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>).filter((x) => x.type === 'dom');
+	for (const [scope, locator] of [['parent', parentLocator(url)], ['exact', pageLocator(url)]] as const) {
+		const src = srcs.find((x) => x.locator === locator);
+		if (!src) continue;
+		const [watch] = await watchesFor(client, locator, src.id);
+		if (watch) return { watch, locator, sourceId: src.id, scope };
+	}
+	return null;
+}
+
+/** Stop whichever watch applies to this page. */
+export async function stopWatch(client: FeltKitClient, url: string): Promise<void> {
+	const f = await findWatch(client, url);
+	if (f) for (const w of await watchesFor(client, f.locator, f.sourceId)) await client.mutation(api.monitors.setEnabled, { monitorId: w.monitorId, enabled: false });
+}
+
+/** Turn off any other watch covering this page (the other scope), so one page never alerts twice. */
+export async function clearOtherScope(client: FeltKitClient, url: string, keep: string): Promise<void> {
+	for (const locator of [parentLocator(url), pageLocator(url)]) if (locator !== keep) for (const w of await watchesFor(client, locator)) await client.mutation(api.monitors.setEnabled, { monitorId: w.monitorId, enabled: false });
+}
+
+/** A browser notification for an alert this capture recorded. */
+export async function notify(a: Alerted): Promise<void> {
+	await chrome.notifications.create(`signal:${a.eventId}`, { type: 'basic', iconUrl: chrome.runtime.getURL('icons/icon128.png'), title: `Signal: ${a.title}`.slice(0, 120), message: a.body.slice(0, 400), priority: 1 }).catch(() => undefined);
 }
 
 // ------------------------------------------------------------------ working set and intent (per-browser selections, not authority)
@@ -148,7 +259,7 @@ export async function saveIntentDraft(t: string): Promise<void> { await chrome.s
 // ------------------------------------------------------------------ discovery
 
 export type { Facets, Facet } from '../../lib/discovery/discover.ts';
-import type { Facets } from '../../lib/discovery/discover.ts';
+import type { DiscoveryIntent, Facets } from '../../lib/discovery/discover.ts';
 
 /** What the captured pages offer to filter on (types, ranges, categories), for the intent controls. */
 export async function loadFacets(client: FeltKitClient, set: Captured[], types?: string[]): Promise<Facets> {
@@ -180,7 +291,7 @@ export function navigableTarget(target: string): string | null {
 
 // ------------------------------------------------------------------ overlay relay
 
-const OVERLAY_OPS = new Set(['events:forPage', 'events:evidence', 'events:acknowledge']);
+const OVERLAY_OPS = new Set(['events:forPage', 'events:evidence', 'events:acknowledge', 'watch:forPage']);
 
 /**
  * Relay for the in-page overlay. The overlay (our content script, isolated world) cannot hold a session;
@@ -192,14 +303,25 @@ export async function relayOverlay(client: FeltKitClient, msg: { op?: string; ar
 	if (!msg.op || !OVERLAY_OPS.has(msg.op)) throw new Error(`refused: ${String(msg.op)}`);
 	const id = typeof msg.args?.eventId === 'string' ? msg.args.eventId : '';
 	switch (msg.op) {
-		case 'events:forPage': return client.query(api.events.forPage, { sourceLocator: pageLocator(sender.tab.url) });
+		case 'events:forPage': {
+			// Alerts recorded for this exact address and for its parent (a watch that ignores map position).
+			const seen = new Set<string>();
+			const all = [...(await client.query(api.events.forPage, { sourceLocator: pageLocator(sender.tab.url) })) as Array<{ id: string; occurredAt: string }>, ...(await client.query(api.events.forPage, { sourceLocator: parentLocator(sender.tab.url) })) as Array<{ id: string; occurredAt: string }>];
+			return all.filter((e) => !seen.has(e.id) && seen.add(e.id)).sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
+		}
 		case 'events:evidence': return client.query(api.events.evidence, { eventId: id });
+		case 'watch:forPage': {
+			const f = await findWatch(client, sender.tab.url);
+			return f ? [{ name: f.watch.name, criteria: f.watch.criteria, notify: f.watch.notify, scope: f.scope === 'parent' ? `${f.locator} (any map position or filters in the address)` : f.locator }] : [];
+		}
 		default: return client.mutation(api.events.acknowledge, { eventId: id });
 	}
 }
 
-/** Show the overlay on a tab. Its transport messages the panel; it holds no credentials. */
+/** Show the overlay on a tab (or refresh it if it is there). Its transport messages the panel; it holds no credentials. */
 export async function showOverlay(tabId: number): Promise<void> {
+	const [present] = await chrome.scripting.executeScript({ target: { tabId }, func: () => { const o = (window as unknown as { __signalOverlay?: { refresh: () => unknown } }).__signalOverlay; if (o) void o.refresh(); return !!o; } });
+	if (present?.result) return;
 	await chrome.scripting.executeScript({
 		target: { tabId },
 		func: (codecBase: string) => {

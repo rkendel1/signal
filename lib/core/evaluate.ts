@@ -4,6 +4,7 @@ import type {
 import type { PageRepresentation } from '../page/types.ts';
 import { evaluateEntityCondition, validateEntityCondition } from '../page/query.ts';
 import { canonicalJson } from './canonical.ts';
+import { discover, validateIntent } from '../discovery/discover.ts';
 
 /**
  * Deterministic criteria evaluation. Pure function of
@@ -61,6 +62,10 @@ export function validateCondition(c: Condition, depth = 0, count = { n: 0 }): vo
 	} else if ('entity' in c) {
 		if (!c.entity || typeof c.entity !== 'object') throw new Error('entity condition needs an object');
 		validateEntityCondition(c.entity);
+	} else if ('discover' in c) {
+		if (!c.discover || typeof c.discover !== 'object') throw new Error('discover condition needs an intent');
+		const errors = validateIntent(c.discover);
+		if (errors.length) throw new Error(`discover: ${errors.join('; ')}`);
 	} else if (!('signal' in c) && !('content' in c)) throw new Error(`Unknown condition: ${JSON.stringify(c)}`);
 }
 
@@ -163,6 +168,24 @@ export class DeterministicEvaluator implements CriteriaEvaluator {
 				trace.push({ path: `${path}.entity`, op: 'entity', expected: c.entity, actual: shown, result: r.matched, note: r.note ?? `${r.matches.length} of ${r.candidates} candidate entities matched` });
 				if (r.matched) matchedValues[`entity:${canonicalJson(c.entity)}`] = r.matches.map((m) => ({ id: m.id, values: m.values })).sort((a, b) => a.id.localeCompare(b.id));
 				return r.matched;
+			}
+			if ('discover' in c) {
+				if (!ctx.page) { trace.push({ path: `${path}.discover`, op: 'discover', expected: c.discover.name, actual: null, result: false, note: 'no page representation (not HTML)' }); return false; }
+				const previous = ctx.previousPage ? discover({ intent: c.discover, pages: [ctx.previousPage] }) : undefined;
+				const r = discover({ intent: c.discover, pages: [ctx.page], ...(previous ? { previous } : {}) });
+				// Where each match is on the page: visible elements first (JSON-LD evidence points at a <script>).
+				const evidence = new Map(ctx.page.evidence.filter((e) => e.method !== 'json-ld' && e.element !== 'script' && e.element !== 'meta').map((e) => [e.id, e.locator]));
+				const matches = r.candidates.filter((x) => x.status === 'match');
+				const shown = matches.slice(0, 20).map((m) => ({
+					key: m.key, name: m.name, type: m.type, criteria: m.criteria.map((x) => x.label),
+					values: Object.fromEntries(m.criteria.map((x) => [x.id, x.values])), ...(m.changed ? { changed: m.changed.fields } : {}),
+					locators: m.evidenceRefs.map((id) => evidence.get(id)).filter((l): l is string => !!l).slice(0, 3)
+				}));
+				const ok = matches.length > 0;
+				trace.push({ path: `${path}.discover`, op: 'discover', expected: c.discover.name, actual: shown, result: ok, note: `${matches.length} match, ${r.candidates.filter((x) => x.status === 'possible').length} possible, of ${r.candidates.length} candidates` });
+				// The matched set and its values: a new match, a lost match or a changed value is a new alert; the same set is a duplicate.
+				if (ok) matchedValues[`discover:${c.discover.id}`] = matches.map((m) => ({ key: m.key, values: m.criteria.map((x) => [x.id, x.values]) })).sort((a, b) => a.key.localeCompare(b.key));
+				return ok;
 			}
 			if ('signal' in c) {
 				const hits = current.signals.filter((s) =>

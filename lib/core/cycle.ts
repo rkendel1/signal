@@ -113,9 +113,12 @@ export function runCycle(i: CycleInput): CycleOutput {
 				...leaves.filter((l) => l.op === 'text' && typeof l.actual === 'string').map((l) => ({ text: String(l.actual) })),
 				...leaves.filter((l) => l.op === 'entity' && Array.isArray(l.actual)).flatMap((l) => (l.actual as Array<{ type: string; name: string | null; values: Record<string, unknown[]> }>).slice(0, 10).map((m) => ({
 					text: `${m.type}${m.name ? ` “${m.name}”` : ''}: ${Object.entries(m.values).map(([k, v]) => `${k}=${v.map((x) => (x && typeof x === 'object' && 'amount' in x ? `${(x as unknown as { currency: string | null }).currency ?? ''} ${(x as unknown as { amount: number }).amount}`.trim() : typeof x === 'object' ? JSON.stringify(x) : String(x))).join('|')}`).join(', ')}`
+				}))),
+				...leaves.filter((l) => l.op === 'discover' && Array.isArray(l.actual)).flatMap((l) => (l.actual as Array<{ name: string | null; key: string; criteria: string[]; changed?: string[] }>).slice(0, 10).map((m) => ({
+					text: `${m.name ?? m.key}: ${m.criteria.join(', ')}${m.changed ? ` (changed: ${m.changed.join(', ')})` : ''}`
 				})))
 			],
-			evidence: { observationRef: obs.evidenceRef!, normalizedTextRef: i.normalizedTextRef, contentHash: obs.contentHash!, ...(i.page ? { pageRef: i.page.ref, pageRevision: i.page.representation.revision } : {}) },
+			evidence: { ...(obs.evidenceRef ? { observationRef: obs.evidenceRef } : {}), normalizedTextRef: i.normalizedTextRef, contentHash: obs.contentHash!, ...(i.page ? { pageRef: i.page.ref, pageRevision: i.page.representation.revision } : {}) },
 			provenance: obs.provenance,
 			confidence: Math.min(1, ...signals.filter((x) => x.ok).map((x) => x.confidence)),
 			dedupKey: dedupKey!

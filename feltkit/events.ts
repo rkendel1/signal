@@ -41,8 +41,10 @@ export const evidence = app.query({
     const rec = requireFound(await ctx.db.get(events, eventId), "That event");
     const e = parse<MatchedEvent>(rec.body);
     const read = async (ref: string) => (await ctx.services.files.read(ref.replace(/^files:/, ""))).text();
-    const raw = await read(e.evidence.observationRef);
     const normalizedText = await read(e.evidence.normalizedTextRef);
+    // Captured (dom) pages keep the structure, not the page: the evidence is the representation, identified by revision.
+    if (!e.evidence.observationRef) return { event: eventView(rec), raw: null, normalizedText, verified: null, pageRef: e.evidence.pageRef ?? null, pageRevision: e.evidence.pageRevision ?? null };
+    const raw = await read(e.evidence.observationRef);
     const verified = sha256(new TextEncoder().encode(raw)) === e.evidence.contentHash;
     return { event: eventView(rec), raw, normalizedText, verified };
   },

@@ -152,6 +152,7 @@ What Signal guarantees is that the event and its evidence are durable *before* a
 | `pages:push` | mutation | `signal.pages.inspect` | `signal.pages.push` | `dom` sources: a rendered HTML snapshot |
 | `pages:record` | mutation | `signal.pages.inspect` | – | the atomic record step of `inspect` (hash-checked) |
 | `pages:get` / `pages:list` | query | `signal.pages.read` | – | full representation / summaries; ownership via `pageId`/`sourceId` |
+| `monitors:setEnabled` | mutation | `signal.monitors.write` | – | `{monitorId, enabled}`: turn a monitor (e.g. a watch) off or on; history kept |
 | `discovery:facetsOf` | query | `signal.pages.read` | `signal.discovery.facets` (with `returns` schema) | `{pageIds[≤20], types?}` → entity types, plus for the selected types: numeric ranges, categories with counts, booleans and presence. Computed with the evaluator's own reconciliation and attribute resolution. Selected types stay selected even when a page lacks them |
 | `discovery:evaluate` | query | `signal.pages.read` | `signal.discovery.evaluate` (with `returns` schema) | M7. Read-only: `{pageIds[≤20], intent, previousPageIds?, enrichments?, scope?}` → `signal.discovery/v1`. Ownership is checked per page id in the handler |
 
@@ -230,5 +231,6 @@ Normative types are in [`lib/discovery/discover.ts`](lib/discovery/discover.ts).
 | `Formula` | `{attr}` \| `{const}` \| `{mul: […]}` \| `{add: […]}` \| `{div: [a, b]}` \| `{sub: [a, b]}`. Division by zero ⇒ no value. Combinations are bounded at 64 |
 | `Enrichment` | `{source: {id, name, method: external-estimate \| external-record, observedAt}, records: [{url, attribute, value}]}`. Joined by exact URL. Used only where the page states no value |
 | `signal.discovery/v1` | `{intent{id, version}, context, scope, candidates[], coverage, plan[], pages[{observationId, revision, factsRevision}], resultDigest}`. Deterministic: the same pages, intent and enrichments give the same `resultDigest` |
+| Criteria condition `{discover: intent}` | A watched intent: true when at least one candidate is a definite match. Matched values = the matching candidates' keys and criteria values, so a new, lost or changed match is a new alert (`on_change`). The trace carries each match's name, criteria labels, `changed` fields and on-page locators (visible elements only) |
 | Candidate status | `match` (every criterion true, scope known) \| `possible` (no false, some unknown) \| `non_match` (some false) \| `out_of_scope`. `changed` is a separate flag listing the criteria whose normalized values differ from the previous result |
 | Criterion result | `true` \| `false` \| `unknown`, with `reason`, `values` and `provenance`. Conflicting descriptions decide only when all of them give the same outcome |

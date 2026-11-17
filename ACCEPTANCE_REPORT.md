@@ -1,5 +1,44 @@
 # Signal — Acceptance Report
 
+## Alerts for an intent, scoped to the search (2026-11-17)
+
+**Reported by use.**
+- No alerts or notifications when items matched.
+- It was not clear what an alert was set to, or where it would appear.
+- Watches were tied to the exact URL, although listing sites put map coordinates in it.
+
+**Changes:**
+- **`discover` condition.** A discovery intent can now be the condition of a criteria version. A watch is therefore an ordinary monitor; events, de-duplication by matched set and values, AppPort notifications, inbox, webhooks and history are reused unchanged. Evaluation stays three-valued: "possible" never alerts.
+- **Panel.**
+  - "Alert me when this matches" / "Update alert" / "Stop alerts" (`monitors:setEnabled`, new).
+  - A "Watching" box listing the criteria in words, the address covered, and where and when alerts arrive.
+  - A scope choice, defaulting to the parent: site and path, query ignored.
+  - Chrome notifications for recorded alerts.
+  - An automatic check when a watched page is opened (panel open, permission already granted, never prompts).
+- **Overlay.** Shows what is watched and what it covers; lists matches; outlines matching items on the page (visible elements only); shows alerts recorded under the exact address or its parent. Evidence for captured pages is the structure revision and visible text.
+- **Captured (`dom`) pages under a monitor** keep structure and visible text, not the page (`observationRef` absent).
+
+### Verification
+
+| Command | Result |
+|---|---|
+| `npx feltkit test` | **97 passed**. New: discover condition → first alert with 4 matches (Birch "possible" excluded); same matches at new map coordinates → `suppressed_duplicate`; new listing and price change → new alert with `changed: [price]`; inbox "5 matches: …"; stopped watch refuses; undecidable intent rejected |
+| `npm run test:e2e` | **2 passed**; the extension test repeated 4× with no failures. Steps: Alert me → "Alert recorded"; the watch box states the criteria, scope and destinations; 4 matching listings outlined on the page; a re-capture alerts again; opening the search at new coordinates is checked automatically without a duplicate alert; the overlay at the new address shows "2 alerts", "Covers: …/search (any map position…)" and the criteria |
+| `node --test tests/lib/*.test.ts` | 79 passed |
+| `cargo test`, `tsc` | 12 passed, 0 errors |
+
+### Found and fixed
+1. **Outlines on JSON-LD.** A match described by JSON-LD and a card was outlined at its `<script>` (invisible). Locators now exclude JSON-LD evidence, and the overlay outlines only visible elements.
+2. **Automatic-check race.** A check scheduled after a page loaded would have read whatever page the tab had moved to. It now re-checks that the tab is still on the watched search.
+3. **Dates as categories.** Timestamps were offered as checkbox categories.
+
+### Not verified
+- **Real listing pages.** A real search page's cards were not recognised as listings (G-EXT-10); alerts on such a page match only what the extractor understood.
+- **Background checking** (G-EXT-9).
+- **Chrome notifications** are created but not observed by automation.
+
+---
+
 ## Capture at real-page size, and an intent editor built from the page (2026-11-17)
 
 **Reported by use.**

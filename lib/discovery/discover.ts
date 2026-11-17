@@ -469,6 +469,8 @@ export function facets(pages: PageRepresentation[], types?: string[]): Facets {
 				continue;
 			}
 		}
+		// Dates are not categories (each value is a distinct timestamp); a date-range control is future work (G-EXT-8).
+		if (types.has('date') || types.has('datetime')) continue;
 		const flat = decidable.map((vs) => vs[0]).filter((v) => typeof v === 'string' || typeof v === 'boolean' || typeof v === 'number') as Array<string | number | boolean>;
 		if (!flat.length) continue;
 		if (flat.every((v) => typeof v === 'boolean')) {

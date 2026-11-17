@@ -58,6 +58,20 @@
 		</div>
 	</form>
 
+	<section id="alerts-box" class="alertbox" aria-labelledby="alerts-h">
+		<h2 id="alerts-h">Alerts for this page</h2>
+		<div id="watch-state" class="muted">Capture this page to set alerts on it.</div>
+		<fieldset id="scope" class="opts" aria-label="Which address the alert covers">
+			<label><input type="radio" name="scope" value="parent" checked> <span id="scope-parent">This search, wherever the map is</span></label>
+			<label><input type="radio" name="scope" value="exact"> Exactly this address</label>
+		</fieldset>
+		<div class="row">
+			<button id="watch" type="button" disabled>Alert me when this matches</button>
+			<button id="unwatch" type="button" class="link" hidden>Stop alerts</button>
+		</div>
+		<label class="inline"><input type="checkbox" id="autocheck" checked> Check watched pages automatically when I open them (while this panel is open)</label>
+	</section>
+
 	<div id="results"></div>
 	<footer class="foot"><button id="signout" type="button" class="link">Sign out</button> · <button id="disconnect" type="button" class="link">Disconnect</button></footer>
 </section>

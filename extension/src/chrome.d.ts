@@ -33,11 +33,15 @@ declare namespace chrome {
 		function update(tabId: number, p: { url: string }): Promise<Tab>;
 		function get(tabId: number): Promise<Tab>;
 		function getCurrent(): Promise<Tab | undefined>;
+		const onUpdated: { addListener(cb: (tabId: number, change: { status?: string; url?: string }, tab: Tab) => void): void };
 	}
 	namespace scripting {
 		interface InjectionResult<T> { result?: T }
 		function executeScript<A extends unknown[], T>(i: { target: { tabId: number }; func: (...args: A) => T; args?: A; world?: 'ISOLATED' | 'MAIN' }): Promise<Array<InjectionResult<Awaited<T>>>>;
 		function executeScript(i: { target: { tabId: number }; files: string[]; world?: 'ISOLATED' | 'MAIN' }): Promise<Array<InjectionResult<unknown>>>;
+	}
+	namespace notifications {
+		function create(id: string, o: { type: 'basic'; iconUrl: string; title: string; message: string; priority?: number }): Promise<string>;
 	}
 	namespace sidePanel {
 		function setPanelBehavior(b: { openPanelOnActionClick: boolean }): Promise<void>;
