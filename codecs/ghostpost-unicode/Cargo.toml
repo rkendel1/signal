@@ -1,0 +1,23 @@
+[package]
+name = "ghostpost_unicode_codec"
+version = "1.1.0"
+edition = "2021"
+description = "Ghostpost invisible-Unicode codec, extracted from rkendel1/ghostpost wasm/ (commit 369220a). Wire format unchanged."
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+lazy_static = "1.4"
+bimap = "0.6"
+base64 = "0.21"
+flate2 = "1.0"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "=0.2.106"
+js-sys = "0.3"
+
+[profile.release]
+opt-level = "s"
+lto = true

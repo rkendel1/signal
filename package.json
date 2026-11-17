@@ -1,0 +1,21 @@
+{
+  "name": "@boundry/signal",
+  "version": "0.1.0",
+  "description": "Signal: observe authorized sources, interpret signals (incl. Ghostpost codec), evaluate declarative criteria, record evidence-backed events, deliver alerts.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "test": "node --test --test-reporter=spec test/*.test.ts",
+    "test:codec": "cargo test --manifest-path codecs/ghostpost-unicode/Cargo.toml",
+    "build:codec": "sh scripts/build-codec.sh",
+    "demo": "node scripts/demo-vertical-slice.ts",
+    "bench": "node scripts/bench.ts",
+    "serve": "node src/api/server.ts"
+  },
+  "dependencies": {
+    "@feltdb/core": "0.21.0"
+  }
+}
