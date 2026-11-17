@@ -24,7 +24,7 @@ export const inspect = app.action({
   args: { sourceId: s.string() },
   handler: async (ctx, { sourceId }) => {
     const src = (await ctx.runQuery(api.pages.source as never, { sourceId } as never)) as Record<string, any>;
-    if (!/^https?:/i.test(src.locator)) fail("FAILED_PRECONDITION", "This source receives pushed content; use pages:push.");
+    if ((src.type !== "http_page" && src.type !== "json") || !/^https?:/i.test(src.locator)) fail("FAILED_PRECONDITION", "This source receives pushed content; use pages:push.");
     const def: SourceDefinition = {
       schema: "signal.source/v1", id: src.id, tenantId: TENANT, ownerId: src.ownerId, type: src.type, locator: src.locator,
       access: { authorization: src.authorization, respectRobots: src.respectRobots }, observation: { strategy: src.strategy }, createdAt: src.createdAt,

@@ -1,5 +1,48 @@
 # Signal — Acceptance Report
 
+## Browser extension — FeltKit extension host (2026-11-17)
+
+**Outcome.** The overlay and discovery now run where the information is, in the person's own browser. The extension is a FeltKit extension host: Signal's app and client reached from a Chrome side panel with a bearer session. FeltKit needed no extension-specific API, and none was added to Signal's server.
+
+### Verification
+
+| Command | Result |
+|---|---|
+| `npm run test:extension` (`tests/e2e/extension.e2e.ts`) | **1 passed**, repeated 3× with no flakes, about 11 s. It uses a real `feltkit dev` server with isolated state, real Chromium (new headless) with the built extension loaded, and leaves no processes behind |
+| `npx feltkit test` | **91 passed**, 0 failed, 0 skipped. This is the 90 from M7 plus 1 new test: fetching is decided by source type |
+| `cargo test` (codec) | 12 passed |
+| `npx tsc --noEmit -p .` | 0 errors; it now includes `extension/src` |
+
+### What the end-to-end test proves
+
+1. **Connect and sign in.** The panel connects to the instance, checks that `/api/session` names `signal`, and signs in as a dev user.
+2. **Capture.** The rendered DOM of the page in the other tab is captured, recorded as a `dom` observation and represented.
+3. **Discovery.** An intent gives 4 match, 1 possible ("beds: not shown") and 2 not a match. Coverage reads "Complete: the page declares 8 and all 8 were examined (1 not of the target type)".
+4. **Change on re-capture.** The page changes and is captured again. The panel shows "changed since last capture"; Oak Ave is `match · changed`, the new Juniper Rd is a match, and unchanged Pine Ct is not flagged.
+5. **Alerts on the page.** An event recorded by a monitor for another page reaches the in-page overlay through the panel relay ("1 alert"). The embedded Ghostpost signal is decoded by the packaged WASM codec inside the content script.
+6. **Security:**
+   - page scripts have no channel to the extension;
+   - a content script reading extension storage gets "not allowed";
+   - the relay refuses `pages:get` (allow-list of 3 operations);
+   - the bearer token never appears in any request to the page origin;
+   - no page or panel script errors.
+
+### Defects found while building it
+1. **The overlay header contradicted FeltKit's contract.** It said a service worker would hold the session; FeltKit's contract is that the panel holds it and the service worker holds none. The code follows FeltKit, and the comment is corrected.
+2. **Fetching was decided by URL scheme, not by source type.** A `dom` source with an http locator was checked against the outbound URL guard (so captured intranet pages were refused) and could be fetched by `observe`/`inspect`. Now only `http_page`/`json` sources are fetchable and guarded. Tested with a 10.x page: registration allowed, fetch refused, push represented.
+3. **Test-fixture origin mismatch.** It produced two candidates per home, because the JSON-LD URL and the card URL really differed. Discovery was right not to merge them; the e2e serves the fixtures with consistent URLs and asserts one candidate per home.
+
+**Behaviour made explicit (not a defect).** When a stale conflicting description disappears, the set of stated values changes, so it is reported. Elm St shows "Changed: price" because the first page also stated a stale $279,000.
+
+### Not verified
+- Chrome's permission prompts (G-EXT-1).
+- The actual side panel surface (G-EXT-2).
+- OAuth sign-in (G-EXT-3).
+- Store packaging (G-EXT-5).
+- Browsers other than Chromium.
+
+---
+
 ## M7 — Page Quality and Discovery Readiness (2026-11-17)
 
 ### Baseline, verified before any change

@@ -64,7 +64,7 @@ export const observe = app.action({
   args: { monitorId: s.string() },
   handler: async (ctx, { monitorId }) => {
     const { monitor, source } = (await ctx.runQuery(self.context, { monitorId } as never)) as { monitor: Record<string, any>; source: Record<string, any> };
-    if (!/^https?:/i.test(source.locator)) fail("FAILED_PRECONDITION", "This source receives pushed content; use monitors:push.");
+    if ((source.type !== "http_page" && source.type !== "json") || !/^https?:/i.test(source.locator)) fail("FAILED_PRECONDITION", "This source receives pushed content; use monitors:push.");
     const def: SourceDefinition = {
       schema: "signal.source/v1", id: source.id, tenantId: TENANT, ownerId: source.ownerId, type: source.type, locator: source.locator,
       access: { authorization: source.authorization, respectRobots: source.respectRobots }, observation: { strategy: source.strategy }, createdAt: source.createdAt,

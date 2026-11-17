@@ -126,7 +126,7 @@ DiscoveryResult  { schema: 'signal.discovery/v1', intent, context, scope, candid
 - per-entity `digest` identifies unchanged entities;
 - `previousPageIds` recomputes the previous result from stored pages, so it needs no stored result.
 
-**Not built:** a scheduler (G-PLAT-1) and an extension host (G-OVL-1). M8 decides who executes `browser-session` proposals.
+**Not built:** a scheduler (G-PLAT-1). The browser extension (`extension/`) executes `browser-session` proposals **with the person in the loop**: **Open here, then capture** navigates the current tab, and the person captures it. Nothing is crawled automatically.
 
 ## 7. Real-estate scenario (requirement 6) — synthetic
 

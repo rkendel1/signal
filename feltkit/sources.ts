@@ -19,7 +19,9 @@ export const register = app.mutation({
     const isHttp = /^https?:/i.test(a.locator);
     if (a.type === "http_page" && !isHttp) fail("INVALID_ARGUMENT", "http_page sources need an absolute http(s) URL.");
     if (!isHttp && a.strategy === "poll") fail("INVALID_ARGUMENT", "Only http(s) sources can be polled; pushed sources use strategy event or manual.");
-    if (isHttp) {
+    // Only fetchable sources (http_page, json at an http URL) are fetched, so only they need the outbound URL guard.
+    // A dom source's locator names the page a person captured in their own browser; Signal never fetches it.
+    if (isHttp && a.type !== "dom" && a.type !== "text") {
       try { assertUrlShapeAllowed(a.locator, netPolicy()); } catch (e) {
         if (e instanceof BlockedUrlError) fail("INVALID_ARGUMENT", e.message);
         throw e;

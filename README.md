@@ -61,10 +61,44 @@ node scripts/bench-pages.ts
 npm run dev
 ```
 
-- `npm test` runs `feltkit test`: 55 tests against real FeltDB, AppPort services and headless Chromium.
+- `npm test` runs `feltkit test`: 91 tests against real FeltDB, AppPort services and headless Chromium.
+- `npm run test:extension` builds the browser extension and runs it end to end. It uses a real `feltkit dev` server with isolated state and real Chromium with the extension loaded.
 - `npm run test:codec` runs the Rust codec tests (12).
 - `npm run bench` and `node scripts/bench-pages.ts` print the measurements behind ACCEPTANCE_REPORT.md.
 - `npm run dev` starts FeltKit dev with Studio. Sign in as `ada`.
+
+## Browser extension
+
+![Signal side panel after capturing a page twice and running discovery](docs/extension-panel.png)
+
+The extension is a FeltKit **extension host** (`@feltdb/feltkit` docs/EXTENSION-HOSTS.md). It is the same Signal app, reached from a Chrome side panel with the app's own client and a bearer session. Use it to:
+- capture the page you are viewing (its rendered DOM, in your own browser session);
+- find candidates on captured pages for an intent;
+- re-capture a page to see what changed;
+- show Signal's alerts on the page.
+
+```bash
+npm run build:extension
+```
+
+Then in Chrome:
+1. Open `chrome://extensions` and turn on Developer mode.
+2. Choose **Load unpacked** and select `extension/dist`.
+3. Click the Signal toolbar button.
+4. Enter your instance URL and sign in.
+
+**Permissions:**
+- `sidePanel`, `storage`, `tabs`.
+- `activeTab` + `scripting`: a page is read only when you press **Capture this page** or **Show alerts on page**.
+- Optional host access, requested per origin: your Signal instance, and a page's origin only if `activeTab` does not already cover it.
+
+**What runs where:**
+
+| Context | Session | Role |
+|---|---|---|
+| Side panel | **Only holder** of the bearer session (in memory, written through to `chrome.storage.local`, locked to trusted contexts) | Calls the instance |
+| Service worker | None | Locks storage and opens the panel |
+| In-page overlay (content script) | None | Asks the panel for three allowed operations. Alerts show only while the panel is open |
 
 A minimal session (as a member):
 
@@ -96,7 +130,7 @@ await client.action(api.monitors.observe, { monitorId });   // → { outcome: "e
 
 These are stated plainly; details are in GAP_REGISTER.
 - **No scheduled polling yet.** FeltKit jobs run mutations, and mutations may not fetch.
-- **The overlay needs an extension host** to run on third-party pages.
+- **The browser extension is loaded unpacked** (no store packaging). Its permission prompts and the side panel itself are checked by hand, not by automation (G-EXT-1/2). OAuth sign-in does not return into it (G-EXT-3).
 - **Single tenant.**
 - **Webhook delivery is staged but not exercised** in tests.
 - **Page intelligence** is measured on 16 real pages in 10 categories (PAGE_QUALITY.md). It is not proven universal: there are measured failures on cross-row records and sidebars, and the held-out set is now consumed. Dynamic pages need a rendered snapshot. English-leaning vocabulary. See GAP_REGISTER G-PAGE-*.

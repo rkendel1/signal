@@ -158,3 +158,16 @@ test('discovery over recorded pages: owner-only, read-only, previous pages give 
 	await assert.rejects(ada.query(api.discovery.evaluate, { pageIds: [p1.pageId], intent: intent.replace('"lt"', '"decreased"') }), { code: 'INVALID_ARGUMENT' });
 	assert.equal((await ada.query(api.pages.list, { sourceId }) as unknown[]).length, 2, 'discovery recorded nothing');
 });
+
+test('fetching is decided by source type: dom sources may name any page a person captured, but are never fetched', async (t) => {
+	const { ada } = await setup(t);
+	const intranet = 'http://10.0.0.5/reports/q3';
+	await assert.rejects(ada.mutation(api.sources.register, { type: 'http_page', locator: intranet, strategy: 'manual' }), { code: 'INVALID_ARGUMENT' }, 'fetchable sources keep the outbound URL guard');
+	const sourceId = await ada.mutation(api.sources.register, { type: 'dom', locator: intranet, strategy: 'manual' });
+	await assert.rejects(ada.action(api.pages.inspect, { sourceId }), { code: 'FAILED_PRECONDITION' }, 'a dom source is push-only');
+	await ada.mutation(api.criteria.define, { definition: JSON.stringify({ id: 'any', name: 'anything', severity: 'info', condition: { text: { contains: 'x' } } }) });
+	const monitorId = await ada.mutation(api.monitors.create, { sourceId, criteriaId: 'any', criteriaVersion: 1 });
+	await assert.rejects(ada.action(api.monitors.observe, { monitorId }), { code: 'FAILED_PRECONDITION' });
+	const r = await ada.mutation(api.pages.push, { sourceId, html: '<h1>Q3</h1><table><tr><th>Region</th><th>Total</th></tr><tr><td>East</td><td>12</td></tr><tr><td>West</td><td>9</td></tr></table>', baseUrl: intranet }) as { outcome: string };
+	assert.equal(r.outcome, 'represented');
+});

@@ -6,7 +6,7 @@ Severity: **High** blocks a stated outcome · **Medium** limits a supported use 
 
 **Still open after M7** (unchanged; not solved by page quality or discovery):
 - **G-PLAT-1:** no scheduled fetching.
-- **G-OVL-1:** no overlay host for third-party sites.
+- ~~**G-OVL-1:** no overlay host for third-party sites.~~ Resolved by the browser extension (`extension/`); see G-EXT-*.
 - **G-PLAT-3:** no JSON field type. The page representation is stored as canonical JSON in Files, with an index row in FeltDB.
 
 ## Platform gaps
@@ -15,7 +15,7 @@ Severity: **High** blocks a stated outcome · **Medium** limits a supported use 
 |---|---|---|---|---|
 | G-PLAT-1 | **No scheduled outbound observation in FeltKit.** Job handlers are *mutations* (`services.jobs.handlers` → `"<module>:<mutation>"`), and FeltKit forbids network I/O in mutations. A schedule therefore cannot run `monitors:observe` (an action) | **High** for continuous web monitoring | `@feltdb/feltkit` skills/feltkit-services (handlers map to mutations); skills/feltkit-build ("never call fetch from a mutation"). `web-monitor` shows AppPort Jobs *outside* FeltKit can run fetching handlers | FeltKit: allow a job type to target an **action** (re-authorized as the enqueuer). Until then, an external trigger (a cron or a FeltKit component with `network: egress`) calls `monitors:observe` for due monitors. Signal does not ship its own scheduler |
 | G-PLAT-2 | **AppBoundry artifacts have `network: "none"`.** `observe` cannot run inside an artifact | Medium | AppBoundry `manifest.ts:312` (survey) | Deploy Signal on a FeltKit server, or move `observe` into a `components` entry with `network: "egress"`. Not attempted |
-| G-OVL-1 | **No CORS by design**, so the overlay needs an extension host for third-party pages. FeltKit documents the host pattern but ships no generic one | Medium | `@feltdb/feltkit` docs/EXTENSION-HOSTS.md (X8) | Build the MV3 host: a content script relaying `transport(op,args)` to a service worker that holds the session in `TRUSTED_CONTEXTS` storage. `web-monitor`'s extension is the starting point (M4). The test bridge (`page.exposeFunction`) is reachable by page scripts; a real isolated-world bridge is not |
+| ~~G-OVL-1~~ | **Resolved:** `extension/` is a FeltKit extension host (bearer session in the side panel, storage locked to trusted contexts, overlay relay allow-list), tested end to end in Chromium (`tests/e2e/extension.e2e.ts`). Original gap: **No CORS by design**, so the overlay needs an extension host for third-party pages. FeltKit documents the host pattern but ships no generic one | Medium | `@feltdb/feltkit` docs/EXTENSION-HOSTS.md (X8) | Build the MV3 host: a content script relaying `transport(op,args)` to a service worker that holds the session in `TRUSTED_CONTEXTS` storage. `web-monitor`'s extension is the starting point (M4). The test bridge (`page.exposeFunction`) is reachable by page scripts; a real isolated-world bridge is not |
 | G-PLAT-3 | **No free-form JSON schema type.** Nested records (conditions, traces, provenance) are stored as canonical JSON strings and are not queryable by inner field | Low | `@appport/schema` builders: string/number/integer/boolean/literal/nullable/object/optional/record/union/array | Acceptable: these are write-once evidence. Revisit if the evaluation trace must be queried |
 | G-PLAT-4 | **No explicit-id insert in `ctx.db`.** Content-derived ids are unique *fields*; callers address records by FeltKit's generated id | Low | `runtime/data.d.ts` (`insert(ref, value) → id`) | Works with unique constraints. An explicit-id insert would remove the dual id |
 | G-TEN-1 | **Single tenant.** Records are owner-scoped; `TENANT="default"` | Medium | `feltkit/_shared.ts` | Enable FeltKit `auth.tenant` and scope collections by tenant. Re-run the authorization tests across tenants |
@@ -67,3 +67,15 @@ Severity: **High** blocks a stated outcome · **Medium** limits a supported use 
 | G-DISC-3 | **Context encodings are a fixed list.** Bounds and filter parameter names come from a small table; other encodings report `unknown` | Low | `extractContext` | Vocabulary rows per encoding, plus user-supplied context |
 | G-DISC-4 | **Coverage omits failed or refused observations** of pages that discovery wanted, because discovery does not observe | Low | DISCOVERY_MODEL.md §5 | Add once discovery drives observation (M8) |
 | G-DISC-5 | **Geo scope is a bounding box only;** enrichment joins by exact URL only | Low | `lib/discovery/discover.ts` | Polygons when a caller needs them; fuzzy joins only via reviewable mappings |
+
+## Browser extension gaps
+
+| ID | Gap | Severity | Evidence | Proposed resolution |
+|---|---|---|---|---|
+| G-EXT-1 | **The permission-prompt path is not automated.** The e2e manifest pre-grants `http://127.0.0.1/*`, because Chrome's prompt cannot be answered by automation. `chrome.permissions.request` for the instance and for a page origin is therefore untested | Medium | `tests/e2e/extension.e2e.ts` header | A manual acceptance check per release, or a Chrome policy-installed test profile |
+| G-EXT-2 | **The side panel itself is not exercised.** Automation cannot open it, so the test runs the panel as a tab ("popped out"), which uses a different active-tab rule | Low | `activeTab()` in `extension/src/host.ts` | Manual check. The code path differs only in how the active tab is chosen |
+| G-EXT-3 | **OAuth and e-mail-link sign-in do not return into the extension** (FeltKit X6). Password and dev sign-in work | Medium | FeltKit EXTENSION-HOSTS.md X6 | `chrome.identity.launchWebAuthFlow` handoff on FeltKit's session API, when FeltKit or the app adds it |
+| G-EXT-4 | **Alerts on a page need the panel open**, because only the panel holds the session (FeltKit's model) | Low | `relayOverlay` | Acceptable by design. A service-worker relay would need the worker to hold the session, which FeltKit's contract avoids |
+| G-EXT-5 | **No store packaging, signing or update channel.** It is loaded unpacked | Medium | – | Chrome Web Store listing or enterprise policy distribution |
+| G-EXT-6 | **Working set and intent draft are per browser** (`chrome.storage.local`), not durable. Recorded pages are durable in the instance | Low | `extension/src/host.ts` | Persisted intents (`signal_intents`, M8). The working set may stay local: it is a selection, not a fact |
+| G-EXT-7 | **Captures are capped at 5,000,000 characters** (the `pages:push` limit). Larger pages are refused with a message, not truncated | Low | `MAX_SNAPSHOT_CHARS` | Raise together with the server limit if real pages need it |

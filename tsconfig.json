@@ -12,5 +12,5 @@
     "allowImportingTsExtensions": true,
     "types": ["node"]
   },
-  "include": ["feltkit", "lib", "tests", "scripts"]
+  "include": ["feltkit", "lib", "tests", "scripts", "extension/src"]
 }

@@ -36,7 +36,8 @@ Signal is a **FeltKit application** (`npm create feltkit@latest signal`). That d
 | **Discovery** (M7): candidates across pages for an intent, with coverage and a scan plan | `lib/discovery/discover.ts` (pure); `feltkit/discovery.ts` (read-only query) | Signal. No store, no fetching. See DISCOVERY_MODEL.md |
 | **Signal Sources**: browser/DOM, text, JSON, web pages | `lib/sources` (HTTP), `monitors:push` (pushed text/json/dom), overlay (DOM) | Signal |
 | **Signal Runtime**: observation lifecycle, scheduling, state | `feltkit/monitors.ts` (lifecycle + state); scheduling is **not built** (G-PLAT-1) | Signal over FeltKit |
-| **Signal Experience**: overlay, evidence, reveal | `lib/overlay/overlay.js` | Signal (the host extension is not built, G-OVL-1) |
+| **Signal Experience**: overlay, evidence, reveal | `lib/overlay/overlay.js` | Signal |
+| **Extension host**: capture in the person's browser session, discovery in a side panel, overlay relay | `extension/` (MV3; built by `scripts/build-extension.ts`) | Signal, on FeltKit's extension-host contract: the same app and client with a bearer session in the panel. No extension-specific server API was added |
 | **Signal Delivery**: routing, retry, dedup | AppPort Notifications + Webhooks via `ctx.afterCommit` | **Platform** |
 | Durable state, authorization, capability discovery | FeltDB, FeltKit roles/`authorize`, AppPort | **Platform** |
 
@@ -64,6 +65,7 @@ Pushed sources (`monitors:push`) enter at step 2, with provenance `pushed-conten
 
 | Concern | Mechanism |
 |---|---|
+| Fetch vs push | Decided by **source type**: only `http_page` and `json` sources at http(s) URLs are fetched, and only they get the outbound URL guard. `dom` and `text` sources are push-only. A captured intranet page can be recorded but is never fetched by Signal (tested) |
 | Who may call what | FeltKit roles → permissions (`signal.*`, `notifications.*`, `files.*`), checked before arguments are validated |
 | On what records | The `authorize` hook checks ownership of `sourceId` / `monitorId` / `eventId`. Criteria ids are per-owner (handler check). Admins are exempt |
 | Who is told | A monitor notifies its owner only, unless the creator holds `signal.admin` |
@@ -111,7 +113,7 @@ Each decision is stated as what is **current** (implemented and tested) and what
 | 3 | **Where discovery lives** | A pure library plus one read-only FeltKit query. It reuses `AttrPredicate` and the page store; it is not a new service or API | Stays in Signal. Other products consume it through the `signal.discovery.evaluate` capability |
 | 4 | **Discovery results** | Not stored. Recomputed from durable pages (`previousPageIds` recomputes the previous result). `resultDigest` makes results comparable | Store a result only when something must refer to it later (e.g. a notification). It would then be an evaluation record like `signal_evaluations`, not a new authority |
 | 5 | **Intents** | Supplied per call, versioned (`id` + `version`), validated (undecidable operators rejected) | M8: a `signal_intents` collection, immutable per version like `signal_criteria`. Monitoring an intent = a monitor whose condition is a discovery intent, reusing the event pipeline |
-| 6 | **Who executes scanning** | Discovery only proposes (`plan[]`, each with `executesIn`). Nothing is fetched by discovery | M8: `browser-session` proposals are executed by the user's browser via the overlay host (G-OVL-1). `background` proposals run through observation, which needs scheduled actions (G-PLAT-1). No separate crawler or scheduler in Signal |
+| 6 | **Who executes scanning** | Discovery only proposes (`plan[]`, each with `executesIn`). The extension lets the person carry out `browser-session` steps: **Open here, then capture**, with navigation restricted to http(s). Nothing is fetched by discovery and nothing runs unattended | M8: `browser-session` proposals are executed by the user's browser via the overlay host (G-OVL-1). `background` proposals run through observation, which needs scheduled actions (G-PLAT-1). No separate crawler or scheduler in Signal |
 | 7 | **External data** | Caller-supplied `Enrichment`, labelled `external-estimate` / `external-record` with a source id and observation time; joined by exact URL; never overrides page facts | Enrichment providers as Resolver-bound, replaceable sources (G-RES-1), authorized like any source. Fuzzy joins only via reviewable mappings |
 | 8 | **Role of AI** | None in extraction, evaluation or discovery. All results are deterministic | A model may *propose* an intent from natural language, or a mapping for an unknown structure. Proposals become active only through validation and explicit acceptance (G-CRIT-1, G-PAGE-5). A model never decides a criterion |
 | 9 | **Coverage claims** | Explicit coverage with `exhaustive` true only with a declared total, every item examined and no further page, and the basis stated. Markers are counted, not assumed to be listings | Add `failed` / `refused` observations to coverage once discovery drives observation (M8) |

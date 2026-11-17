@@ -18,7 +18,9 @@
     "build:codec": "sh scripts/build-codec.sh",
     "inspect": "feltkit inspect",
     "typecheck": "tsc --noEmit",
-    "bench": "node scripts/bench.ts"
+    "bench": "node scripts/bench.ts",
+    "build:extension": "node scripts/build-extension.ts",
+    "test:extension": "node --test tests/e2e/extension.e2e.ts"
   },
   "dependencies": {
     "@feltdb/feltkit": "0.3.31",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@types/node": "22.19.1",
+    "esbuild": "0.28.2",
     "typescript": "7.0.2"
   }
 }

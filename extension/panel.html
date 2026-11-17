@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signal</title>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<header class="bar"><strong>Signal</strong><span id="who" class="muted"></span></header>
+<p id="status" role="status" aria-live="polite"></p>
+
+<section id="connect" hidden>
+	<h2>Connect to your Signal instance</h2>
+	<form id="connect-form">
+		<label for="instance">Instance URL</label>
+		<input id="instance" type="url" placeholder="https://signal.example.com" required autocomplete="url">
+		<button type="submit">Connect</button>
+	</form>
+	<p class="muted">Signal asks for access to that one address. Pages are read only when you capture them.</p>
+</section>
+
+<section id="signin" hidden>
+	<h2>Sign in</h2>
+	<form id="signin-form">
+		<label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required>
+		<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required>
+		<button type="submit">Sign in</button>
+	</form>
+	<div id="devusers"></div>
+	<button id="disconnect-signin" class="link" type="button">Use a different instance</button>
+</section>
+
+<section id="work" hidden>
+	<div class="row">
+		<button id="capture" type="button">Capture this page</button>
+		<button id="overlay" type="button" class="secondary">Show alerts on page</button>
+	</div>
+	<h2>Captured pages <span id="count" class="muted"></span></h2>
+	<ul id="pages" class="list"></ul>
+	<button id="clear" type="button" class="link">Clear captured pages</button>
+
+	<h2><label for="intent">Intent</label></h2>
+	<textarea id="intent" rows="10" spellcheck="false"></textarea>
+	<div class="row"><button id="discover" type="button">Find candidates</button><button id="example" type="button" class="link">Example intent</button></div>
+
+	<div id="results"></div>
+	<footer class="foot"><button id="signout" type="button" class="link">Sign out</button> · <button id="disconnect" type="button" class="link">Disconnect</button></footer>
+</section>
+<script src="panel.js" type="module"></script>
+</body>
+</html>
