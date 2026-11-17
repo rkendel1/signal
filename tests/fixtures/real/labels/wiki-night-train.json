@@ -1,0 +1,69 @@
+{
+ "id": "wiki-night-train",
+ "category": "article",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Facts from the page JSON-LD; the visible title is h1#firstHeading."
+ ],
+ "pageAttributes": {
+  "title": {
+   "value": "Night Train - Wikipedia",
+   "compare": "text"
+  }
+ },
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "Night Train"
+   },
+   "acceptTypes": [
+    "Article"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "wikipedia.org/wiki/Night_Train",
+     "compare": "contains"
+    },
+    "datePublished": {
+     "paths": [
+      "datePublished",
+      "date"
+     ],
+     "value": "2005-03-29",
+     "compare": "date"
+    },
+    "dateModified": {
+     "paths": [
+      "dateModified"
+     ],
+     "value": "2026-07-25",
+     "compare": "date"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Contributors to Wikimedia projects"
+     }
+    },
+    {
+     "types": [
+      "publisher"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Wikimedia Foundation, Inc."
+     }
+    }
+   ]
+  }
+ ]
+}

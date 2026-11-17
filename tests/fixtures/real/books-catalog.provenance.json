@@ -1,0 +1,18 @@
+{
+  "id": "books-catalog",
+  "url": "https://books.toscrape.com/",
+  "category": "product_listing",
+  "terms": "toscrape.com is a sandbox built for scraping practice",
+  "fetchedAt": "2026-11-17T16:21:53.695Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://books.toscrape.com/",
+  "contentType": "text/html",
+  "byteLength": 51294,
+  "sha256": "9fdd63da34161ebd13408d7a85105f83ec3c9f351c5d77cd0aa578790e121c1e",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

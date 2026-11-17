@@ -1,0 +1,18 @@
+{
+  "id": "wiki-population",
+  "url": "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population",
+  "category": "data_table",
+  "terms": "Wikipedia text CC BY-SA 4.0; attribution: Wikipedia contributors",
+  "fetchedAt": "2026-11-17T16:22:03.795Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population",
+  "contentType": "text/html; charset=UTF-8",
+  "byteLength": 1390744,
+  "sha256": "202958a0e4c1195a4441ebdcdaaad77f076e7ad652b27ee81d89f60958dcecef",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

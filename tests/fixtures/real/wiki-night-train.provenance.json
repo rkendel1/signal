@@ -1,0 +1,18 @@
+{
+  "id": "wiki-night-train",
+  "url": "https://en.wikipedia.org/wiki/Night_train",
+  "category": "article",
+  "terms": "Wikipedia text CC BY-SA 4.0; attribution: Wikipedia contributors, 'Night train'",
+  "fetchedAt": "2026-11-17T16:22:02.073Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://en.wikipedia.org/wiki/Night_train",
+  "contentType": "text/html; charset=UTF-8",
+  "byteLength": 74104,
+  "sha256": "0844366d810573f436e74d093156ece11057fee84fd742fb30170c88935d2b23",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

@@ -1,0 +1,78 @@
+{
+ "id": "books-detail",
+ "category": "product_detail",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Product facts are a two-column table (UPC, prices, availability, reviews)."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "A Light in the Attic"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price",
+      "price_incl_tax",
+      "price_excl_tax"
+     ],
+     "value": {
+      "amount": 51.77,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "sku": {
+     "paths": [
+      "sku",
+      "upc",
+      "gtin"
+     ],
+     "value": "a897fe39b1053632",
+     "compare": "text"
+    },
+    "reviews": {
+     "paths": [
+      "number_of_reviews",
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "It's hard to imagine a world without A L",
+     "compare": "contains"
+    }
+   }
+  }
+ ]
+}

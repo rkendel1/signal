@@ -1,0 +1,991 @@
+{
+ "id": "books-catalog",
+ "category": "product_listing",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Visible titles are truncated (\"A Light in the ...\"); the full title is in the link title attribute.",
+  "Star ratings exist only as CSS classes (star-rating Three) — not accessible text."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "A Light in the Attic",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 51.77,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/a-light-in-the-attic_1000/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tipping the Velvet",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 53.74,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/tipping-the-velvet_999/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Soumission",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 50.1,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/soumission_998/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sharp Objects",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 47.82,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/sharp-objects_997/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sapiens: A Brief History of Humankind",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 54.23,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 5,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/sapiens-a-brief-history-of-humankind_996/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "The Requiem Red",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 22.65,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/the-requiem-red_995/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "The Dirty Little Secrets of Getting Your Dream Job",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 33.34,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/the-dirty-little-secrets-of-getting-your-dream-job_994/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "The Coming Woman: A Novel Based on the Life of the Infamous Feminist, Victoria Woodhull",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 17.93,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/the-coming-woman-a-novel-based-on-the-life-of-the-infamous-feminist-victoria-woodhull_993/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "The Boys in the Boat: Nine Americans and Their Epic Quest for Gold at the 1936 Berlin Olympics",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 22.6,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/the-boys-in-the-boat-nine-americans-and-their-epic-quest-for-gold-at-the-1936-berlin-olympics_992/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "The Black Maria",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 52.15,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/the-black-maria_991/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 13.99,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/starving-hearts-triangular-trade-trilogy-1_990/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Shakespeare's Sonnets",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 20.66,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/shakespeares-sonnets_989/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Set Me Free",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 17.46,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 5,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/set-me-free_988/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Scott Pilgrim's Precious Little Life (Scott Pilgrim #1)",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 52.29,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 5,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/scott-pilgrims-precious-little-life-scott-pilgrim-1_987/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Rip it Up and Start Again",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 35.02,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 5,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/rip-it-up-and-start-again_986/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 57.25,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/our-band-could-be-your-life-scenes-from-the-american-indie-underground-1981-1991_985/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Olio",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 23.88,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/olio_984/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mesaerion: The Best Science Fiction Stories 1800-1849",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 37.59,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/mesaerion-the-best-science-fiction-stories-1800-1849_983/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Libertarianism for Beginners",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 51.33,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/libertarianism-for-beginners_982/index.html",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "It's Only the Himalayas",
+    "compare": "prefix"
+   },
+   "acceptTypes": [
+    "Product",
+    "Book"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 45.17,
+      "currency": "GBP"
+     },
+     "compare": "money"
+    },
+    "availability": {
+     "paths": [
+      "availability",
+      "offers.availability"
+     ],
+     "value": "InStock",
+     "compare": "availability"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "catalogue/its-only-the-himalayas_981/index.html",
+     "compare": "contains"
+    }
+   }
+  }
+ ]
+}

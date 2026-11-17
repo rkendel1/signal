@@ -1,0 +1,4611 @@
+{
+ "id": "fake-jobs",
+ "category": "job_listing",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Job titles repeat across cards (e.g. several \"Senior Python Developer\"); identity must not merge them.",
+  "Company is a styled subtitle (h3.company) without a label."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "Senior Python Developer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Stewartbury, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/senior-python-developer-0.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Payne, Roberts and Davis"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Energy engineer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Christopherville, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/energy-engineer-1.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Vasquez-Davidson"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Legal executive"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Ericaburgh, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/legal-executive-2.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Jackson, Chambers and Levy"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Fitness centre manager"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "East Seanview, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/fitness-centre-manager-3.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Savage-Bradley"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Product manager"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "North Jamieview, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/product-manager-4.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Ramirez Inc"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Medical technical officer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Davidville, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/medical-technical-officer-5.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Rogers-Yates"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Physiological scientist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "South Christopher, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/physiological-scientist-6.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Kramer-Klein"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Textile designer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Jonathan, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/textile-designer-7.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Meyers-Johnson"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Television floor manager"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Osbornetown, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/television-floor-manager-8.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Hughes-Williams"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Waste management officer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Scotttown, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/waste-management-officer-9.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Jones, Williams and Villa"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Software Engineer (Python)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Ericberg, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/software-engineer-python-10.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Garcia PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Interpreter"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Ramireztown, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/interpreter-11.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Gregory and Sons"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Architect"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Figueroaview, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/architect-12.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Clark, Garcia and Sosa"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Meteorologist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Kelseystad, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/meteorologist-13.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Bush PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Audiological scientist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Williamsburgh, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/audiological-scientist-14.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Salazar-Meyers"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "English as a second language teacher"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Mitchellburgh, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/english-as-a-second-language-teacher-15.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Parker, Murphy and Brooks"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Surgeon"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "West Jessicabury, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/surgeon-16.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Cruz-Brown"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Equities trader"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Maloneshire, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/equities-trader-17.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Macdonald-Ferguson"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Newspaper journalist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Johnsonton, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/newspaper-journalist-18.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Williams, Peterson and Rojas"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Materials engineer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "South Davidtown, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/materials-engineer-19.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Smith and Sons"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Python Programmer (Entry-Level)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Sara, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/python-programmer-entry-level-20.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Moss, Duncan and Allen"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Product/process development scientist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Marktown, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/product-process-development-scientist-21.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Gomez-Carroll"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Scientist, research (maths)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Laurenland, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/scientist-research-maths-22.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Manning, Welch and Herring"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ecologist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Lauraton, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/ecologist-23.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Lee, Gutierrez and Brown"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Materials engineer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "South Tammyberg, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/materials-engineer-24.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Davis, Serrano and Cook"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Historic buildings inspector/conservation officer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "North Brandonville, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/historic-buildings-inspector-conservation-officer-25.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Smith LLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Data scientist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Robertfurt, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/data-scientist-26.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Thomas Group"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Psychiatrist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Burnettbury, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/psychiatrist-27.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Silva-King"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Structural engineer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Herbertside, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/structural-engineer-28.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Pierce-Long"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Immigration officer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Christopherport, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/immigration-officer-29.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Walker-Simpson"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Python Programmer (Entry-Level)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "West Victor, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/python-programmer-entry-level-30.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Cooper and Sons"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Neurosurgeon"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Aaron, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/neurosurgeon-31.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Donovan, Gonzalez and Figueroa"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Broadcast engineer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Loribury, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/broadcast-engineer-32.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Morgan, Butler and Bennett"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Make"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Angelastad, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/make-33.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Snyder-Lee"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nurse, adult"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Larrytown, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/nurse-adult-34.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Harris PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Air broker"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "West Colin, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/air-broker-35.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Washington PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Editor, film/video"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "West Stephanie, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/editor-film-video-36.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Brown, Price and Campbell"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Production assistant, radio"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Laurentown, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/production-assistant-radio-37.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Mcgee PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Engineer, communications"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Wrightberg, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/engineer-communications-38.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Dixon Inc"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sales executive"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Alberttown, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/sales-executive-39.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Thompson, Sheppard and Ward"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Software Developer (Python)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Brockburgh, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/software-developer-python-40.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Adams-Brewer"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Futures trader"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "North Jason, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/futures-trader-41.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Schneider-Brady"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tour manager"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Arnoldhaven, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/tour-manager-42.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Gonzales-Frank"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cytogeneticist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Lake Destiny, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/cytogeneticist-43.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Smith-Wong"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Designer, multimedia"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "South Timothyburgh, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/designer-multimedia-44.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Pierce-Herrera"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Trade union research officer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "New Jimmyton, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/trade-union-research-officer-45.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Aguilar, Rivera and Quinn"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Chemist, analytical"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "New Lucasbury, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/chemist-analytical-46.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Lowe, Barnes and Thomas"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Programmer, multimedia"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Cory, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/programmer-multimedia-47.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Lewis, Gonzalez and Vasquez"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Engineer, broadcasting (operations)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Gileston, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/engineer-broadcasting-operations-48.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Taylor PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Teacher, primary school"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Cindyshire, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/teacher-primary-school-49.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Oliver, Jones and Ramirez"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Python Developer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "East Michaelfort, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/python-developer-50.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Rivera and Sons"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Manufacturing systems engineer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Joybury, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/manufacturing-systems-engineer-51.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Garcia PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Producer, television/film/video"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Emmatown, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/producer-television-film-video-52.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Johnson, Wells and Kramer"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Scientist, forensic"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Colehaven, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/scientist-forensic-53.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Gonzalez LLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bonds trader"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Coryton, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/bonds-trader-54.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Morgan, White and Macdonald"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Editorial assistant"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Amyborough, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/editorial-assistant-55.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Robinson-Fitzpatrick"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Photographer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Reynoldsville, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/photographer-56.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Waters, Wilson and Hoover"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Retail banker"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Billy, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/retail-banker-57.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Hill LLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Jewellery designer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Adamburgh, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/jewellery-designer-58.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Li-Gregory"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ophthalmologist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Wilsonmouth, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/ophthalmologist-59.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Fisher, Ryan and Coleman"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Back-End Web Developer (Python, Django)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "South Kimberly, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/back-end-web-developer-python-django-60.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Stewart-Alexander"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Licensed conveyancer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Benjaminland, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/licensed-conveyancer-61.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Abbott and Sons"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Futures trader"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Zacharyport, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/futures-trader-62.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Bryant, Santana and Davenport"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Counselling psychologist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Devonville, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/counselling-psychologist-63.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Smith PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Insurance underwriter"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "East Thomas, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/insurance-underwriter-64.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Patterson-Singh"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Engineer, automotive"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "New Jeffrey, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/engineer-automotive-65.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Martinez-Berry"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Producer, radio"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Davidside, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/producer-radio-66.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "May, Taylor and Fisher"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dispensing optician"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Jamesville, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/dispensing-optician-67.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Bailey, Owen and Thompson"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Designer, fashion/clothing"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "New Kelly, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/designer-fashion-clothing-68.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Vasquez Ltd"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Chartered loss adjuster"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Lake Antonio, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/chartered-loss-adjuster-69.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Leblanc LLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Back-End Web Developer (Python, Django)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "New Elizabethside, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/back-end-web-developer-python-django-70.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Jackson, Ali and Mckee"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Forest/woodland manager"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Millsbury, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/forest-woodland-manager-71.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Blankenship, Knight and Powell"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Clinical cytogeneticist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Lloydton, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/clinical-cytogeneticist-72.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Patton, Haynes and Jones"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Print production planner"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Jeremy, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/print-production-planner-73.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Wood Inc"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Systems developer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "New Elizabethtown, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/systems-developer-74.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Collins Group"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Graphic designer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Charlesstad, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/graphic-designer-75.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Flores-Nelson"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Writer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Josephbury, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/writer-76.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Mitchell, Jones and Olson"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Field seismologist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Seanfurt, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/field-seismologist-77.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Howard Group"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Chief Strategy Officer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Williambury, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/chief-strategy-officer-78.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Kramer-Edwards"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Air cabin crew"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "South Jorgeside, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/air-cabin-crew-79.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Berry-Houston"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Python Programmer (Entry-Level)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Robertborough, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/python-programmer-entry-level-80.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Mathews Inc"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Warden/ranger"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "South Saratown, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/warden-ranger-81.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Riley-Johnson"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sports therapist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Hullview, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/sports-therapist-82.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Spencer and Sons"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Arts development officer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Philipland, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/arts-development-officer-83.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Camacho-Sanchez"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Printmaker"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "North Patty, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/printmaker-84.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Oliver and Sons"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Health and safety adviser"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "North Stephen, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/health-and-safety-adviser-85.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Eaton PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Manufacturing systems engineer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Stevensland, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/manufacturing-systems-engineer-86.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Stanley-Frederick"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Programmer, applications"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Reyesstad, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/programmer-applications-87.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Bradley LLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Medical physicist"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Bellberg, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/medical-physicist-88.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Parker, Goodwin and Zavala"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Media planner"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "North Johnland, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/media-planner-89.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Kim-Miles"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Software Developer (Python)"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Martinezburgh, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/software-developer-python-90.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Moreno-Rodriguez"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Surveyor, land/geomatics"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Joshuatown, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/surveyor-land-geomatics-91.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Brown-Ortiz"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Legal executive"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "West Ericstad, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/legal-executive-92.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Hartman PLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Librarian, academic"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Tuckertown, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/librarian-academic-93.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Brooks Inc"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Barrister"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Perezton, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/barrister-94.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Washington-Castillo"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Museum/gallery exhibitions officer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Lake Abigail, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/museum-gallery-exhibitions-officer-95.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Nguyen, Yoder and Petty"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Radiographer, diagnostic"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Jacobshire, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/radiographer-diagnostic-96.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Holder LLC"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Database administrator"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Port Susan, AE",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/database-administrator-97.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Yates-Ferguson"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Furniture designer"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "North Tiffany, AA",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/furniture-designer-98.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Ortega-Lawrence"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ship broker"
+   },
+   "acceptTypes": [
+    "JobPosting"
+   ],
+   "attributes": {
+    "location": {
+     "paths": [
+      "location",
+      "jobLocation.name",
+      "jobLocation.address"
+     ],
+     "value": "Michelleville, AP",
+     "compare": "text"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePosted"
+     ],
+     "value": "2021-04-08",
+     "compare": "date"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "https://realpython.github.io/fake-jobs/jobs/ship-broker-99.html",
+     "compare": "contains"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "hiringOrganization"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Fuentes, Walls and Castro"
+     }
+    }
+   ]
+  }
+ ]
+}

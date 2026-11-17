@@ -1,0 +1,117 @@
+{
+ "id": "arxiv-abs",
+ "category": "research_publication",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Bibliographic facts are in Highwire Press citation_* meta tags; no JSON-LD.",
+  "Abstract text removed for retention (license)."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "Attention Is All You Need"
+   },
+   "acceptTypes": [
+    "ScholarlyArticle",
+    "Article",
+    "CreativeWork",
+    "WebPage"
+   ],
+   "attributes": {
+    "datePublished": {
+     "paths": [
+      "datePublished",
+      "date",
+      "citation_date"
+     ],
+     "value": "2017-06-12",
+     "compare": "date"
+    },
+    "identifier": {
+     "paths": [
+      "identifier",
+      "citation_arxiv_id",
+      "sku"
+     ],
+     "value": "1706.03762",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Vaswani, Ashish"
+     }
+    },
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Shazeer, Noam"
+     }
+    },
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Parmar, Niki"
+     }
+    },
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Uszkoreit, Jakob"
+     }
+    },
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Jones, Llion"
+     }
+    },
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Gomez, Aidan N."
+     }
+    },
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Kaiser, Lukasz"
+     }
+    },
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Polosukhin, Illia"
+     }
+    }
+   ]
+  }
+ ]
+}

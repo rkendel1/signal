@@ -1,0 +1,341 @@
+{
+ "id": "quotes",
+ "category": "posts_with_authors",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Microdata CreativeWork with itemprop text/author/keywords; author is a plain text property (not an itemscope)."
+ ],
+ "relationshipNote": "author may be represented either as a relationship or as an author attribute; both are accepted",
+ "entities": [
+  {
+   "match": {
+    "attr": "text",
+    "value": "The world as we have created it is a pro",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "change,deep-thoughts,thinking,world",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Albert Einstein"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "text",
+    "value": "It is our choices, Harry, that show what",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "abilities,choices",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "J.K. Rowling"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "text",
+    "value": "There are only two ways to live your lif",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "inspirational,life,live,miracle,miracles",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Albert Einstein"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "text",
+    "value": "The person, be it gentleman or lady, who",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "aliteracy,books,classic,humor",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Jane Austen"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "text",
+    "value": "Imperfection is beauty, madness is geniu",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "be-yourself,inspirational",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Marilyn Monroe"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "text",
+    "value": "Try not to become a man of success. Rath",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "adulthood,success,value",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Albert Einstein"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "text",
+    "value": "It is better to be hated for what you ar",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "life,love",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "André Gide"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "text",
+    "value": "I have not failed. I've just found 10,00",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "edison,failure,inspirational,paraphrased",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Thomas A. Edison"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "text",
+    "value": "A woman is like a tea bag; you never kno",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "misattributed-eleanor-roosevelt",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Eleanor Roosevelt"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "text",
+    "value": "A day without sunshine is like, you know",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "CreativeWork",
+    "Quotation",
+    "SocialMediaPosting",
+    "Article"
+   ],
+   "attributes": {
+    "keywords": {
+     "paths": [
+      "keywords"
+     ],
+     "value": "humor,obvious,simile",
+     "compare": "text"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Steve Martin"
+     }
+    }
+   ]
+  }
+ ]
+}

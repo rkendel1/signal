@@ -1,0 +1,18 @@
+{
+  "id": "discourse-meta",
+  "url": "https://meta.discourse.org/t/what-is-discourse/18",
+  "category": "discussion",
+  "terms": "Expected refusal: kept to show refusals are recorded, not bypassed",
+  "fetchedAt": "2026-11-17T16:22:10.533Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 403,
+  "finalUrl": "https://meta.discourse.org/t/what-is-discourse/18",
+  "status": "denied",
+  "error": {
+    "code": "HTTP_403",
+    "message": "Source refused access; Signal does not bypass access controls"
+  },
+  "sanitized": false
+}

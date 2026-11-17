@@ -1,0 +1,976 @@
+{
+ "id": "usagov-agencies",
+ "category": "directory",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Each agency is an accordion button + a panel with hidden=\"until-found\" (collapsed but findable and expandable by the user — accessible information).",
+  "Fields are \"Label:\" paragraphs (Website, Phone number, Contact)."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "AbilityOne Commission"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.abilityone.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-703-603-2100",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Access Board"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.access-board.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-272-0080",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Administration for Children and Families (ACF)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.acf.hhs.gov/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Administration for Community Living (ACL)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://acl.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-401-4634",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Administration for Native Americans (ANA)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.acf.hhs.gov/ana",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Administrative Conference of the United States (ACUS)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.acus.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-480-2080",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Administrative Office of the U.S. Courts"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.uscourts.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-502-2600",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Advisory Council on Historic Preservation (ACHP)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.achp.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-517-0200",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Africa Command"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.africom.mil/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-314-430-1110",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "African Development Foundation (USADF)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.usadf.gov/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Agency for Global Media"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.usagm.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-920-2000",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Agency for Healthcare Research and Quality (AHRQ)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.ahrq.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-301-427-1104",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Agency for International Development (USAID)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "http://www.usaid.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-712-4300",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Agency for Toxic Substances and Disease Registry (ATSDR)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.atsdr.cdc.gov/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Agricultural Marketing Service (AMS)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.ams.usda.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-720-8998",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Agricultural Research Service (ARS)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.ars.usda.gov/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Agriculture Department (USDA)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.usda.gov/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Agriculture Library (NAL)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.nal.usda.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-301-504-5755",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Air Force"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.af.mil/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-703-697-3039",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Air Force Reserve"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.afrc.af.mil/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-478-327-1748 (public affairs)",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Alcohol and Tobacco Tax and Trade Bureau (TTB)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.ttb.gov",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Alcohol, Tobacco, Firearms and Explosives Bureau (ATF)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.atf.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-648-7777 (for criminal intelligence/law enforcement matters only)",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Alhurra TV"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.alhurra.com/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-703-852-9000",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "American Battle Monuments Commission (ABMC)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.abmc.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-703-584-1501",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "AmeriCorps"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://americorps.gov/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "AmeriCorps Seniors"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.americorps.gov/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Animal and Plant Health Inspection Service (APHIS)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.aphis.usda.gov/aphis/home/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-720-2511",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Antitrust Division"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.justice.gov/atr",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Appalachian Regional Commission (ARC)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.arc.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-884-7700",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Architect of the Capitol"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.aoc.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-228-1793",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Archives, National Archives and Records Administration (NARA)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.archives.gov/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Arctic Research Commission (USARC)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.arctic.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-703-525-0111",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Armed Forces Retirement Home (AFRH)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "http://www.afrh.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-541-7501 (to contact a Washington, DC campus resident)",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Arms Control and International Security"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.state.gov/bureaus-offices/under-secretary-for-arms-control-and-international-security-affairs/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-647-4000",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Army"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.army.mil/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Army Corps of Engineers"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "http://www.usace.army.mil/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-202-761-0031",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Arthritis, Musculoskeletal and Skin Diseases, National Institute of (NIAMS)"
+   },
+   "acceptTypes": [
+    "Organization",
+    "GovernmentOrganization"
+   ],
+   "attributes": {
+    "url": {
+     "paths": [
+      "url",
+      "website"
+     ],
+     "value": "https://www.niams.nih.gov/",
+     "compare": "contains"
+    },
+    "telephone": {
+     "paths": [
+      "telephone",
+      "phone_number",
+      "phone"
+     ],
+     "value": "1-301-495-4484",
+     "compare": "text"
+    }
+   }
+  }
+ ]
+}

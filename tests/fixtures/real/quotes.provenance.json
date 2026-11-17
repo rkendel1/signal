@@ -1,0 +1,18 @@
+{
+  "id": "quotes",
+  "url": "https://quotes.toscrape.com/",
+  "category": "posts_with_authors",
+  "terms": "toscrape.com is a sandbox built for scraping practice",
+  "fetchedAt": "2026-11-17T16:22:00.317Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://quotes.toscrape.com/",
+  "contentType": "text/html; charset=utf-8",
+  "byteLength": 11064,
+  "sha256": "efdc2605a2062dceb335ba421bd61d3a6795fb88bfa9873096ecd4a9406de1e3",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

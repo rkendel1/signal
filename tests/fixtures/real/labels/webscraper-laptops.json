@@ -1,0 +1,5510 @@
+{
+ "id": "webscraper-laptops",
+ "category": "product_listing",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Microdata puts itemprop=\"name\" on an <a>; by the HTML microdata rules its value is the href, not the title. The full name is in the title attribute; visible text is truncated.",
+  "Rating exists only as a data-rating attribute and star icons."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus VivoBook X441NA-GA190"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 295.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus VivoBook X441NA-GA190 Cho",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 14,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Prestigio SmartBook 133S Dark Grey"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 299,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Prestigio SmartBook 133S Dark ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Prestigio SmartBook 133S Gold"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 299,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Prestigio SmartBook 133S Gold,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 12,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Aspire E1-510"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 306.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "15.6\", Pentium N3520 2.16GHz, ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo V110-15IAP"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 321.94,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo V110-15IAP, 15.6\" HD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 5,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo V110-15IAP"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 356.49,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus VivoBook 15 X540NA-GQ008T",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 6,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hewlett Packard 250 G6 Dark Ash Silver"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 364.46,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Hewlett Packard 250 G6 Dark As",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 12,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire 3 A315-31 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 372.7,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire 3 A315-31 Black, 1",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire A315-31-C33J"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 379.94,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire A315-31-C33J Black",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire ES1-572 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 379.95,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire ES1-572 Black, 15.",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire 3 A315-31 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 391.48,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire 3 A315-31 Black, 1",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 10,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire 3 A315-21"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 393.88,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire 3 A315-21, 15.6\", ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus VivoBook Max"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 399,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus VivoBook Max X541NA-GQ041",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 4,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus VivoBook E502NA-GO022T Dark Blue"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 399.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus VivoBook E502NA-GO022T Da",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 3,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo ThinkPad E31-80"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 404.23,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo ThinkPad E31-80, 13.3\" ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 12,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire 3 A315-31 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 408.98,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire 3 A315-31 Black, 1",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 10,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo V110-15ISK"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 409.63,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo V110-15ISK, 15.6\" HD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire ES1-732 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 410.46,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire ES1-732 Black, 17.",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 14,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus VivoBook 15 X540NA-GQ026T"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 410.66,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus VivoBook 15 X540NA-GQ026T",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 4,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Packard 255 G2"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 416.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "15.6\", AMD E2-3800 1.3GHz, 4GB",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus EeeBook R416NA-FA014T"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 433.3,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus EeeBook R416NA-FA014T, 14",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 1,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire 3 A315-51"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 436.29,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire 3 A315-51, 15.6\" H",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 1,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire ES1-572 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 436.29,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire ES1-572 Black, 15.",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Extensa 15 (2540) Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 439.73,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Extensa 15 (2540) Black, ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 6,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire ES1-572 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 454.62,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire ES1-572 Black, 15.",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo V110-15ISK"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 454.73,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo V110-15ISK, 15.6\" HD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire A315-51-33TG"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 457.38,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire A315-51-33TG, Blac",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo V110-15IKB"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 465.95,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo V110-15IKB, 15.6\" HD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus VivoBook 15 X540UA-DM260 Chocolate Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 468.56,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus VivoBook 15 X540UA-DM260 ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 1,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire ES1-572 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 469.1,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire ES1-572 Black, 15.",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 5,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo V510 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 484.23,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo V510 Black, 14\" HD, Cor",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire ES1-572 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 485.9,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire ES1-572 Black, 15.",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 6,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo V510 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 487.8,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo V510 Black, 15.6\" HD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Swift 1 SF113-31 Silver"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 488.64,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Swift 1 SF113-31 Silver, ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 4,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Vostro 15"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 488.78,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Vostro 15 (3568) Black, 1",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 14,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire 3 A315-51 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 494.71,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire 3 A315-51 Black, 1",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Vostro 15 (3568) Red"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 497.17,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Vostro 15 (3568) Red, 15.",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo V510 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 498.23,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo V510 Black, 15.6\" FHD, ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 5,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "HP 250 G3"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 520.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "15.6\", Core i5-4210U, 4GB, 500",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 13,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Spin 5"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 564.98,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Spin 5 SP513-51 Black, 13",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "HP 350 G1"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 577.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "15.6\", Core i5-4200U, 4GB, 750",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 10,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Aspire E1-572G"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 581.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "15.6\", Core i5-4200U, 8GB, 1TB",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Pavilion"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 609.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "15.6\", Core i5-4200U, 6GB, 750",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 4,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire A515-51-5654"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 679,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire A515-51-5654, Blac",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Inspiron 15"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 679,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Inspiron 15 (5567) Fog Gr",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus VivoBook S14"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 729,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus VivoBook S14 (S406UA-BV04",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "ProBook"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 739.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "14\", Core i5 2.6GHz, 4GB, 500G",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Inspiron 15"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 745.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Moon Silver, 15.6\", Core i7-45",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 12,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ROG STRIX GL553VD-DM256"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 799,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ROG STRIX GL553VD-DM256, ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Nitro 5 AN515-51"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 809,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Nitro 5 AN515-51, 15.6\" F",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ROG STRIX GL553VD-DM256"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 899,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ROG STRIX GL553VD-DM256, ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo ThinkPad L570"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 999,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo ThinkPad L570, 15.6\" FH",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 11,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "ThinkPad Yoga"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1033.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "12.5\" Touch, Core i3-4010U, 4G",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 13,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo ThinkPad L460"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1096.02,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo ThinkPad L460, 14\" FHD ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 14,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Inspiron 15 (7567) Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1098.42,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Inspiron 15 (7567) Black,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "MSI GL72M 7RDX"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1099,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "MSI GL72M 7RDX, 17.3\" FHD, Cor",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 1,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "MSI GL72M 7RDX"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1099,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ROG Strix GL553VD-DM535T,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ROG Strix GL553VD-DM535T"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1101.83,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Apple MacBook Air 13.3\", Core ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 4,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5280"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1102.66,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5280, 12.5\" HD, ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5480"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1110.14,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5480, 14\" FHD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 4,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo Legion Y520-15IKBM"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1112.91,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo Legion Y520-15IKBM, Bla",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 1,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Toshiba Portege Z30-C-16J Grey"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1114.55,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Toshiba Portege Z30-C-16J Grey",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Predator Helios 300 (PH317-51)"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1123.87,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Predator Helios 300 (PH31",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 1,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Aspire 7 A715-71G"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1123.87,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Aspire 7 A715-71G, 15.6\" ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 4,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Inspiron 17 2in1 (7779) Silver"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1124.2,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Inspiron 17 2in1 (7779) S",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 10,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5480"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1133.82,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5480, 14\" FHD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 14,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo Legion Y520"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1133.91,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo Legion Y520, 15.6\" FHD,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 13,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus AsusPro Advanced BU401LA-FA271G Dark Grey"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1139.54,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus AsusPro Advanced BU401LA-",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Nitro 5 AN515-51"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1140.62,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Nitro 5 AN515-51, 15.6\" F",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 14,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5480"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1143.4,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5480, 14\" FHD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 5,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Inspiron 15 (7567) Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1144.2,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Inspiron 15 (7567) Black,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5580"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1144.4,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5580, 15.6\" FHD,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 10,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo Legion Y520-15IKBM"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1149,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo Legion Y520-15IKBM, 15.",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 11,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "MSI GP62M 7RDX Leopard"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1149,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "MSI GP62M 7RDX Leopard, 15.6\" ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 11,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo Yoga 720 Grey"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1149.73,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo Yoga 720 Grey, 15.6\" FH",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 12,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Toshiba Portege Z30-C-16L Grey"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1154.04,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Toshiba Portege Z30-C-16L Grey",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer TravelMate P645-S-511A Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1170.1,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer TravelMate P645-S-511A Bl",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5580"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1178.19,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5580, 15.6\" FHD,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 6,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "ThinkPad T540p"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1178.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "15.6\", Core i5-4200M, 4GB, 500",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "MSI GS63 7RD Stealth"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1179,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "MSI GS63 7RD Stealth, 15.6\" FH",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5480"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1187.88,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5480, 14\" FHD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 5,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Predator Helios 300 (PH317-51)"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1187.98,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Predator Helios 300 (PH31",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 14,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "MSI GL62M 7REX"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1199,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "MSI GL62M 7REX, 15.6\" FHD, Cor",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "MSI GL62M 7REX2"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1199,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "MSI GL62M 7REX2, 15.6\" FHD, Co",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 12,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo Yoga 910 Grey"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1199.73,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo Yoga 910 Grey, 13.9\" FH",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Toshiba Portege X30-D-10J Black/Blue"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1203.41,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Toshiba Portege X30-D-10J Blac",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 13,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo IdeaPad Miix 510 Platinum Silver"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1212.16,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo IdeaPad Miix 510 Platin",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Acer Predator Helios 300 (PH317-51)"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1221.58,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Acer Predator Helios 300 (PH31",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 9,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "ThinkPad Yoga"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1223.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "12.5\" Touch, Core i5 4200U, 8G",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus VivoBook Pro 15 N580VN-FI006T Gold Metal"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1235.49,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus VivoBook Pro 15 N580VN-FI",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 10,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5480"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1238.37,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5480, 14\" FHD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ZenBook UX530UX-FY040T Blue"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1239.2,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ZenBook UX530UX-FY040T Bl",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 14,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "ThinkPad X230"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1244.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "12.5\", Core i5 2.6GHz, 8GB, 18",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 10,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ROG Strix GL753VE-GC096T"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1259,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ROG Strix GL753VE-GC096T,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Apple MacBook Air 13\""
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1260.13,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Apple MacBook Air 13\", i5 1.8G",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5480"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1271.06,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5480, 14\" FHD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 13,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hewlett Packard Spectre 13-v106na Dark Ash Silver"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1273.11,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Hewlett Packard Spectre 13-v10",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell XPS 13"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1281.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "13.3\" Touch, Core i5-4210U, 8G",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 4,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Toshiba Portege Z30-C-16K Grey"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1294.74,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Toshiba Portege Z30-C-16K Grey",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 6,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "MSI GL62VR 7RFX"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1299,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "MSI GL62VR 7RFX, 15.6\" FHD, Co",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 1,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5480"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1310.39,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5480, 14\" FHD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "ThinkPad X240"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1311.99,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "12.5\", Core i5-4300U, 8GB, 240",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 12,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hewlett Packard ProBook 640 G3"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1326.83,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Hewlett Packard ProBook 640 G3",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 2,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Apple MacBook Pro 13\" Space Gray"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1333,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Apple MacBook Pro 13\" Space Gr",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5580"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1337.28,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5580, 15.6\" FHD,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 6,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5480"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1338.37,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5480, 14\" FHD, C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 11,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dell Latitude 5580"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1341.22,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Dell Latitude 5580, 15.6\" FHD,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 3,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Apple MacBook Air 13\""
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1347.78,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Apple MacBook Air 13\", Intel C",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 11,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo ThinkPad T470"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1349.23,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo ThinkPad T470, 14\" FHD ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 5,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo ThinkPad Yoga 370 Black"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1362.24,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo ThinkPad Yoga 370 Black",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 12,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 2,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Toshiba Portege X20W-D-10V Black/Blue"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1366.32,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Toshiba Portege X20W-D-10V Bla",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 11,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ASUSPRO B9440UA-GV0279R Gray"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1381.13,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ASUSPRO B9440UA-GV0279R G",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 4,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lenovo Legion Y720"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1399,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Lenovo Legion Y720, 15.6\" FHD ",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ROG Strix GL702VM-GC146T"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1399,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ROG Strix GL702VM-GC146T,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 10,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ROG Strix GL702ZC-GC154T"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1769,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ROG Strix GL702ZC-GC154T,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 7,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 4,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ROG Strix GL702ZC-GC209T"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1769,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ROG Strix GL702ZC-GC209T,",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 1,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Asus ROG Strix SCAR Edition GL503VM-ED115T"
+   },
+   "acceptTypes": [
+    "Product"
+   ],
+   "attributes": {
+    "price": {
+     "paths": [
+      "price",
+      "offers.price"
+     ],
+     "value": {
+      "amount": 1799,
+      "currency": "USD"
+     },
+     "compare": "money"
+    },
+    "description": {
+     "paths": [
+      "description"
+     ],
+     "value": "Asus ROG Strix SCAR Edition GL",
+     "compare": "contains"
+    },
+    "reviews": {
+     "paths": [
+      "reviewCount",
+      "aggregateRating.reviewCount"
+     ],
+     "value": 8,
+     "compare": "number"
+    },
+    "rating": {
+     "paths": [
+      "rating",
+      "ratingValue",
+      "aggregateRating.ratingValue"
+     ],
+     "value": 3,
+     "compare": "number",
+     "accessible": false
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "fake-jobs",
+  "url": "https://realpython.github.io/fake-jobs/",
+  "category": "job_listing",
+  "terms": "Real Python practice site for scraping tutorials",
+  "fetchedAt": "2026-11-17T16:21:58.697Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://realpython.github.io/fake-jobs/",
+  "contentType": "text/html; charset=utf-8",
+  "byteLength": 104429,
+  "sha256": "f3199d30c223be6ba73abff2713e204aba7c510c80f10c6f8d3f2ad13ba7d306",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

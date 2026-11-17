@@ -1,0 +1,24 @@
+{
+  "id": "hn-item",
+  "url": "https://news.ycombinator.com/item?id=1",
+  "category": "discussion",
+  "terms": "Public page; robots.txt allows. User names and comment text sanitized before retention",
+  "fetchedAt": "2026-11-17T16:22:07.004Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://news.ycombinator.com/item?id=1",
+  "contentType": "text/html; charset=utf-8",
+  "byteLength": 6207,
+  "sha256": "d43795f494ffa50e824897743515644a73b05742d773d6e07729d9339daacd6c",
+  "status": "ok",
+  "error": null,
+  "sanitized": true,
+  "sanitization": [
+    "3 usernames replaced with userN aliases",
+    "3 comment bodies replaced",
+    "per-session auth/goto query values removed"
+  ],
+  "originalSha256": "259e577807ac8c620cd600c4b95965544a588c15f150f0404927ac759fc4c569"
+}

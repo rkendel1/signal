@@ -1,0 +1,22 @@
+{
+  "id": "arxiv-abs",
+  "url": "https://arxiv.org/abs/1706.03762",
+  "category": "research_publication",
+  "terms": "arXiv abstract page; robots.txt allows /abs; metadata only retained in labels",
+  "fetchedAt": "2026-11-17T16:22:05.410Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://arxiv.org/abs/1706.03762",
+  "contentType": "text/html; charset=utf-8",
+  "byteLength": 43071,
+  "sha256": "407847f813bde820c6d9b534bc2bcf48e91d5840a2f4745ea3b95e7874d1ee22",
+  "status": "ok",
+  "error": null,
+  "sanitized": true,
+  "sanitization": [
+    "abstract text replaced (arXiv non-exclusive license); title, authors, dates and identifiers kept as bibliographic facts"
+  ],
+  "originalSha256": "af8c8702f1c65b70972fefe2118fa8cc09a609999b1d612be5e02986162e6326"
+}

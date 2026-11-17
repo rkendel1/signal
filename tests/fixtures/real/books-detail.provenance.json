@@ -1,0 +1,18 @@
+{
+  "id": "books-detail",
+  "url": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+  "category": "product_detail",
+  "terms": "toscrape.com is a sandbox built for scraping practice",
+  "fetchedAt": "2026-11-17T16:21:55.482Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+  "contentType": "text/html",
+  "byteLength": 9279,
+  "sha256": "a6e572bec156bf80ff3149b89b6d218cdcf8866ccc26ccf69a5431db8e142c6a",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

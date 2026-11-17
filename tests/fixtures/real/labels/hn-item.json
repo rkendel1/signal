@@ -1,0 +1,154 @@
+{
+ "id": "hn-item",
+ "category": "discussion",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Reply nesting is expressed by td.ind[indent] in flat table rows, not by DOM nesting.",
+  "Usernames replaced (user1..3) and comment bodies removed during sanitization."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "Y Combinator"
+   },
+   "acceptTypes": [
+    "SocialMediaPosting",
+    "DiscussionForumPosting",
+    "Article"
+   ],
+   "attributes": {
+    "score": {
+     "paths": [
+      "score",
+      "points",
+      "upvoteCount"
+     ],
+     "value": 57,
+     "compare": "number"
+    },
+    "date": {
+     "paths": [
+      "date",
+      "datePublished"
+     ],
+     "value": "2006-10-09",
+     "compare": "date"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "user1"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "author",
+    "value": "user2"
+   },
+   "acceptTypes": [
+    "Comment",
+    "SocialMediaPosting",
+    "DiscussionForumPosting"
+   ],
+   "attributes": {
+    "date": {
+     "paths": [
+      "date",
+      "dateCreated",
+      "datePublished"
+     ],
+     "value": "2006-10-09",
+     "compare": "date"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "inReplyTo",
+      "isPartOf"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Y Combinator"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "author",
+    "value": "user1"
+   },
+   "acceptTypes": [
+    "Comment",
+    "SocialMediaPosting",
+    "DiscussionForumPosting"
+   ],
+   "attributes": {
+    "date": {
+     "paths": [
+      "date",
+      "dateCreated",
+      "datePublished"
+     ],
+     "value": "2006-10-09",
+     "compare": "date"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "inReplyTo",
+      "isPartOf"
+     ],
+     "to": {
+      "attr": "author",
+      "value": "user2"
+     }
+    }
+   ]
+  },
+  {
+   "match": {
+    "attr": "author",
+    "value": "user3"
+   },
+   "acceptTypes": [
+    "Comment",
+    "SocialMediaPosting",
+    "DiscussionForumPosting"
+   ],
+   "attributes": {
+    "date": {
+     "paths": [
+      "date",
+      "dateCreated",
+      "datePublished"
+     ],
+     "value": "2007-02-25",
+     "compare": "date"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "inReplyTo",
+      "isPartOf"
+     ],
+     "to": {
+      "attr": "author",
+      "value": "user1"
+     }
+    }
+   ]
+  }
+ ]
+}

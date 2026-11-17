@@ -1,0 +1,4811 @@
+{
+ "id": "wiki-population",
+ "category": "data_table",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "240 body rows of the first wikitable; footnote markers stripped from names.",
+  "The first row is the World total."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "World"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 8232000000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "India"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1429404000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "China"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1404890000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "United States"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 341784857,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Indonesia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 290125073,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Pakistan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 241499431,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nigeria"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 223800000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Brazil"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 214211951,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bangladesh"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 169828911,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Russia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 146028325,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mexico"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 131231919,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Japan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 122690000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Democratic Republic of the Congo"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 116452162,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Philippines"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 114849400,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ethiopia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 111652998,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Egypt"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 108613296,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Vietnam"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 102300000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Iran"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 87134000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Turkey"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 86092168,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Germany"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 83298787,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Thailand"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 70250751,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tanzania"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 70038850,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "United Kingdom"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 69487000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "France"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 69081996,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "South Africa"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 63522380,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Italy"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 58949500,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kenya"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 54227015,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Colombia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 53399171,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sudan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 53282719,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Myanmar"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 51375327,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "South Korea"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 51088284,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Spain"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 49935642,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Algeria"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 47400000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Argentina"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 46466688,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Iraq"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 46118793,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Uganda"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 45905417,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Afghanistan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 43844000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Canada"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 41798407,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Uzbekistan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 39047321,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Angola"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 38778554,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Morocco"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 37254695,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Poland"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 37221000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saudi Arabia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 35300280,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mozambique"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 34958973,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Malaysia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 34389400,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ghana"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 34378768,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Peru"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 34157732,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ivory Coast"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 33293101,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Yemen"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 32684503,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Madagascar"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 32658977,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nepal"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 30034040,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cameroon"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 29442327,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ukraine"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 28700000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Venezuela"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 28633711,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Australia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 27921150,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Niger"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 27522750,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Syria"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 26472497,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "North Korea"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 25950000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Burkina Faso"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 24736828,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mali"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 23929000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Taiwan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 23204000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Zambia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 23003214,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sri Lanka"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 21778000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Malawi"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 21201635,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kazakhstan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 20633529,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Somalia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 20305907,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Chile"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 20150948,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Chad"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 20031602,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Senegal"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 19575061,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Romania"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 19041322,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guatemala"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 18312373,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ecuador"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 18243816,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Netherlands"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 18192693,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cambodia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 17816143,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guinea"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 17521167,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Zimbabwe"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 16175966,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "South Sudan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 15786898,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Rwanda"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 14418145,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Benin"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 13551992,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Burundi"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 12332788,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "United Arab Emirates"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 12063953,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tunisia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11992843,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Belgium"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11947050,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Jordan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11937000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Haiti"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11867032,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Portugal"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11424031,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bolivia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11365333,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Czech Republic"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10903655,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dominican Republic"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10771504,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tajikistan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10721000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sweden"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10621725,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Greece"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10372335,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Israel"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10296300,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Azerbaijan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10273450,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Honduras"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10186738,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Papua New Guinea"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10185363,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hungary"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9488428,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cuba"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9434593,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sierra Leone"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9270700,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Austria"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9228795,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Switzerland"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9154896,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Belarus"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9056080,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Togo"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 8095498,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Laos"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7745000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Libya"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7539852,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hong Kong (China)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7518300,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kyrgyzstan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7404300,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Turkmenistan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7057841,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nicaragua"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6874748,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Serbia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6532019,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Central African Republic"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6470307,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bulgaria"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6423207,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Singapore"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6208500,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Republic of the Congo"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6142180,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Paraguay"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6109644,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Denmark"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6044001,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "El Salvador"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6029976,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lebanon"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5895466,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Finland"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5662086,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Norway"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5636904,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Palestine"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5557096,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ireland"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5525600,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Oman"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5454352,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Slovakia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5403009,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "New Zealand"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5372400,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Liberia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5248621,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Costa Rica"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5217296,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mauritania"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4927532,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kuwait"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4881254,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Panama"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4064780,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Georgia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3941100,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Croatia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3874993,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Eritrea"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3682669,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mongolia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3591120,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Uruguay"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3480601,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bosnia and Herzegovina"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3412000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Qatar"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3370611,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Puerto Rico (US)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3184835,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Armenia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3103900,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Namibia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3022401,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lithuania"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2890874,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Jamaica"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2774538,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Botswana"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2515633,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Gabon"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2469296,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Gambia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2422712,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Moldova"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2365600,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Albania"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2335930,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Slovenia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2138751,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lesotho"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2116427,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guinea-Bissau"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1890252,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Latvia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1828600,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "North Macedonia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1819074,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Equatorial Guinea"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1727151,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bahrain"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1603260,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kosovo"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1582322,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Timor-Leste"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1409452,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Trinidad and Tobago"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1367764,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Estonia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1360745,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mauritius"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1240316,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Eswatini"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1235549,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Djibouti"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1066809,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cyprus"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 996600,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guyana"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 956044,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Comoros"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 944388,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Fiji"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 902623,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bhutan"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 790718,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Solomon Islands"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 750325,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Luxembourg"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 690959,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Macau (China)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 686500,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Montenegro"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 622902,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Suriname"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 616500,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Western Sahara (disputed)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 610813,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Malta"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 588254,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Maldives"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 515132,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cape Verde"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 491233,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Northern Cyprus"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 476214,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Brunei"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 458600,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Belize"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 418982,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bahamas"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 398165,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Iceland"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 397710,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Transnistria"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 367776,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Vanuatu"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 321409,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "French Polynesia (France)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 279500,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "New Caledonia (France)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 264596,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Barbados"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 261692,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Abkhazia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 244236,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "São Tomé and Príncipe"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 209607,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Samoa"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 205557,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Lucia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 184100,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Curaçao (Netherlands)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 158006,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guam (US)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 153836,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Seychelles"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 123565,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kiribati"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 120740,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Aruba (Netherlands)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 110625,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Vincent and the Grenadines"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 109296,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Grenada"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 109021,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Antigua and Barbuda"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 106365,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Jersey (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 104540,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tonga"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 100179,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Andorra"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 90271,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cayman Islands (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 88833,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "U.S. Virgin Islands (US)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 87146,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Isle of Man (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 84975,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Micronesia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 75817,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dominica"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 65431,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guernsey (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 64781,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bermuda (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 64055,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Greenland (Denmark)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 56945,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "South Ossetia"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 56520,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Faroe Islands (Denmark)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 55616,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Turks and Caicos Islands (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 52299,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Kitts and Nevis"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 51320,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "American Samoa (US)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 49710,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Northern Mariana Islands (US)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 47329,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sint Maarten (Netherlands)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 42449,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Marshall Islands"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 42418,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Liechtenstein"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 41228,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "British Virgin Islands (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 39471,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Monaco"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 38857,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Gibraltar (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 38196,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "San Marino"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 34151,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Martin (France)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 31496,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Palau"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 16733,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Anguilla (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 16010,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cook Islands"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 15040,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nauru"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11680,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Wallis and Futuna (France)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11620,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tuvalu"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10643,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Barthélemy (France)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10562,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Pierre and Miquelon (France)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5819,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Helena, Ascension and Tristan da Cunha (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5651,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Montserrat (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4386,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Falkland Islands (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3662,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tokelau (New Zealand)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2608,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Norfolk Island (Australia)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2188,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Christmas Island (Australia)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1692,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Niue"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1681,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Vatican City"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 882,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cocos (Keeling) Islands (Australia)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 593,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Pitcairn Islands (UK)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "Country"
+   ],
+   "attributes": {
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 35,
+     "compare": "number"
+    }
+   }
+  }
+ ]
+}

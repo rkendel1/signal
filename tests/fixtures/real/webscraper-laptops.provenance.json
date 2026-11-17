@@ -1,0 +1,18 @@
+{
+  "id": "webscraper-laptops",
+  "url": "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops",
+  "category": "product_listing",
+  "terms": "webscraper.io test sites are published for scraping practice; robots.txt allows",
+  "fetchedAt": "2026-11-17T16:21:57.103Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops",
+  "contentType": "text/html; charset=utf-8",
+  "byteLength": 179185,
+  "sha256": "520c9d257cedd6e5e99089df60d6b87104b6ea65df8f252f83af0b1fbd1865b6",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}
