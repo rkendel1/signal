@@ -1,5 +1,29 @@
 # Signal — Acceptance Report
 
+## Show a match where it is on the page; one overlay per page (2026-11-17)
+
+**Reported by use.**
+- An alert named the match (an address) but did not show where it was on the page.
+- Two overlays appeared on one page.
+
+**Changes:**
+- **"Show on page"** on every match, in the overlay's alert and in the panel's results. It scrolls the item into view and frames it with a label stating why it matched ("Signal match: Bedrooms 3–4 · Price $199,000–$349,000"); the frame follows scrolling. When the item is not on the page right now, it says so and why; listings with a URL also get "Open listing".
+- **Finding an item on the live page.** By its recorded position (visible elements only), else by its detail-page link (its card), else by its name or address text. Pages re-render after a capture, so the recorded position alone is not enough. Discovery candidates now carry `locators`, shared by the panel and by alerts.
+- **One overlay per page.** An overlay left by an earlier extension load (another script world) is told to stop through a DOM event and removed; the newest one takes over.
+
+### Verification
+
+| Command | Result |
+|---|---|
+| `npm run test:e2e` | 2 passed, three runs in a row. New steps: in a short window, "Show on page" for 15 Maple Dr scrolls it into view and shows the reason label. A stale overlay injected in another script world leaves exactly one overlay, and it is the working one ("1 alert") |
+| `npx feltkit test` | 98 passed |
+| `node --test tests/lib/*.test.ts` | 80 passed |
+
+### Not verified
+- **The real site.** Whether its cards re-render in a way that defeats all three strategies is unknown. An item described only in the page's structured data (e.g. an open-house event with no card of its own) is reported as not visible, rather than pointed at a guess.
+
+---
+
 ## Alerts for an intent, scoped to the search (2026-11-17)
 
 **Reported by use.**

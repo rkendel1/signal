@@ -267,7 +267,7 @@ export async function loadFacets(client: FeltKitClient, set: Captured[], types?:
 }
 
 export interface DiscoveryView {
-	candidates: Array<{ key: string; name: string | null; type: string; status: 'match' | 'possible' | 'non_match' | 'out_of_scope'; missing: string[]; changed?: { fields: string[] }; criteria: Array<{ id: string; label: string; result: 'true' | 'false' | 'unknown'; reason?: string }> }>;
+	candidates: Array<{ key: string; name: string | null; type: string; status: 'match' | 'possible' | 'non_match' | 'out_of_scope'; missing: string[]; locators: string[]; changed?: { fields: string[] }; criteria: Array<{ id: string; label: string; result: 'true' | 'false' | 'unknown'; reason?: string }> }>;
 	coverage: { declaredTotal: number | null; listed: number; discovered: number; notYetExamined: number | null; exhaustive: boolean; exhaustiveBasis: string; unavailable: Array<{ what: string; why: string }> };
 	plan: Array<{ kind: string; target: string; reason: string; executesIn: 'browser-session' | 'background' | 'user'; priority: number }>;
 	context: Record<string, { value: unknown; source: string; basis: string }>;
@@ -337,6 +337,17 @@ export async function showOverlay(tabId: number): Promise<void> {
 		args: [chrome.runtime.getURL('codec')]
 	});
 	await chrome.scripting.executeScript({ target: { tabId }, files: ['overlay.js'] });
+}
+
+/** Scroll to an item on the tab and frame it, with why it matched. False when it is not on the page right now. */
+export async function showOnPage(tabId: number, item: { key: string; name: string | null; locators: string[]; criteria: string[] }): Promise<boolean> {
+	await showOverlay(tabId);
+	const [r] = await chrome.scripting.executeScript({
+		target: { tabId },
+		func: (x: typeof item) => (window as unknown as { __signalOverlay?: { show: (v: unknown) => boolean } }).__signalOverlay?.show(x) ?? false,
+		args: [item]
+	});
+	return r?.result === true;
 }
 
 export function errorText(e: unknown): string {

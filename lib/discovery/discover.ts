@@ -77,6 +77,8 @@ export interface Candidate {
 	metrics: Record<string, { value: number | null; /** several values when inputs conflict */ possibleValues?: number[]; provenance: 'calculated'; inputs: Array<{ attr: string; provenance: string; source?: string }> }>;
 	changed?: { since: string; fields: string[] };
 	evidenceRefs: string[];
+	/** Where the candidate is on the page: CSS locators of visible elements (not JSON-LD), record element first. */
+	locators: string[];
 }
 
 export interface DiscoveryCoverage {
@@ -229,6 +231,14 @@ export interface DiscoverInput {
 	user?: { bounds?: Bounds; selection?: string[] };
 }
 
+const locatorCache = new WeakMap<PageRepresentation, Map<string, string>>();
+/** The locator of an evidence item when it is a visible element (JSON-LD evidence points at a <script>). */
+function visibleLocator(page: PageRepresentation, id: string): string | null {
+	let m = locatorCache.get(page);
+	if (!m) { m = new Map(page.evidence.filter((e) => e.method !== 'json-ld' && e.element !== 'script' && e.element !== 'meta').map((e) => [e.id, e.locator])); locatorCache.set(page, m); }
+	return m.get(id) ?? null;
+}
+
 /** Reconcile: descriptions of the same thing (sameAs, or the same source URL) form one candidate. */
 function groupCandidates(pages: PageRepresentation[], targets: Set<string>): Map<string, Group> {
 	const groups = new Map<string, Group>();
@@ -327,7 +337,8 @@ export function discover(input: DiscoverInput): DiscoveryResult {
 			key: g.key, entityIds: g.entities.map(({ e }) => e.id), type: first.type, name: name ?? null, status, criteria,
 			missing: [...criteria.filter((c) => c.result === 'unknown').map((c) => `${c.id}: ${c.reason}`), ...(scopeUnknown ? ['scope: no coordinates'] : [])],
 			metrics, ...(prev && changedFields.length ? { changed: { since: input.previous!.resultDigest, fields: changedFields } } : {}),
-			evidenceRefs: [...new Set(g.entities.flatMap(({ e }) => e.evidenceRefs.slice(0, 2)))]
+			evidenceRefs: [...new Set(g.entities.flatMap(({ e }) => e.evidenceRefs.slice(0, 2)))],
+			locators: [...new Set(g.entities.flatMap(({ e, page }) => e.evidenceRefs.map((id) => visibleLocator(page, id)).filter((l): l is string => !!l)))].slice(0, 3)
 		});
 
 	}

@@ -19,7 +19,7 @@ const Candidate = s.object({
   key: s.string(), entityIds: s.array(s.string()), type: s.string(), name: s.nullable(s.string()),
   status: s.enum(["match", "possible", "non_match", "out_of_scope"] as const),
   criteria: s.array(s.object({ id: s.string(), label: s.string(), result: s.enum(["true", "false", "unknown"] as const), reason: s.optional(s.string()), values: s.array(s.unknown()), provenance: s.array(s.string()) })),
-  missing: s.array(s.string()), metrics: s.record(s.unknown()), changed: s.optional(s.object({ since: s.string(), fields: s.array(s.string()) })), evidenceRefs: s.array(s.string()),
+  missing: s.array(s.string()), locators: s.array(s.string()), metrics: s.record(s.unknown()), changed: s.optional(s.object({ since: s.string(), fields: s.array(s.string()) })), evidenceRefs: s.array(s.string()),
 });
 const n = s.integer();
 const Result = s.object({

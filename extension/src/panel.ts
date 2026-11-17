@@ -3,7 +3,7 @@ import type { FeltKitClient, SessionInfo } from '@feltdb/feltkit/client';
 import {
 	activeTab, capture, connect, discover, errorText, forgetInstance, instanceOrigin, intentDraft, loadFacets, lockStorage, navigableTarget,
 	relayOverlay, savedInstance, saveIntentDraft, saveWorkingSet, showOverlay, snapshotTab, workingSet, type DiscoveryView, type Facet, type Facets,
-	clearOtherScope, findWatch, notify, pageLocator, parentLocator, setWatch, stopWatch, watchedPages
+	clearOtherScope, findWatch, notify, pageLocator, parentLocator, setWatch, showOnPage, stopWatch, watchedPages
 } from './host.ts';
 import { buildIntent, formatValue, niceStep, reconcile, type EditorState, type FilterState } from './intent-builder.ts';
 
@@ -91,6 +91,14 @@ function renderResults(r: DiscoveryView) {
 			const crit = el('div', 'crit');
 			for (const x of cand.criteria) { const [m, cls] = MARK[x.result]; const s = el('span', cls, `${m} ${x.label}`); if (x.reason) s.title = x.reason; crit.append(s); }
 			li.append(head, crit);
+			const go = el('button', 'secondary small', 'Show on page') as HTMLButtonElement; go.type = 'button';
+			go.addEventListener('click', () => void (async () => {
+				li.querySelector('.miss')?.remove();
+				const tab = await activeTab().catch(() => null);
+				const found = tab?.id ? await showOnPage(tab.id, { key: cand.key, name: cand.name, locators: cand.locators ?? [], criteria: cand.criteria.filter((x) => x.result === 'true').map((x) => x.label) }).catch(() => false) : false;
+				if (!found) li.append(el('div', 'muted miss', 'Not on the open page right now: it may be further down a list that has not loaded yet, on another captured page, or only described in the page’s data.'));
+			})());
+			li.append(go);
 			if (cand.changed) li.append(el('div', 'muted', `Changed: ${labelled(cand.changed.fields.join(', '))}`));
 			if (cand.missing.length) li.append(el('div', 'muted', `Undecided: ${labelled(cand.missing.join('; '))}`));
 			ul.append(li);

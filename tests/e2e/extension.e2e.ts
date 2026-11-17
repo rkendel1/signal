@@ -165,7 +165,45 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	let n = 0;
 	for (let i = 0; i < 40 && n !== 4; i++) { await page.waitForTimeout(250); n = await outlined(); }
 	assert.equal(n, 4, 'matching items outlined on the page');
-	if (process.env.SIGNAL_SCREENSHOTS) { await page.setViewportSize({ width: 900, height: 1100 }); await page.screenshot({ path: join(process.env.SIGNAL_SCREENSHOTS, 'extension-page.png') }); }
+
+	// "Show on page": the listing is scrolled into view and framed with why it matched.
+	const shadowText = async () => {
+		const c = await ctx.newCDPSession(page);
+		const { root: d } = await c.send('DOM.getDocument', { depth: -1, pierce: true });
+		const out: string[] = [];
+		const walk = (nd: any, inside: boolean) => { const here = inside || (nd.attributes ?? []).includes('data-signal-overlay'); if (here && nd.nodeType === 3 && nd.nodeValue.trim()) out.push(nd.nodeValue.trim()); for (const k of [...(nd.shadowRoots ?? []), ...(nd.children ?? [])]) if (k.nodeName !== 'STYLE') walk(k, here); };
+		walk(d, false);
+		await c.detach();
+		return out.join('\n');
+	};
+	await page.setViewportSize({ width: 900, height: 500 }); // short window: the last match starts below the fold
+	await page.evaluate(() => window.scrollTo(0, 0));
+	await panel.click('.cand:has(.head > :first-child:text-is("15 Maple Dr")) button:text("Show on page")');
+	let spotted = '';
+	for (let i = 0; i < 40 && !/Signal match:/.test(spotted); i++) { await page.waitForTimeout(150); spotted = await shadowText(); }
+	assert.match(spotted, /^Signal match: Bedrooms 3–4 · Price \$199,000–\$349,000$/m, 'framed on the page with why it matched');
+	await page.waitForTimeout(800); // smooth scroll
+	const inView = await page.evaluate(() => {
+		const a = [...document.querySelectorAll('a')].find((x) => x.textContent === '15 Maple Dr')!;
+		const r = a.getBoundingClientRect();
+		return r.top >= 0 && r.bottom <= window.innerHeight;
+	});
+	assert.ok(inView, 'scrolled to where the listing is');
+	if (process.env.SIGNAL_SCREENSHOTS) { await page.setViewportSize({ width: 900, height: 700 }); await page.waitForTimeout(300); await page.screenshot({ path: join(process.env.SIGNAL_SCREENSHOTS, 'extension-page.png') }); }
+
+	// One overlay per page, even when an older one is left behind in another script world (an extension reload).
+	await panel.evaluate(async (url: string) => {
+		const [tab] = await chrome.tabs.query({ url: `${url}/*` });
+		await chrome.scripting.executeScript({ target: { tabId: tab.id! }, files: ['overlay.js'], world: 'MAIN' }); // stands in for the orphan
+	}, site.url);
+	await page.waitForTimeout(300);
+	await panel.click('#overlay');
+	await panel.waitForFunction(() => /Alerts are shown/.test(document.getElementById('status')!.textContent ?? ''));
+	let hosts = 0;
+	for (let i = 0; i < 20; i++) { await page.waitForTimeout(150); hosts = await page.evaluate(() => document.querySelectorAll('[data-signal-overlay]').length); if (hosts === 1 && /1 alert/.test(await shadowText())) break; }
+	assert.equal(hosts, 1, 'exactly one overlay');
+	assert.match(await shadowText(), /^1 alert$/m, 'and it is the working one');
+	await page.setViewportSize({ width: 1280, height: 720 });
 
 	// The page changes; the person captures it again: changes are detected against the previous capture.
 	site.set('/search', { body: served('neighborhood-later.html', site.url) });

@@ -173,13 +173,11 @@ export class DeterministicEvaluator implements CriteriaEvaluator {
 				if (!ctx.page) { trace.push({ path: `${path}.discover`, op: 'discover', expected: c.discover.name, actual: null, result: false, note: 'no page representation (not HTML)' }); return false; }
 				const previous = ctx.previousPage ? discover({ intent: c.discover, pages: [ctx.previousPage] }) : undefined;
 				const r = discover({ intent: c.discover, pages: [ctx.page], ...(previous ? { previous } : {}) });
-				// Where each match is on the page: visible elements first (JSON-LD evidence points at a <script>).
-				const evidence = new Map(ctx.page.evidence.filter((e) => e.method !== 'json-ld' && e.element !== 'script' && e.element !== 'meta').map((e) => [e.id, e.locator]));
 				const matches = r.candidates.filter((x) => x.status === 'match');
 				const shown = matches.slice(0, 20).map((m) => ({
 					key: m.key, name: m.name, type: m.type, criteria: m.criteria.map((x) => x.label),
 					values: Object.fromEntries(m.criteria.map((x) => [x.id, x.values])), ...(m.changed ? { changed: m.changed.fields } : {}),
-					locators: m.evidenceRefs.map((id) => evidence.get(id)).filter((l): l is string => !!l).slice(0, 3)
+					locators: m.locators
 				}));
 				const ok = matches.length > 0;
 				trace.push({ path: `${path}.discover`, op: 'discover', expected: c.discover.name, actual: shown, result: ok, note: `${matches.length} match, ${r.candidates.filter((x) => x.status === 'possible').length} possible, of ${r.candidates.length} candidates` });
