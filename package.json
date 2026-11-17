@@ -1,21 +1,28 @@
 {
-  "name": "@boundry/signal",
-  "version": "0.1.0",
-  "description": "Signal: observe authorized sources, interpret signals (incl. Ghostpost codec), evaluate declarative criteria, record evidence-backed events, deliver alerts.",
+  "name": "signal",
+  "private": true,
+  "version": "0.2.0",
+  "description": "Signal: observe authorized sources, interpret signals (incl. the Ghostpost codec), evaluate declarative criteria, record evidence-backed events, and alert. A FeltKit application.",
   "type": "module",
   "license": "MIT",
-  "engines": {
-    "node": ">=22.18"
-  },
+  "engines": { "node": ">=22.18" },
   "scripts": {
-    "test": "node --test test/*.test.ts",
+    "dev": "feltkit dev",
+    "build": "feltkit build",
+    "start": "feltkit start",
+    "test": "feltkit test",
+    "test:lib": "node --test tests/lib/*.test.ts",
     "test:codec": "cargo test --manifest-path codecs/ghostpost-unicode/Cargo.toml",
     "build:codec": "sh scripts/build-codec.sh",
-    "demo": "node scripts/demo-vertical-slice.ts",
-    "bench": "node scripts/bench.ts",
-    "serve": "node src/api/server.ts"
+    "inspect": "feltkit inspect",
+    "typecheck": "tsc --noEmit",
+    "bench": "node scripts/bench.ts"
   },
   "dependencies": {
-    "@feltdb/core": "0.21.0"
+    "@feltdb/feltkit": "0.3.31"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.1",
+    "typescript": "7.0.2"
   }
 }

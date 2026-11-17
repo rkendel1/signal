@@ -45,7 +45,12 @@ export function isPrivateAddress(ip: string): boolean {
 		v.startsWith('fe9') || v.startsWith('fea') || v.startsWith('feb') || v.startsWith('ff') || v.startsWith('64:ff9b');
 }
 
-export async function assertUrlAllowed(raw: string, policy: NetPolicy = {}): Promise<URL> {
+/**
+ * Synchronous checks that need no DNS: scheme, credentials, internal names, literal
+ * private IPs. Safe inside a FeltKit mutation (no network). Returns the parsed URL and
+ * whether the host is explicitly allowed.
+ */
+export function assertUrlShapeAllowed(raw: string, policy: NetPolicy = {}): { url: URL; host: string; allowlisted: boolean } {
 	let url: URL;
 	try {
 		url = new URL(raw);
@@ -57,11 +62,18 @@ export async function assertUrlAllowed(raw: string, policy: NetPolicy = {}): Pro
 	}
 	if (url.username || url.password) throw new BlockedUrlError('Credentials in URL are not allowed');
 	const host = url.hostname.replace(/^\[|\]$/g, '');
-	if ((policy.allowPrivateHosts ?? []).includes(host)) return url;
+	if ((policy.allowPrivateHosts ?? []).includes(host)) return { url, host, allowlisted: true };
 	if (host === 'localhost' || host.endsWith('.localhost') || host.endsWith('.internal') || host === 'metadata.google.internal') {
 		throw new BlockedUrlError(`Host ${host} is internal`);
 	}
-	const addrs = isIP(host) ? [{ address: host }] : await lookup(host, { all: true, verbatim: true }).catch(() => {
+	if (isIP(host) && isPrivateAddress(host)) throw new BlockedUrlError(`Host ${host} resolves to non-public address ${host}`);
+	return { url, host, allowlisted: false };
+}
+
+export async function assertUrlAllowed(raw: string, policy: NetPolicy = {}): Promise<URL> {
+	const { url, host, allowlisted } = assertUrlShapeAllowed(raw, policy);
+	if (allowlisted || isIP(host)) return url;
+	const addrs = await lookup(host, { all: true, verbatim: true }).catch(() => {
 		throw new BlockedUrlError(`Host ${host} does not resolve`);
 	});
 	for (const a of addrs) {

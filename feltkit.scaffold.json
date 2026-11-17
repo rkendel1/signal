@@ -1,0 +1,29 @@
+{
+  "schema": "feltkit.scaffold/1",
+  "generator": "create-feltkit",
+  "version": "0.3.31",
+  "template": "tasks",
+  "appName": "signal",
+  "files": {
+    ".gitignore": "d950b96297c708cdabe267b6fac4d8c9c0250130ec46ccab5a7b797a2a54603a",
+    "README.md": "6f52e606c42dcdb877c0ebfbc732b7aa6305482108e86257b2db6d17ca86bb62",
+    "feltkit/_generated/api.ts": "f3e16bb986bf4ff4ca5b098e1075e65d5c8bd93ab1b8d5046634cd9c60fe3e9e",
+    "feltkit/app.ts": "5919b73ecca6ac1a549e977160e98af2a309fb5d4868d4b9138276645cc644a5",
+    "feltkit/inbox.ts": "1c31c42352924caa9910be9b3ed14c3a11550c4611e7c378599fd3e754ae42e4",
+    "feltkit/projects.ts": "44995b1ae3672fdb3a7de97c0b925132ce73d6635e75af30387b4aa586ecf056",
+    "feltkit/tasks.ts": "241723e94cb06218425eca270bbc7f54adf32956a4a1b24a1f29340e62d77318",
+    "index.html": "e666101f33f29f4cd3d3124fa86ec5aadb73211d0ad27cc667f4bf9fdd934b28",
+    "package.json": "bb46cb791b4badf3194fff6b5c0b880da4ffb54d065235286007c78948bc601c",
+    "public/apple-touch-icon.png": "f178acb22d7fffb443d3b44bbb9e77abe8dcd910c5c92c44efb3b449a716697c",
+    "public/favicon.png": "d63ce9d8306b4e9d6c846c6ba0ab02bb931e7ea3a597c60a378f57914b7d5e08",
+    "public/feltkit-mark.png": "bf0278ae55fde084e687454607ab5fa2adfadb6d012f97e4a870920f371bc251",
+    "public/theme.js": "f3dab7c7cd5c8ceb759b45c15c387525909a8b1267f4bdb62e318bd83c705b23",
+    "src/App.tsx": "67b80667f1fe761f78cb071dfb32dc282b67afd000103ef862c4587120900e46",
+    "src/main.tsx": "8684ccefc9de95eca599091e5df0ecc2476229617cc588c0d6740ef42f1b1e3e",
+    "src/styles.css": "05528f384ba6f43166bd9e576fe6573c5d35a2b7994b6076da3d85b5969ec76d",
+    "src/theme.tsx": "0ebaedfcfa72cdc7ada8764ba233c4697f180eb86e5860e369c881b751c2a785",
+    "tests/tasks.test.ts": "bd551a15f63b727cf517942e3d9ccf98efba6ed5d084a39e744c96829a3d594c",
+    "tsconfig.json": "bd36362dfc4aee48a50e237401186bcf2c51eb103700cd2ee57b3f5d55e94d12",
+    "vite.config.ts": "eca485c281977125366d4800553256e419f364984e615f75a2d2bae54f7857fd"
+  }
+}

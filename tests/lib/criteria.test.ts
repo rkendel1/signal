@@ -1,9 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import type { Condition, CriteriaDefinition, Interpretation } from '../src/contracts/types.ts';
-import { DeterministicEvaluator, fuzzyContains, validateCondition } from '../src/core/evaluate.ts';
-import { extractFields, parseNumber, jsonPointer } from '../src/interpret/extract.ts';
-import { htmlToText } from '../src/interpret/normalize.ts';
+import type { Condition, CriteriaDefinition, Interpretation } from '../../lib/contracts/types.ts';
+import { DeterministicEvaluator, fuzzyContains, validateCondition } from '../../lib/core/evaluate.ts';
+import { extractFields, parseNumber, jsonPointer } from '../../lib/interpret/extract.ts';
+import { htmlToText } from '../../lib/interpret/normalize.ts';
 
 const ev = new DeterministicEvaluator();
 function interp(fields: Record<string, unknown>, signals: Interpretation['signals'] = []): Interpretation {

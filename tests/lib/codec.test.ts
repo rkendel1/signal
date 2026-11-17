@@ -1,13 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import * as wasm from '../codecs/ghostpost-unicode/pkg/ghostpost_unicode_codec.js';
-import { GhostpostUnicodeDecoder, ghostpostEncoder, initGhostpostCodec } from '../src/codecs/ghostpost-unicode.ts';
-import { InvisibleUnicodeDetector } from '../src/codecs/invisible-unicode.ts';
+import * as wasm from '../../codecs/ghostpost-unicode/pkg/ghostpost_unicode_codec.js';
+import { GhostpostUnicodeDecoder, ghostpostEncoder, initGhostpostCodec } from '../../lib/codecs/ghostpost-unicode.ts';
+import { InvisibleUnicodeDetector } from '../../lib/codecs/invisible-unicode.ts';
 
 initGhostpostCodec();
 const dec = new GhostpostUnicodeDecoder();
-const fx = JSON.parse(readFileSync(new URL('./fixtures/ghostpost-369220a.json', import.meta.url), 'utf8'));
+const fx = JSON.parse(readFileSync(new URL('../fixtures/ghostpost-369220a.json', import.meta.url), 'utf8'));
 
 test('cross-implementation: Signal build encodes byte-identically to original Ghostpost WASM', () => {
 	for (const c of fx.cases) {
