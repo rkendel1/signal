@@ -10,7 +10,7 @@ export type FilterState =
 	| { kind: 'category'; on: boolean; values: Array<string | number | boolean>; missing: Missing }
 	| { kind: 'boolean'; on: boolean; value: boolean; missing: Missing }
 	| { kind: 'presence'; on: boolean; missing: Missing };
-export interface EditorState { types: string[]; filters: Record<string, FilterState> }
+export interface EditorState { types: string[]; filters: Record<string, FilterState>; /** true once the person chose types (an empty choice included) */ chosen?: boolean }
 
 /** The initial state of a control: off, spanning everything observed. Presence filters count absence as "no". */
 export function defaultFilter(f: Facet): FilterState {

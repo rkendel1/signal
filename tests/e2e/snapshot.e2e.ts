@@ -30,8 +30,10 @@ test('reduced snapshots keep every fact on all retained real pages, and are smal
 		const page = await ctx.newPage();
 		await page.route('**/*', (r: any) => (r.request().url() === url ? r.fulfill({ body: html, contentType: 'text/html; charset=utf-8' }) : r.abort()));
 		await page.goto(url, { waitUntil: 'domcontentloaded' });
+		await page.evaluate(`globalThis.__snap = ${snapshotPage.toString()}`);
 		const full: string = await page.evaluate(() => '<!doctype html>\n' + document.documentElement.outerHTML);
-		const snap = await page.evaluate(snapshotPage, 50_000_000);
+		// Structural reduction only: rendered visibility is tested separately below (it changes facts on purpose).
+		const snap = await page.evaluate(([max, rendered]: [number, boolean]) => (globalThis as any).__snap(max, rendered), [50_000_000, false] as [number, boolean]);
 		await page.close();
 		const rep = (h: string): PageRepresentation => extractPage({ html: h, locator: prov.url, baseUrl: url, observationId: 'o', contentHash: 'h', contentType: 'text/html', observedAt: prov.fetchedAt });
 		const a = rep(full), b = rep(snap.html!);
@@ -48,4 +50,32 @@ test('reduced snapshots keep every fact on all retained real pages, and are smal
 		rows.push(`${id.padEnd(20)} full ${String(full.length).padStart(8)}  reduced ${String(snap.chars).padStart(8)}  (${Math.round((1 - snap.chars / full.length) * 100)}% smaller)  entities ${b.entities.length}`);
 	}
 	console.log(rows.join('\n'));
+});
+
+test('rendered visibility: what the page does not display is dropped; what it displays despite aria-hidden is kept', { timeout: 60_000 }, async (t) => {
+	const browser = await chromium.launch();
+	t.after(() => browser.close());
+	const page = await (await browser.newContext()).newPage();
+	await page.setContent(`<!doctype html><html><head><style>.collapsed{display:none}</style>
+		<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Acme Realty"}</script></head><body><main><h1>Homes</h1>
+		<ul class="cards">
+			<li class="card"><a href="/h/1">1 Main St</a><span class="price" aria-hidden="true">$300,000</span><span>3 bd</span></li>
+			<li class="card"><a href="/h/2">2 Main St</a><span class="price" aria-hidden="true">$310,000</span><span>3 bd</span></li>
+			<li class="card"><a href="/h/3">3 Main St</a><span class="price" aria-hidden="true">$320,000</span><span>4 bd</span></li>
+		</ul>
+		<div class="collapsed"><p>Sold: 9 Old Rd for $1</p></div>
+		<p aria-hidden="true" style="display:none">not shown either</p>
+		<script type="application/ld+json">{"@context":"https://schema.org","@type":"Place","name":"In-body JSON-LD stays"}</script>
+		</main></body></html>`);
+	const snap = await page.evaluate(snapshotPage, 50_000_000);
+	assert.ok(snap.revealed >= 3, 'displayed prices are no longer marked hidden');
+	assert.ok(snap.notDisplayed >= 2, 'CSS-hidden content is dropped');
+	assert.ok(!snap.html!.includes('Sold: 9 Old Rd'));
+	assert.ok(snap.html!.includes('In-body JSON-LD stays'), 'JSON-LD in <body> is data, not display');
+	const rep = extractPage({ html: snap.html!, locator: 'https://x.example/', baseUrl: 'https://x.example/', observationId: 'o', contentHash: 'h', contentType: 'text/html', observedAt: '2026-11-17T12:00:00Z' });
+	const prices = rep.entities.flatMap((e) => e.attributes.filter((a) => a.name === 'price').map((a) => (a.value as { amount: number }).amount)).sort();
+	assert.deepEqual(prices, [300000, 310000, 320000], 'visible prices extracted (they were discarded as aria-hidden before)');
+	assert.ok(rep.entities.some((e) => e.type === 'Place'));
+	const plain = extractPage({ html: await page.content(), locator: 'https://x.example/', baseUrl: 'https://x.example/', observationId: 'o', contentHash: 'h', contentType: 'text/html', observedAt: '2026-11-17T12:00:00Z' });
+	assert.equal(plain.entities.flatMap((e) => e.attributes.filter((a) => a.name === 'price')).length, 0, 'without rendered visibility the prices are lost');
 });

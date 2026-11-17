@@ -239,6 +239,14 @@ function visibleLocator(page: PageRepresentation, id: string): string | null {
 	return m.get(id) ?? null;
 }
 
+/**
+ * Records whose type was not recognised (Unknown) or is only structural (ListItem, TableRow) are candidates only
+ * when they are items of a repeated structure with at least two facts: "items in a list", not stray fragments.
+ */
+const GENERIC_TYPES = new Set(['Unknown', 'ListItem', 'TableRow']);
+const NOT_FACTS = new Set(['text', 'latitude', 'longitude', 'url', 'image', 'selected', 'number']);
+const isListedRecord = (e: PageEntity, members: Set<string>) => members.has(e.id) && e.attributes.filter((a) => !NOT_FACTS.has(a.name)).length >= 2;
+
 /** Reconcile: descriptions of the same thing (sameAs, or the same source URL) form one candidate. */
 function groupCandidates(pages: PageRepresentation[], targets: Set<string>): Map<string, Group> {
 	const groups = new Map<string, Group>();
@@ -246,7 +254,8 @@ function groupCandidates(pages: PageRepresentation[], targets: Set<string>): Map
 	for (const page of pages) {
 		const sameAs = new Map<string, string[]>();
 		for (const r of page.relationships.filter((x) => x.type === 'sameAs')) { (sameAs.get(r.from) ?? sameAs.set(r.from, []).get(r.from)!).push(r.to); (sameAs.get(r.to) ?? sameAs.set(r.to, []).get(r.to)!).push(r.from); }
-		for (const e of page.entities.filter((x) => targets.has(x.type))) {
+		const members = new Set(page.collections.flatMap((c) => c.members));
+		for (const e of page.entities.filter((x) => targets.has(x.type) && (!GENERIC_TYPES.has(x.type) || isListedRecord(x, members)))) {
 			const url = e.identity.strength === 'strong' && /^https?:/.test(e.identity.key) ? e.identity.key : null;
 			const linked = (sameAs.get(e.id) ?? []).map((id) => keyOf.get(id)).find(Boolean);
 			const key = linked ?? url ?? (String(e.attributes.find((a) => a.name === 'url')?.value ?? '') || e.id);
@@ -403,7 +412,13 @@ export function discover(input: DiscoverInput): DiscoveryResult {
  * Computed with the same reconciliation and attribute resolution the evaluator uses, so a range shown
  * here is exactly the range criteria will be tested against. Counts are candidates, not entities.
  */
-export interface FacetType { type: string; candidates: number; inCollections: number }
+export interface FacetType {
+	type: string; candidates: number; inCollections: number;
+	/** How to show the type: its name, or a plain description for records whose type was not recognised. */
+	label: string;
+	/** Up to two example items, as "name — fact, fact, fact", so a person can tell what the type is on this page. */
+	sample: string[];
+}
 export interface Facet {
 	attr: string;
 	label: string;
@@ -415,10 +430,19 @@ export interface Facet {
 }
 export interface Facets { types: FacetType[]; selected: string[]; candidates: number; facets: Facet[] }
 
+const show = (v: AttributeValue): string => (v && typeof v === 'object' ? ('amount' in v ? `${(v as { currency: string | null }).currency === 'USD' ? '$' : ''}${(v as { amount: number }).amount.toLocaleString('en-US')}` : 'value' in v ? String((v as { value: number }).value) : 'url' in v ? '' : '') : String(v));
+function sampleOf(g: Group): string {
+	const attrs = g.entities.flatMap(({ e }) => e.attributes);
+	const name = attrs.find((a) => a.name === 'name' || a.name === 'headline')?.value;
+	const facts = attrs.filter((a) => !NOT_FILTERABLE.has(a.name) && a.value !== null && a.dataType !== 'image' && a.dataType !== 'url').slice(0, 4).map((a) => `${humanize(a.name)} ${show(a.value)}`.trim());
+	return `${typeof name === 'string' ? name : 'Unnamed item'}${facts.length ? ` — ${facts.join(', ')}` : ''}`.slice(0, 160);
+}
+
 /** Attributes that identify or describe rather than qualify; geography is handled by scope. */
 const NOT_FILTERABLE = new Set(['name', 'url', 'image', 'description', 'text', 'heading', 'title', 'latitude', 'longitude', 'sku', 'gtin', 'gtin13', 'identifier', 'sameAs', 'canonicalUrl', 'inLanguage', 'nextPage', 'previousPage', 'viewportBounds', 'viewportMarkers', 'selected', 'headline', 'priceCurrency']);
 const ALIAS_ROOTS = ['price', 'latitude', 'longitude'];
-const NON_TARGET_TYPES = new Set(['WebPage', 'Unknown', 'Offer', 'GeoCoordinates', 'PostalAddress', 'ImageObject', 'AggregateRating', 'Rating', 'QuantitativeValue', 'MonetaryAmount', 'BreadcrumbList', 'ListItem', 'SearchAction', 'EntryPoint', 'WebSite']);
+const NON_TARGET_TYPES = new Set(['WebPage', 'Offer', 'GeoCoordinates', 'PostalAddress', 'ImageObject', 'AggregateRating', 'Rating', 'QuantitativeValue', 'MonetaryAmount', 'BreadcrumbList', 'SearchAction', 'EntryPoint', 'WebSite']);
+const TYPE_LABEL: Record<string, string> = { Unknown: 'Repeated items (type not recognised)', ListItem: 'List items', TableRow: 'Table rows' };
 const ACRONYMS = new Set(['hoa', 'sku', 'url', 'isbn', 'gpu', 'cpu', 'ram', 'ssd', 'tv', 'id']);
 
 export function humanize(attr: string): string {
@@ -431,29 +455,38 @@ export function facets(pages: PageRepresentation[], types?: string[]): Facets {
 	for (const p of pages) {
 		const members = new Set(p.collections.flatMap((c) => c.members));
 		for (const e of p.entities) {
-			if (NON_TARGET_TYPES.has(e.type)) continue;
-			const t = all.get(e.type) ?? all.set(e.type, { type: e.type, candidates: 0, inCollections: 0 }).get(e.type)!;
+			if (NON_TARGET_TYPES.has(e.type) || (GENERIC_TYPES.has(e.type) && !isListedRecord(e, members))) continue;
+			const t = all.get(e.type) ?? all.set(e.type, { type: e.type, candidates: 0, inCollections: 0, label: TYPE_LABEL[e.type] ?? e.type.replace(/([a-z])([A-Z])/g, '$1 $2'), sample: [] }).get(e.type)!;
 			if (members.has(e.id)) t.inCollections++;
 		}
 	}
-	for (const t of all.values()) t.candidates = groupCandidates(pages, new Set([t.type])).size;
-	const typeList = [...all.values()].sort((a, b) => b.inCollections - a.inCollections || b.candidates - a.candidates || (a.type < b.type ? -1 : 1));
-	// Default selection: the type the page lists most (a result list is what people filter), else the commonest.
-	// A person's selection is kept even when these pages lack a type (it shows with 0): it must not shrink silently,
-	// or comparisons with earlier captures would change meaning.
-	const chosen = types?.length ? [...types] : typeList.length ? [typeList[0].type] : [];
-	for (const t of chosen) if (!all.has(t)) typeList.push({ type: t, candidates: 0, inCollections: 0 });
-	// Types linked to the chosen ones by sameAs describe the same things (JSON-LD records of listed cards): include them.
-	const linked = new Set(chosen);
-	for (const p of pages) {
-		const typeOf = new Map(p.entities.map((e) => [e.id, e.type]));
-		for (const r of p.relationships) if (r.type === 'sameAs') {
-			const [a, b] = [typeOf.get(r.from), typeOf.get(r.to)];
-			if (a && b && chosen.includes(a) && !NON_TARGET_TYPES.has(b)) linked.add(b);
-			if (a && b && chosen.includes(b) && !NON_TARGET_TYPES.has(a)) linked.add(a);
-		}
+	for (const t of all.values()) {
+		const gs = [...groupCandidates(pages, new Set([t.type])).values()];
+		t.candidates = gs.length;
+		t.sample = gs.slice(0, 2).map((g) => sampleOf(g));
 	}
-	const selected = [...linked];
+	const typeList = [...all.values()].sort((a, b) => b.inCollections - a.inCollections || b.candidates - a.candidates || (a.type < b.type ? -1 : 1));
+	// Without a selection: the type the page lists most (a result list is what people filter), plus types linked to
+	// it by sameAs (JSON-LD records of the listed cards). With a selection, exactly that selection, even empty:
+	// a person's choice is never extended or shrunk silently (a chosen type absent here shows with 0).
+	let selected: string[];
+	if (types !== undefined) {
+		selected = [...types];
+		for (const t of selected) if (!all.has(t)) typeList.push({ type: t, candidates: 0, inCollections: 0, label: TYPE_LABEL[t] ?? t.replace(/([a-z])([A-Z])/g, '$1 $2'), sample: [] });
+	} else {
+		const top = typeList.find((t) => !GENERIC_TYPES.has(t.type) && t.inCollections > 0) ?? typeList[0];
+		const chosen = top ? [top.type] : [];
+		const linked = new Set(chosen);
+		for (const p of pages) {
+			const typeOf = new Map(p.entities.map((e) => [e.id, e.type]));
+			for (const r of p.relationships) if (r.type === 'sameAs') {
+				const [a, b] = [typeOf.get(r.from), typeOf.get(r.to)];
+				if (a && b && chosen.includes(a) && all.has(b)) linked.add(b);
+				if (a && b && chosen.includes(b) && all.has(a)) linked.add(a);
+			}
+		}
+		selected = [...linked];
+	}
 	const groups = [...groupCandidates(pages, new Set(selected)).values()];
 	const names = new Set<string>(ALIAS_ROOTS);
 	for (const g of groups) for (const { e } of g.entities) for (const a of e.attributes) names.add(a.name);

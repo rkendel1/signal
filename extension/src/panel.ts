@@ -3,7 +3,7 @@ import type { FeltKitClient, SessionInfo } from '@feltdb/feltkit/client';
 import {
 	activeTab, capture, connect, discover, errorText, forgetInstance, instanceOrigin, intentDraft, loadFacets, lockStorage, navigableTarget,
 	relayOverlay, savedInstance, saveIntentDraft, saveWorkingSet, showOverlay, snapshotTab, workingSet, type DiscoveryView, type Facet, type Facets,
-	clearOtherScope, findWatch, notify, pageLocator, parentLocator, setWatch, showOnPage, stopWatch, watchedPages
+	clearOtherScope, findWatch, isMonitored, notify, pageLocator, parentLocator, setWatch, showOnPage, stopWatch, watchedPages
 } from './host.ts';
 import { buildIntent, formatValue, niceStep, reconcile, type EditorState, type FilterState } from './intent-builder.ts';
 
@@ -145,11 +145,16 @@ function changed(evaluate = true) {
 	if (evaluate && $<HTMLInputElement>('live').checked && facetData) { clearTimeout(liveTimer); liveTimer = setTimeout(() => void runDiscovery(), 350); }
 }
 
+let facetSeq = 0;
 async function refreshFacets(types?: string[], evaluate = true) {
 	const set = await workingSet();
 	if (!conn || !set.length) { facetData = null; renderEditor(); return; }
-	facetData = await loadFacets(conn.client, set, types ?? (editor.types.length ? editor.types : undefined));
-	editor = reconcile({ types: facetData.selected, filters: editor.filters }, facetData.facets);
+	const explicit = types ?? (editor.chosen ? editor.types : undefined);
+	const seq = ++facetSeq;
+	const data = await loadFacets(conn.client, set, explicit);
+	if (seq !== facetSeq) return; // a newer choice was made meanwhile: its refresh wins
+	facetData = data;
+	editor = { ...reconcile({ types: facetData.selected, filters: editor.filters }, facetData.facets), chosen: explicit !== undefined };
 	renderEditor();
 	changed(evaluate);
 }
@@ -157,20 +162,27 @@ async function refreshFacets(types?: string[], evaluate = true) {
 function renderEditor() {
 	const types = $('types'); types.replaceChildren();
 	const filters = $('filters'); filters.replaceChildren();
-	if (!facetData) { filters.append(el('p', 'muted', 'Capture a page to see what you can filter on.')); $('filter-count').textContent = ''; $<HTMLTextAreaElement>('intent').value = currentIntent(); return; }
+	if (!facetData) { types.append(el('p', 'muted', 'Analyze a page first.')); filters.append(el('p', 'muted', 'Choose what you are looking for in step 2.')); $('filter-count').textContent = ''; $<HTMLTextAreaElement>('intent').value = currentIntent(); return; }
+	// Every kind of item found, with how many and examples; each can be selected and unselected, all of them included.
 	for (const t of facetData.types) {
-		const b = el('button', 'chip', `${humanType(t.type)} · ${t.candidates}`) as HTMLButtonElement;
-		b.type = 'button';
-		b.setAttribute('aria-pressed', String(editor.types.includes(t.type)));
-		b.addEventListener('click', () => {
-			const next = editor.types.includes(t.type) ? editor.types.filter((x) => x !== t.type) : [...editor.types, t.type];
-			if (!next.length) return; // something must be looked for
-			void refreshFacets(next).catch((e) => status(errorText(e), true));
+		const card = el('label', 'typecard');
+		const box = document.createElement('input'); box.type = 'checkbox'; box.checked = editor.types.includes(t.type); box.value = t.type;
+		box.addEventListener('change', () => {
+			// The choice takes effect immediately; the facets for it follow.
+			editor = { ...editor, chosen: true, types: box.checked ? [...new Set([...editor.types, t.type])] : editor.types.filter((x) => x !== t.type) };
+			void refreshFacets(editor.types).catch((err) => status(errorText(err), true));
 		});
-		types.append(b);
+		const body = el('div');
+		const head = el('strong', '', t.label); head.append(el('span', 'count', ` · ${t.candidates}`));
+		body.append(head);
+		for (const ex of t.sample) body.append(el('div', 'ex', ex));
+		card.append(box, body);
+		types.append(card);
 	}
-	$('filter-count').textContent = `(${facetData.candidates} ${facetData.candidates === 1 ? 'item' : 'items'})`;
-	if (!facetData.facets.length) filters.append(el('p', 'muted', 'Nothing on these items varies enough to filter on.'));
+	if (!facetData.types.length) types.append(el('p', 'muted', 'No items were recognised on this page.'));
+	$('filter-count').textContent = editor.types.length ? `(${facetData.candidates} ${facetData.candidates === 1 ? 'item' : 'items'})` : '';
+	if (!editor.types.length) filters.append(el('p', 'muted', 'Choose what you are looking for in step 2.'));
+	else if (!facetData.facets.length) filters.append(el('p', 'muted', 'Nothing on these items varies enough to filter on.'));
 	for (const f of facetData.facets) filters.append(filterRow(f, editor.filters[f.attr]));
 	$<HTMLTextAreaElement>('intent').value = currentIntent();
 }
@@ -233,6 +245,7 @@ function filterRow(f: Facet, s: FilterState): HTMLElement {
 
 async function runDiscovery(prefix = ''): Promise<void> {
 	if (!conn) return;
+	if (!jsonMode && !editor.types.length) { $('results').replaceChildren(el('p', 'muted', 'Choose what you are looking for in step 2.')); status(prefix.trim()); return; }
 	const r = await discover(conn.client, currentIntent(), await workingSet()).catch((e) => { status(errorText(e), true); return null; });
 	if (!r) return;
 	renderResults(r);
@@ -252,7 +265,7 @@ async function renderWatch() {
 	const locator = tab?.url ? pageLocator(tab.url) : null;
 	const captured = !!locator && set.some((p) => p.url === locator);
 	box.replaceChildren();
-	if (!conn || !locator || !captured) { box.append(document.createTextNode('Capture this page to set alerts on it.')); btn.disabled = true; stop.hidden = true; return; }
+	if (!conn || !locator || !captured) { box.append(document.createTextNode('Analyze this page to set alerts on it.')); btn.disabled = true; stop.hidden = true; return; }
 	const found = await findWatch(conn.client, tab!.url!);
 	const w = found?.watch;
 	const parent = parentLocator(tab!.url!);
@@ -268,7 +281,7 @@ async function renderWatch() {
 	const ul = el('ul');
 	for (const c of w.criteria.length ? w.criteria : ['any item of the selected kind']) ul.append(el('li', '', c));
 	d.append(ul);
-	d.append(el('div', 'muted', `Where: outlined on this page, a browser notification, and your Signal inbox (${w.notify.join(', ')}). When: each time this page is captured${$<HTMLInputElement>('autocheck').checked ? ', including automatically when you open it while this panel is open' : ''}. A new alert is recorded when the set of matching items or their values changes. “Possible” items (missing information) never alert.`));
+	d.append(el('div', 'muted', `Where: outlined on this page, a browser notification, and your Signal inbox (${w.notify.join(', ')}). When: each time this page is captured${$<HTMLInputElement>('autocheck').checked ? ', including automatically whenever you open it — the panel can stay closed' : ''}. A new alert is recorded when the set of matching items or their values changes. “Possible” items (missing information) never alert.`));
 	box.append(d);
 	btn.textContent = 'Update alert to the current filters'; stop.hidden = false;
 }
@@ -281,6 +294,7 @@ $('watch').addEventListener('click', () => void busy($<HTMLButtonElement>('watch
 	const scope = document.querySelector<HTMLInputElement>('#scope input:checked')?.value === 'exact' ? 'exact' : 'parent';
 	const target = scope === 'parent' ? parentLocator(tab.url!) : pageLocator(tab.url!);
 	await setWatch(conn!.client, target, intent, `${kinds}${what ? `: ${what}` : ''}`.slice(0, 200));
+	void chrome.runtime.sendMessage({ type: 'signal.watchesChanged' }).catch(() => undefined);
 	await clearOtherScope(conn!.client, tab.url!, target); // one page, one watch
 	watched = await watchedPages(conn!.client);
 	await captureTab(tab); // evaluate now: the current matches are the first alert
@@ -288,30 +302,26 @@ $('watch').addEventListener('click', () => void busy($<HTMLButtonElement>('watch
 $('unwatch').addEventListener('click', () => void busy($<HTMLButtonElement>('unwatch'), 'Stopping alerts…', async () => {
 	const tab = await activeTab();
 	await stopWatch(conn!.client, tab.url!);
+	void chrome.runtime.sendMessage({ type: 'signal.watchesChanged' }).catch(() => undefined);
+	await showOverlay(tab.id!).catch(() => undefined); // refreshes an existing overlay: unwatched, its badge goes away
 	watched = await watchedPages(conn!.client);
 	await renderWatch();
 	status('Alerts stopped for this page. Earlier alerts are kept.');
 }));
 $('autocheck').addEventListener('change', () => { void chrome.storage.local.set({ 'signal.autocheck': $<HTMLInputElement>('autocheck').checked }); void renderWatch(); });
 
-// Automatic check: a watched page opened in this window is captured once it has loaded, so alerts do not
-// depend on remembering to press Capture. Runs only while the panel is open, only for watched pages, and
-// only where access was already granted (it never asks for permission on its own).
-const recent = new Map<string, number>();
-chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
-	if (change.status !== 'complete' || !conn || !tab.url || !$<HTMLInputElement>('autocheck').checked) return;
-	let locator: string; try { locator = pageLocator(tab.url); } catch { return; }
-	void renderWatch();
-	const scopeKey = watched.has(locator) ? locator : watched.has(parentLocator(tab.url)) ? parentLocator(tab.url) : null;
-	if (!scopeKey || Date.now() - (recent.get(locator) ?? 0) < 15_000) return;
-	recent.set(locator, Date.now()); // per exact address: panning to a new map position is a new check
-	setTimeout(() => void (async () => {
-		// Only if the tab is still on the watched search: never read a page the person navigated to meanwhile.
-		const now = await chrome.tabs.get(tabId).catch(() => null);
-		if (!now?.url) return;
-		const still = pageLocator(now.url) === scopeKey || parentLocator(now.url) === scopeKey;
-		if (still) await captureTab(now, true);
-	})().catch(() => undefined), 2500); // let the page render its listings
+// The automatic check of watched pages runs in the background worker (also with this panel closed). Here the
+// panel only keeps its view current: the watch box follows the open tab, and a background check refreshes results.
+chrome.tabs.onUpdated.addListener((_tabId, change) => { if (change.status === 'complete' && conn) void renderWatch().catch(() => undefined); });
+chrome.runtime.onMessage.addListener((msg) => {
+	if (msg?.type !== 'signal.captured' || !conn) return;
+	void (async () => {
+		await renderPages();
+		await refreshFacets(undefined, false);
+		const prefix = `Checked automatically${msg.alert ? ' — alert recorded' : ''}: ${msg.entities} entities. `;
+		if (facetData) await runDiscovery(prefix); else status(prefix);
+		await renderWatch();
+	})().catch(() => undefined);
 });
 
 // ------------------------------------------------------------------ wiring
@@ -338,28 +348,46 @@ $('signin-form').addEventListener('submit', (ev) => {
  */
 async function captureTab(tab: chrome.tabs.Tab, quiet = false): Promise<void> {
 	const snap = await snapshotTab(tab, !quiet);
+	lastSnapshot = snap;
 	const c = await capture(conn!.client, snap);
 	if (c.alert) await notify(c.alert);
-	await showOverlay(tab.id!).catch(() => undefined); // alerts and matches shown on the page itself
-	const kb = (n: number) => `${Math.round(n / 1024).toLocaleString()} KB`;
-	const message = `${quiet ? 'Checked automatically. ' : ''}${c.alert ? 'Alert recorded. ' : ''}Captured: ${c.entities} entities${c.unchanged ? ' (unchanged since last capture)' : ''}. Page ${kb(snap.originalChars)}, structure-relevant part ${kb(snap.chars)} sent; Signal keeps the structure, not the page.`;
+	if (await isMonitored(conn!.client, snap.url)) await showOverlay(tab.id!).catch(() => undefined); // only on pages you chose to monitor
+	renderDiagnostics(snap, c);
+	const message = `${quiet ? 'Checked automatically. ' : ''}${c.alert ? 'Alert recorded. ' : ''}Analyzed: ${c.entities} entities${c.unchanged ? ' (unchanged since last time)' : ''}.`;
 	await renderPages();
 	await refreshFacets(undefined, false);
 	if (facetData) await runDiscovery(`${message} `); else status(message);
 	await renderWatch();
 }
-$('capture').addEventListener('click', () => void busy($<HTMLButtonElement>('capture'), 'Capturing…', async () => captureTab(await activeTab())));
+let lastSnapshot: import('./host.ts').Snapshot | null = null;
+let downloadUrl: string | null = null;
+/** What was read, honestly: how much of the page, what was dropped, and a way to hand it over when something is missing. */
+function renderDiagnostics(snap: import('./host.ts').Snapshot, c: { entities: number; truncated?: boolean }) {
+	const box = $('diag'); box.hidden = false; box.replaceChildren();
+	box.classList.toggle('warn', !!c.truncated);
+	const kb = (n: number) => `${Math.round(n / 1024).toLocaleString()} KB`;
+	if (c.truncated) box.append(el('div', '', 'Signal read only part of this page (its size limit was reached), so items further down may be missing.'));
+	box.append(el('div', '', `${c.entities} entities from ${snap.elements.toLocaleString()} page elements · sent ${kb(snap.chars)} of ${kb(snap.originalChars)} (scripts, styles and drawings removed) · ${snap.notDisplayed} hidden parts skipped · ${snap.revealed} visible parts kept that the page had marked hidden.`));
+	if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+	downloadUrl = URL.createObjectURL(new Blob([snap.html ?? ''], { type: 'text/html' }));
+	const a = el('a', '', 'Something missing? Download what Signal read') as HTMLAnchorElement;
+	a.href = downloadUrl; a.download = `signal-read-${new URL(snap.url).hostname}.html`;
+	box.append(el('div'), a);
+}
+$('capture').addEventListener('click', () => void busy($<HTMLButtonElement>('capture'), 'Analyzing…', async () => captureTab(await activeTab())));
 $('overlay').addEventListener('click', () => void busy($<HTMLButtonElement>('overlay'), 'Opening alerts on the page…', async () => {
 	const tab = await activeTab();
+	if (!(await isMonitored(conn!.client, tab.url!))) { status('This page is not monitored. Set an alert above first; the overlay appears only on pages you chose to monitor.'); return; }
 	await showOverlay(tab.id!);
-	status('Alerts are shown on the page while this panel is open.');
+	status('Alerts are shown on the page, also with this panel closed.');
 }));
-$('clear').addEventListener('click', async () => { await saveWorkingSet([]); $('results').replaceChildren(); await renderPages(); await refreshFacets(); status('Cleared. Recorded pages stay in your Signal instance.'); });
+$('clear').addEventListener('click', async () => { await saveWorkingSet([]); editor = { types: [], filters: {} }; $('results').replaceChildren(); await renderPages(); await refreshFacets(); status('Cleared. Recorded pages stay in your Signal instance.'); });
 $('intent-form').addEventListener('submit', (ev) => ev.preventDefault());
 $('json-mode').addEventListener('change', () => {
 	jsonMode = $<HTMLInputElement>('json-mode').checked;
 	$<HTMLTextAreaElement>('intent').readOnly = !jsonMode;
 	$<HTMLFieldSetElement>('controls').disabled = jsonMode;
+	$<HTMLFieldSetElement>('types-fs').disabled = jsonMode;
 	if (!jsonMode) $<HTMLTextAreaElement>('intent').value = currentIntent();
 	void persistEditor();
 });
@@ -370,13 +398,7 @@ const disconnect = async () => { await forgetInstance(conn?.client); conn = null
 $('disconnect').addEventListener('click', disconnect);
 $('disconnect-signin').addEventListener('click', disconnect);
 
-// The overlay on a page asks this panel (the only holder of the session) to call Signal.
-chrome.runtime.onMessage.addListener((msg, sender, respond) => {
-	if (msg?.type !== 'signal.overlay') return;
-	if (!conn) { respond({ ok: false, error: 'Signal is not connected' }); return; }
-	relayOverlay(conn.client, msg, sender).then((value) => respond({ ok: true, value }), (e) => respond({ ok: false, error: errorText(e) }));
-	return true;
-});
+// The overlay's requests are answered by the background worker, so they work with this panel closed.
 
 (async () => {
 	await lockStorage();

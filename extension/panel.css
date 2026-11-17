@@ -59,3 +59,22 @@ details summary { cursor: pointer; font-size: 12px; color: var(--muted); margin-
 .watching strong { display: block; margin-bottom: 2px; }
 .watching ul { margin: 4px 0 4px 18px; padding: 0; }
 button.small { padding: 2px 8px; font-size: 12px; margin-top: 6px; }
+
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: none; }
+.step { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px 12px; margin: 12px 0; }
+.step > h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--fg); font-weight: 650; }
+.num { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: var(--accent-fg); font-size: 12px; font-weight: 700; flex: none; }
+.hint { margin: 0 0 6px; font-size: 12px; color: var(--muted); }
+.diag { margin-top: 8px; font-size: 12px; color: var(--muted); border-left: 3px solid var(--line); padding: 2px 8px; }
+.diag.warn { border-left-color: var(--possible); color: var(--fg); }
+.diag a { color: var(--accent); }
+details#pages-box { margin-top: 8px; }
+.typecards { display: grid; gap: 6px; }
+.typecard { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; border: 1px solid var(--line); border-radius: 8px; padding: 8px; margin: 0; cursor: pointer; color: var(--fg); font-size: 13px; }
+.typecard:has(input:checked) { border-color: var(--accent); }
+.typecard input { width: auto; margin: 2px 0 0; }
+.typecard .count { color: var(--muted); font-weight: 400; }
+.typecard .ex { color: var(--muted); font-size: 12px; margin-top: 2px; overflow-wrap: anywhere; }
+input[type="checkbox"], input[type="radio"] { width: auto; margin: 0; flex: none; }
+#scope { margin-top: 6px; }
+#scope label { display: flex; gap: 6px; align-items: baseline; margin: 2px 0; font-size: 13px; color: var(--fg); }

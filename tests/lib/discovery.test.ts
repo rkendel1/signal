@@ -159,8 +159,14 @@ test('facets: controls come from the captured pages, computed as the evaluator s
 	assert.ok(!ef.facets.some((x) => /date/i.test(x.attr) && x.kind === 'category'), 'timestamps are not offered as checkbox categories');
 	assert.equal(by.latitude, undefined, 'geography is scope, not a facet');
 	const kept = facets([hood], ['RealEstateListing', 'Event']);
-	assert.deepEqual(kept.selected, ['RealEstateListing', 'Event', 'SingleFamilyResidence'], 'a chosen type absent from these pages stays selected');
-	assert.deepEqual(kept.types.find((t) => t.type === 'Event'), { type: 'Event', candidates: 0, inCollections: 0 });
+	assert.deepEqual(kept.selected, ['RealEstateListing', 'Event'], 'a person\'s selection is exactly theirs: nothing added, a chosen type absent here stays selected');
+	assert.deepEqual(facets([hood], []).selected, [], 'everything can be unselected');
+	assert.deepEqual(facets([hood], []).facets, [], 'nothing selected, nothing to filter');
+	const types = Object.fromEntries(f.types.map((t) => [t.type, t]));
+	assert.equal(types.RealEstateListing.label, 'Real Estate Listing');
+	assert.match(types.RealEstateListing.sample[0], /^121 Elm St — /, 'an example item shows what the type is on this page');
+	assert.equal(types.Unknown, undefined, 'map markers (coordinates only) are not items');
+	assert.deepEqual(kept.types.find((t) => t.type === 'Event'), { type: 'Event', candidates: 0, inCollections: 0, label: 'Event', sample: [] });
 	assert.equal(humanize('numberOfBedrooms'), 'Bedrooms');
 	assert.equal(humanize('hoaFee'), 'HOA fee');
 	// A range built from a facet selects exactly what the evaluator decides.

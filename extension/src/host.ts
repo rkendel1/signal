@@ -139,25 +139,25 @@ export interface Alerted { eventId: string; title: string; body: string }
  * watched, the capture goes through the watch's monitor, so the alert criteria are evaluated and an
  * alert is recorded (and notified) when the matching set changes.
  */
-export async function capture(client: FeltKitClient, snap: Snapshot): Promise<Captured & { alert?: Alerted }> {
+export async function capture(client: FeltKitClient, snap: Snapshot): Promise<Captured & { alert?: Alerted; truncated?: boolean }> {
 	const locator = pageLocator(snap.url);
 	const found = await findWatch(client, snap.url);
 	const w = found?.watch;
 	const sourceId = w ? found!.sourceId : await domSource(client, locator);
-	let r: { pageId: string; outcome: string; revision: string | null; entities: number };
+	let r: { pageId: string; outcome: string; revision: string | null; entities: number; truncated?: boolean };
 	let alert: Alerted | undefined;
 	if (w) {
 		const m = (await client.mutation(api.monitors.push, { monitorId: w.monitorId, content: snap.html!, baseUrl: locator })) as { outcome: string; eventId: string | null; pageId?: string | null };
 		if (!m.pageId) throw new Error(`Not represented: ${m.outcome}`);
-		const pg = (await client.query(api.pages.list, { sourceId })) as Array<{ pageId: string; revision: string; entities: number }>;
+		const pg = (await client.query(api.pages.list, { sourceId })) as Array<{ pageId: string; revision: string; entities: number; truncated: boolean }>;
 		const rec = pg.find((x) => x.pageId === m.pageId);
-		r = { pageId: m.pageId, outcome: 'represented', revision: rec?.revision ?? null, entities: rec?.entities ?? 0 };
+		r = { pageId: m.pageId, outcome: 'represented', revision: rec?.revision ?? null, entities: rec?.entities ?? 0, truncated: rec?.truncated };
 		if (m.eventId) {
 			const [ev] = ((await client.query(api.events.forPage, { sourceLocator: found!.locator })) as Array<{ id: string; criteriaName: string; excerpts: Array<{ text: string }> }>).filter((e) => e.id === m.eventId);
 			alert = { eventId: m.eventId, title: ev?.criteriaName ?? w.name, body: (ev?.excerpts ?? []).map((x) => x.text).slice(0, 4).join('\n') || 'Matches changed' };
 		}
 	} else {
-		r = (await client.mutation(api.pages.push, { sourceId, html: snap.html!, baseUrl: locator })) as { pageId: string; outcome: string; revision: string | null; entities: number };
+		r = (await client.mutation(api.pages.push, { sourceId, html: snap.html!, baseUrl: locator })) as { pageId: string; outcome: string; revision: string | null; entities: number; truncated?: boolean };
 		if (r.outcome !== 'represented' && r.outcome !== 'already_recorded') throw new Error(`Not represented: ${r.outcome}`);
 	}
 	const set = await workingSet();
@@ -168,7 +168,7 @@ export async function capture(client: FeltKitClient, snap: Snapshot): Promise<Ca
 		...(prev ? { previousPageId: prev.pageId } : {})
 	};
 	await saveWorkingSet([...set.filter((p) => p.url !== locator), entry]);
-	return { ...entry, ...(alert ? { alert } : {}) };
+	return { ...entry, ...(alert ? { alert } : {}), ...(r.truncated ? { truncated: true } : {}) };
 }
 
 // ------------------------------------------------------------------ watches: an intent that alerts (a monitor whose criteria is a discover condition)
@@ -221,6 +221,21 @@ export async function watchedPages(client: FeltKitClient): Promise<Set<string>> 
 	return new Set(ms.filter((m) => m.enabled && m.criteriaId === watchId(m.sourceId) && srcs.has(m.sourceId)).map((m) => srcs.get(m.sourceId)!));
 }
 
+/** Locators of every page the person chose to monitor: any enabled monitor's source (watches and server monitors). */
+export async function monitoredPages(client: FeltKitClient): Promise<Set<string>> {
+	const srcs = new Map(((await client.query(api.sources.list, {})) as Array<{ id: string; locator: string }>).map((x) => [x.id, x.locator]));
+	const ms = (await client.query(api.monitors.list, {})) as Array<{ sourceId: string; enabled: boolean }>;
+	return new Set(ms.filter((m) => m.enabled && srcs.has(m.sourceId)).map((m) => srcs.get(m.sourceId)!));
+}
+
+/** Whether the overlay belongs on this page: it is monitored (exactly, or as part of a search), or has alerts. */
+export async function isMonitored(client: FeltKitClient, url: string): Promise<boolean> {
+	const set = await monitoredPages(client);
+	if (set.has(pageLocator(url)) || set.has(parentLocator(url))) return true;
+	for (const loc of [pageLocator(url), parentLocator(url)]) if (((await client.query(api.events.forPage, { sourceLocator: loc })) as unknown[]).length) return true;
+	return false;
+}
+
 /** The watch that applies to a page: one on its parent (any query) first, else one on its exact address. */
 export async function findWatch(client: FeltKitClient, url: string): Promise<{ watch: Watch; locator: string; sourceId: string; scope: 'parent' | 'exact' } | null> {
 	const srcs = ((await client.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>).filter((x) => x.type === 'dom');
@@ -263,7 +278,7 @@ import type { DiscoveryIntent, Facets } from '../../lib/discovery/discover.ts';
 
 /** What the captured pages offer to filter on (types, ranges, categories), for the intent controls. */
 export async function loadFacets(client: FeltKitClient, set: Captured[], types?: string[]): Promise<Facets> {
-	return (await client.query(api.discovery.facetsOf, { pageIds: set.map((p) => p.pageId), ...(types?.length ? { types } : {}) })) as unknown as Facets;
+	return (await client.query(api.discovery.facetsOf, { pageIds: set.map((p) => p.pageId), ...(types !== undefined ? { types } : {}) })) as unknown as Facets; // [] means "nothing selected", not "no choice"
 }
 
 export interface DiscoveryView {

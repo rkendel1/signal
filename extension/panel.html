@@ -32,47 +32,63 @@
 </section>
 
 <section id="work" hidden>
-	<div class="row">
-		<button id="capture" type="button">Capture this page</button>
-		<button id="overlay" type="button" class="secondary">Show alerts on page</button>
-	</div>
-	<h2>Captured pages <span id="count" class="muted"></span></h2>
-	<ul id="pages" class="list"></ul>
-	<button id="clear" type="button" class="link">Clear captured pages</button>
+	<ol class="steps">
+		<li class="step">
+			<h2><span class="num">1</span>Analyze this page</h2>
+			<p class="hint">Reads the page as you see it and works out what is on it. Signal keeps that structure, not the page.</p>
+			<div class="row"><button id="capture" type="button">Analyze this page</button></div>
+			<div id="diag" class="diag" hidden></div>
+			<details id="pages-box">
+				<summary>Analyzed pages <span id="count" class="muted"></span></summary>
+				<ul id="pages" class="list"></ul>
+				<button id="clear" type="button" class="link">Clear analyzed pages</button>
+			</details>
+		</li>
 
-	<form id="intent-form">
-		<fieldset id="controls">
-			<legend class="h2">Looking for</legend>
-			<div id="types" class="chips" role="group" aria-label="What to look for"></div>
-			<h2>Filters <span id="filter-count" class="muted"></span></h2>
-			<div id="filters"><p class="muted">Capture a page to see what you can filter on.</p></div>
-		</fieldset>
-		<details id="advanced">
-			<summary>Intent as JSON</summary>
-			<label class="inline"><input type="checkbox" id="json-mode"> Edit as JSON instead (derived metrics, other operators)</label>
-			<textarea id="intent" rows="10" spellcheck="false" readonly aria-label="Intent JSON"></textarea>
-		</details>
-		<div class="row">
-			<button id="discover" type="button">Find candidates</button>
-			<label class="inline"><input type="checkbox" id="live" checked> Update as I change filters</label>
-		</div>
-	</form>
+		<li class="step">
+			<h2><span class="num">2</span>What’s on this page</h2>
+			<p class="hint">Choose what you are looking for. Every choice can be selected and unselected.</p>
+			<fieldset id="types-fs"><div id="types" class="typecards" role="group" aria-label="What to look for"><p class="muted">Analyze a page first.</p></div></fieldset>
+		</li>
 
-	<section id="alerts-box" class="alertbox" aria-labelledby="alerts-h">
-		<h2 id="alerts-h">Alerts for this page</h2>
-		<div id="watch-state" class="muted">Capture this page to set alerts on it.</div>
-		<fieldset id="scope" class="opts" aria-label="Which address the alert covers">
-			<label><input type="radio" name="scope" value="parent" checked> <span id="scope-parent">This search, wherever the map is</span></label>
-			<label><input type="radio" name="scope" value="exact"> Exactly this address</label>
-		</fieldset>
-		<div class="row">
-			<button id="watch" type="button" disabled>Alert me when this matches</button>
-			<button id="unwatch" type="button" class="link" hidden>Stop alerts</button>
-		</div>
-		<label class="inline"><input type="checkbox" id="autocheck" checked> Check watched pages automatically when I open them (while this panel is open)</label>
-	</section>
+		<li class="step">
+			<h2><span class="num">3</span>Narrow it down <span id="filter-count" class="muted"></span></h2>
+			<form id="intent-form">
+				<fieldset id="controls">
+					<div id="filters"><p class="muted">Choose what you are looking for in step 2.</p></div>
+				</fieldset>
+				<details id="advanced">
+					<summary>Intent as JSON</summary>
+					<label class="inline"><input type="checkbox" id="json-mode"> Edit as JSON instead (derived metrics, other operators)</label>
+					<textarea id="intent" rows="10" spellcheck="false" readonly aria-label="Intent JSON"></textarea>
+				</details>
+				<div class="row">
+					<button id="discover" type="button" class="secondary">Update results</button>
+					<label class="inline"><input type="checkbox" id="live" checked> Update as I change filters</label>
+				</div>
+			</form>
+		</li>
 
-	<div id="results"></div>
+		<li class="step">
+			<h2><span class="num">4</span>Results</h2>
+			<div id="results"><p class="muted">Results appear here.</p></div>
+		</li>
+
+		<li class="step" id="alerts-box" aria-labelledby="alerts-h">
+			<h2 id="alerts-h"><span class="num">5</span>Alerts on this page</h2>
+			<div id="watch-state" class="muted">Analyze this page to set alerts on it.</div>
+			<fieldset id="scope" aria-label="Which address the alert covers">
+				<label><input type="radio" name="scope" value="parent" checked> <span id="scope-parent">This search, wherever the map is</span></label>
+				<label><input type="radio" name="scope" value="exact"> Exactly this address</label>
+			</fieldset>
+			<div class="row">
+				<button id="watch" type="button" disabled>Alert me when this matches</button>
+				<button id="unwatch" type="button" class="link" hidden>Stop alerts</button>
+			</div>
+			<label class="inline"><input type="checkbox" id="autocheck" checked> Check watched pages automatically when I open them (the panel can stay closed)</label>
+			<div class="row"><button id="overlay" type="button" class="secondary">Show alerts on this page</button></div>
+		</li>
+	</ol>
 	<footer class="foot"><button id="signout" type="button" class="link">Sign out</button> · <button id="disconnect" type="button" class="link">Disconnect</button></footer>
 </section>
 <script src="panel.js" type="module"></script>

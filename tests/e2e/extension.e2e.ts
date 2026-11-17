@@ -103,13 +103,24 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	// Capture the rendered page the person is looking at.
 	await page.bringToFront();
 	await panel.click('#capture');
-	await panel.waitForFunction(() => /Captured:.*match ·|error/i.test(document.getElementById('status')!.textContent ?? '') || document.getElementById('status')!.classList.contains('error'));
-	assert.match(String(await statusText()), /^Captured: \d+ entities\. Page [\d,]+ KB, structure-relevant part [\d,]+ KB sent; Signal keeps the structure, not the page\. 7 match · 0 possible · 0 not a match$/, 'with no filters on, everything found is listed');
+	await panel.waitForFunction(() => /Analyzed:.*match ·|error/i.test(document.getElementById('status')!.textContent ?? '') || document.getElementById('status')!.classList.contains('error'));
+	assert.match(String(await statusText()), /^Analyzed: \d+ entities\. 7 match · 0 possible · 0 not a match$/, 'with no filters on, everything found is listed');
+	assert.match(String(await panel.textContent('#diag')), /entities from [\d,]+ page elements · sent [\d,]+ KB of [\d,]+ KB/, 'what was read is stated');
+	assert.ok(await panel.$('#diag a[download]'), 'what Signal read can be downloaded');
+	assert.equal(await page.evaluate(() => document.querySelectorAll('[data-signal-overlay]').length), 0, 'not monitored yet: no overlay on the page');
 
-	// The controls come from what the page contains: types as chips, attributes as sliders and toggles.
-	assert.deepEqual(await panel.$$eval('#types .chip', (els: Element[]) => els.map((e) => [e.textContent, e.getAttribute('aria-pressed')])), [
-		['Real Estate Listing · 7', 'true'], ['Product · 1', 'false'], ['Single Family Residence · 2', 'true']
-	]);
+	// Step 2 "What's on this page": every kind of item, with counts and examples; each can be selected and unselected.
+	const cards = () => panel.$$eval('#types .typecard', (els: Element[]) => els.map((e) => [e.querySelector('strong')!.textContent, (e.querySelector('input') as HTMLInputElement).checked]));
+	assert.deepEqual(await cards(), [['Real Estate Listing · 7', true], ['Product · 1', false], ['Single Family Residence · 2', true]]);
+	assert.match(String(await panel.textContent('#types')), /121 Elm St — /, 'example items show what each kind is');
+	const toggle = async (type: string) => { await panel.click(`#types input[value="${type}"]`); await panel.waitForTimeout(500); };
+	await toggle('RealEstateListing');
+	await toggle('SingleFamilyResidence');
+	assert.deepEqual(await cards(), [['Real Estate Listing · 7', false], ['Product · 1', false], ['Single Family Residence · 2', false]], 'everything can be unselected');
+	assert.match(String(await panel.textContent('#filters')), /Choose what you are looking for in step 2/);
+	await toggle('RealEstateListing');
+	await toggle('SingleFamilyResidence');
+	assert.deepEqual(await cards(), [['Real Estate Listing · 7', true], ['Product · 1', false], ['Single Family Residence · 2', true]], 'and selected again');
 	assert.deepEqual(await panel.$$eval('#filters .filter .top label', (els: Element[]) => els.map((e) => e.textContent)), ['Floor size', 'HOA fee', 'Bedrooms', 'Price', 'Year built', 'Has price reduction']);
 	assert.equal(await panel.$$eval('#intent', (els: Element[]) => (els[0] as HTMLTextAreaElement).readOnly), true, 'JSON is shown, not required');
 
@@ -150,7 +161,7 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	assert.match(String(await panel.textContent('#watch-state')), /Not watching this page/);
 	await panel.evaluate(() => { document.getElementById('status')!.textContent = ''; });
 	await panel.click('#watch');
-	await panel.waitForFunction(() => /^Alert recorded\. Captured:.*match ·/.test(document.getElementById('status')!.textContent ?? '') || document.getElementById('status')!.classList.contains('error'));
+	await panel.waitForFunction(() => /^Alert recorded\. Analyzed:.*match ·/.test(document.getElementById('status')!.textContent ?? '') || document.getElementById('status')!.classList.contains('error'));
 	assert.match(String(await statusText()), /^Alert recorded\. /, 'the current matches are the first alert');
 	const host = site.url.replace(/^https?:\/\//, '');
 	await panel.waitForFunction(() => /Watching /.test(document.getElementById('watch-state')!.textContent ?? ''));
@@ -211,7 +222,7 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	await page.bringToFront();
 	await panel.evaluate(() => { document.getElementById('status')!.textContent = ''; });
 	await panel.click('#capture');
-	await panel.waitForFunction(() => /Captured:.*match ·/.test(document.getElementById('status')!.textContent ?? ''));
+	await panel.waitForFunction(() => /Analyzed:.*match ·/.test(document.getElementById('status')!.textContent ?? ''));
 	assert.match(String(await panel.textContent('#pages')), /changed since last capture/);
 	assert.match(String(await statusText()), /^Alert recorded\. /, 'a new listing and a price change: a new alert');
 	const second = await rows(); // the same filters, kept across the new capture, re-evaluated automatically
@@ -238,7 +249,7 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	let after = before;
 	for (let i = 0; i < 40 && after === before; i++) { await page.waitForTimeout(250); after = await capturesOfSearch(); }
 	assert.equal(after, before + 1, 'opening the watched search at a new map position was checked automatically');
-	await panel.waitForFunction(() => /^Checked automatically\. Captured:.*match ·/.test(document.getElementById('status')!.textContent ?? ''));
+	await panel.waitForFunction(() => /^Checked automatically.*match ·/.test(document.getElementById('status')!.textContent ?? ''));
 	const alerts = (await watcher.query(api.events.forPage, { sourceLocator: `${site.url}/search` })) as unknown[];
 	assert.equal(alerts.length, 2, 'same matches as the last check: no third alert');
 	let overlay = '';
@@ -309,6 +320,28 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	assert.ok(site.requests.every((r) => !JSON.stringify(r.headers).includes(probe.token)), 'the session never reaches a page origin');
 	const reps = await node.query(api.sources.list, {}) as Array<{ type: string; locator: string }>;
 	assert.ok(reps.some((s) => s.type === 'dom' && s.locator === `${site.url}/search`), 'captures recorded as dom sources of the page');
+
+	// The panel closed: the overlay and the automatic check still work (the background worker relays them).
+	await panel.close();
+	const quiet = createClient({ url: instance, session: 'bearer', tokens: (() => { let v: string | null = null; return { get: () => v, set: (x: string | null) => { v = x; } }; })() });
+	await quiet.signInAsDevUser('ada');
+	const searchSource = ((await quiet.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>).find((x) => x.type === 'dom' && x.locator === `${site.url}/search`)!;
+	const count = async () => ((await quiet.query(api.pages.list, { sourceId: searchSource.id })) as unknown[]).length;
+	const n0 = await count();
+	await page.goto(`${site.url}/search?south=39.71&north=39.79&zoom=12`);
+	let n1 = n0;
+	for (let i = 0; i < 60 && n1 === n0; i++) { await page.waitForTimeout(250); n1 = await count(); }
+	assert.equal(n1, n0 + 1, 'checked automatically with the panel closed');
+	let closedText = '';
+	for (let i = 0; i < 40 && !/alerts?$/m.test(closedText); i++) { await page.waitForTimeout(250); closedText = await overlayText().catch(() => ''); }
+	assert.match(closedText, /^\d+ alerts?$/m, 'alerts on the page with the panel closed');
+	assert.match(closedText, /Alert when an item matches: Bedrooms 3–4 · Price \$199,000–\$349,000/, '"Watching" answered by the background worker');
+
+	// Pages nobody chose to monitor never get the overlay.
+	site.set('/elsewhere', { body: '<!doctype html><html><body><h1>Something else</h1><p>No monitoring here.</p></body></html>' });
+	await page.goto(`${site.url}/elsewhere`);
+	await page.waitForTimeout(3500);
+	assert.equal(await page.evaluate(() => document.querySelectorAll('[data-signal-overlay]').length), 0, 'no overlay on an unmonitored page');
 
 	assert.deepEqual(pageErrors, []);
 	assert.deepEqual(panelErrors, []);

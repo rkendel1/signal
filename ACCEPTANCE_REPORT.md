@@ -1,5 +1,40 @@
 # Signal — Acceptance Report
 
+## A guided panel, rendered visibility, alerts with the panel closed, overlay only where monitored (2026-11-17)
+
+**Reported by use.**
+- Too little was found on a real listing page, and the selector offered only Event / Person / Place.
+- The flow was not clear.
+- "Looking for" choices could not all be unselected.
+- Alerts on the page worked only while the panel was open.
+- The overlay appeared on unrelated sites (claude.ai).
+
+**Changes:**
+- **Steps.** The panel is five steps: 1 Analyze this page · 2 What's on this page · 3 Narrow it down · 4 Results · 5 Alerts on this page.
+- **What's on this page.** Every kind of item is listed with its count and two examples; each can be selected and unselected (an empty choice included). Linked types are suggested only for the initial default. Repeated items whose type was not recognised are shown as their own group with their values, instead of being hidden; coordinates-only map markers do not count.
+- **Rendered visibility.** The snapshot drops what the page does not display, and keeps what it displays although marked `aria-hidden`/`hidden`.
+- **Diagnostics.** The panel states entities found, page elements, bytes sent, hidden parts skipped, parts revealed, and whether the read was truncated. "Download what Signal read" provides the exact input.
+- **Background worker.** It relays the overlay and runs the automatic check, so alerts, "Watching" and "Show on page" work with the panel closed.
+- **Overlay only on monitored pages.** It appears only on pages with an enabled monitor or watch, or with alerts recorded. Analyzing a page does not add it; "Show on page" elsewhere leaves only a temporary highlight, never a badge.
+
+### Verification
+
+| Command | Result |
+|---|---|
+| `npm run test:e2e` | **3 passed**, three runs in a row. New: diagnostics shown; no overlay before monitoring; cards unselected to none and reselected; with the panel closed, opening the watched search at new coordinates is checked and the overlay shows alerts and "Watching"; an unmonitored page gets no overlay; visible-but-`aria-hidden` prices are extracted (and are lost without rendered visibility) |
+| `npx feltkit test` | 98 passed |
+| `node --test tests/lib/*.test.ts` | 80 passed |
+
+### Found and fixed during this work
+- **Racing selection refreshes.** Two quick unticks raced; the selection now applies at click time, and only the latest refresh is used.
+- **Empty selection.** An empty selection was sent as "no choice" and re-defaulted.
+- **Layout.** Radio buttons took full width; a missing type showed its raw name.
+
+### Not verified
+- Whether Zillow's cards are now recognised (G-EXT-11).
+
+---
+
 ## Show a match where it is on the page; one overlay per page (2026-11-17)
 
 **Reported by use.**

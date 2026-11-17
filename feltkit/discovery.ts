@@ -54,7 +54,7 @@ async function loadOwnPages(ctx: QueryCtx, ids: string[]): Promise<PageRepresent
 }
 
 const FacetsResult = s.object({
-  types: s.array(s.object({ type: s.string(), candidates: s.integer(), inCollections: s.integer() })),
+  types: s.array(s.object({ type: s.string(), candidates: s.integer(), inCollections: s.integer(), label: s.string(), sample: s.array(s.string()) })),
   selected: s.array(s.string()),
   candidates: s.integer(),
   facets: s.array(s.object({
