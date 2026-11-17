@@ -54,8 +54,10 @@ export function parseGeoJson(text: string): ParsedDataset {
 	if (features.length > MAX_ROWS) throw new Error(`dataset: more than ${MAX_ROWS} rows`);
 	const fieldSet = new Set<string>();
 	const rows: RawRow[] = features.map((f, index) => {
-		const feat = f as { properties?: Record<string, unknown> | null; geometry?: { type?: string; coordinates?: unknown } | null };
+		const feat = f as { id?: string | number; properties?: Record<string, unknown> | null; geometry?: { type?: string; coordinates?: unknown } | null };
 		const props: Record<string, Cell> = {};
+		// A Feature's own id (outside its properties) identifies it; kept as `id` unless a property already uses that name.
+		if ((typeof feat.id === 'string' || typeof feat.id === 'number') && !(feat.properties && 'id' in feat.properties)) { props.id = feat.id; fieldSet.add('id'); }
 		for (const [k, v] of Object.entries(feat.properties ?? {})) { props[k] = v === null || ['string', 'number', 'boolean'].includes(typeof v) ? (v as Cell) : JSON.stringify(v); fieldSet.add(k); }
 		const g = feat.geometry;
 		let geometry: Geometry | undefined;
@@ -81,11 +83,12 @@ function flatten(obj: Record<string, unknown>, prefix = '', out: Record<string, 
 /** Follow a dotted path ("data.items") or JSON pointer ("/data/items") to the record array. */
 export function atPath(doc: unknown, path: string | undefined): unknown {
 	if (!path) return doc;
-	const parts = path.startsWith('/') ? path.slice(1).split('/').map((p) => p.replace(/~1/g, '/').replace(/~0/g, '~')) : path.split('.');
+	// Dotted paths may contain array indices ("data[0].items") and `*` for every value of a keyed map ("entities.*").
+	const parts = path.startsWith('/') ? path.slice(1).split('/').map((p) => p.replace(/~1/g, '/').replace(/~0/g, '~')) : path.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
 	let cur: unknown = doc;
 	for (const p of parts) {
 		if (cur === null || typeof cur !== 'object') return undefined;
-		cur = (cur as Record<string, unknown>)[p];
+		cur = p === '*' ? Object.values(cur as Record<string, unknown>) : (cur as Record<string, unknown>)[p];
 	}
 	return cur;
 }

@@ -15,7 +15,7 @@ const Summary = s.object({
   status: s.string(), change: s.string(), qualification: s.string(), summary: s.string(), score: s.number(), confidence: s.number(),
   priority: s.number(), priorityWhy: s.string(), hasConflict: s.boolean(), hasStale: s.boolean(), hasMissing: s.boolean(), synthetic: s.boolean(),
   sourceCount: s.integer(), sourceIssues: s.array(s.string()), firstDetectedAt: s.string(), lastChangedAt: s.string(), lastEvaluatedAt: s.string(),
-  acknowledged: s.boolean(), dismissed: s.boolean(), lat: s.nullable(s.number()), lng: s.nullable(s.number()), criteriaVersion: s.integer(),
+  acknowledged: s.boolean(), dismissed: s.boolean(), snoozedUntil: s.nullable(s.string()), lat: s.nullable(s.number()), lng: s.nullable(s.number()), criteriaVersion: s.integer(),
 });
 
 export const list = app.query({
@@ -25,9 +25,10 @@ export const list = app.query({
   capability: { name: "signal.findings.list", description: "The caller's findings in priority order, with why each was surfaced, its confidence, and whether its evidence is conflicting, stale or missing." },
   handler: async (ctx, a) => {
     const ownerId = ctx.auth.requirePrincipal().id;
+    const nowIso = new Date().toISOString();
     const status = a.status ?? "open";
     let rows = a.criteriaId ? await ctx.db.find(findings, { criteriaId: a.criteriaId }) : status === "open" ? await ctx.db.find(findings, { ownerId, status: "open" }) : await ctx.db.find(findings, { ownerId });
-    rows = rows.filter((f) => f.ownerId === ownerId && (status === "all" || (status === "open" ? f.status === "open" : f.status !== "open")) && (!a.qualification || f.qualification === a.qualification) && (a.includeDismissed || !f.dismissedAt));
+    rows = rows.filter((f) => f.ownerId === ownerId && (status === "all" || (status === "open" ? f.status === "open" : f.status !== "open")) && (!a.qualification || f.qualification === a.qualification) && (a.includeDismissed || !f.dismissedAt) && (a.includeDismissed || !(f.snoozedUntil && f.snoozedUntil > nowIso)));
     const now = new Date().toISOString();
     const crit = new Map<string, any>(), ents = new Map<string, any>();
     const srcs = (await ctx.db.find(sources, { ownerId })).filter((x) => x.status === "unavailable" || x.status === "paused" || x.status === "removed");
@@ -44,7 +45,7 @@ export const list = app.query({
         priority: p.value, priorityWhy: p.why, hasConflict: f.hasConflict, hasStale: f.hasStale, hasMissing: f.hasMissing, synthetic: f.synthetic, sourceCount: f.sourceCount,
         sourceIssues: srcs.filter((x) => used.has(x.name)).map((x) => `${x.name} is ${x.status}${x.statusReason ? ` (${x.statusReason})` : ""}`),
         firstDetectedAt: f.firstDetectedAt, lastChangedAt: f.lastChangedAt, lastEvaluatedAt: f.lastEvaluatedAt,
-        acknowledged: Boolean(f.acknowledgedAt), dismissed: Boolean(f.dismissedAt), lat: e?.lat ?? null, lng: e?.lng ?? null, criteriaVersion: f.criteriaVersion,
+        acknowledged: Boolean(f.acknowledgedAt), dismissed: Boolean(f.dismissedAt), snoozedUntil: f.snoozedUntil ?? null, lat: e?.lat ?? null, lng: e?.lng ?? null, criteriaVersion: f.criteriaVersion,
       });
     }
     out.sort((x, y) => y.priority - x.priority || y.lastChangedAt.localeCompare(x.lastChangedAt));
@@ -77,7 +78,7 @@ export const get = app.query({
     const runIds = [...new Set(events.map((e) => e.runId))];
     const runRecs = (await Promise.all(runIds.map(async (runId) => (await ctx.db.find(runs, { runId }))[0]))).filter(Boolean);
     return {
-      finding: { id: f.id, status: f.status, change: f.change, qualification: f.qualification, summary: f.summary, score: f.score, confidence: f.confidence, firstDetectedAt: f.firstDetectedAt, lastChangedAt: f.lastChangedAt, lastEvaluatedAt: f.lastEvaluatedAt, acknowledgedAt: f.acknowledgedAt ?? null, dismissedAt: f.dismissedAt ?? null, dismissReason: f.dismissReason ?? null, synthetic: f.synthetic, criteriaVersion: f.criteriaVersion },
+      finding: { id: f.id, status: f.status, change: f.change, qualification: f.qualification, summary: f.summary, score: f.score, confidence: f.confidence, firstDetectedAt: f.firstDetectedAt, lastChangedAt: f.lastChangedAt, lastEvaluatedAt: f.lastEvaluatedAt, acknowledgedAt: f.acknowledgedAt ?? null, dismissedAt: f.dismissedAt ?? null, dismissReason: f.dismissReason ?? null, snoozedUntil: f.snoozedUntil ?? null, synthetic: f.synthetic, criteriaVersion: f.criteriaVersion },
       criteria: { id: f.criteriaId, name: c?.name ?? "(removed)", activeVersion: c?.activeVersion ?? null, enabled: c?.enabled ?? false, definition: v ? parse(v.definition) : null },
       entity: ent ? { id: ent.id, type: ent.type, label: ent.label ?? null, lat: ent.lat ?? null, lng: ent.lng ?? null, records: ent.records } : null,
       explanation,

@@ -6,8 +6,22 @@
  * incomparable units). Unknown is never treated as false.
  */
 import { canonicalJson, sha256 } from '../core/canonical.ts';
-import { describe, isLeaf, type Condition, type CriteriaDefinition, type Derived, type Expr, type Leaf } from './criteria.ts';
-import type { EntityEvidence, EvidenceRecord, LinkStatus, Value } from './types.ts';
+import { describe, isLeaf, LOCATION, type AreaRef, type Condition, type CriteriaDefinition, type Derived, type Expr, type Leaf } from './criteria.ts';
+import type { EntityEvidence, EvidenceRecord, Geometry, LinkStatus, Value } from './types.ts';
+import { distanceM, inGeometry } from './identity.ts';
+
+/** Areas referenced by criteria, resolved by the caller from their source records (sourceId:recordKey → geometry). */
+export type Areas = Map<string, { geometry: Geometry; label: string; sourceName: string; observationId: string } | null>;
+export const areaKey = (a: AreaRef) => `${a.sourceId}\u0000${a.recordKey}`;
+
+/** 0 inside the area; otherwise the distance in km to its nearest vertex (an upper bound on the distance to its edge). */
+export function kmFromArea(lat: number, lng: number, g: Geometry): number {
+	if (inGeometry(lat, lng, g)) return 0;
+	let best = Infinity;
+	for (const poly of g.polygons ?? []) for (const ring of poly) for (const [x, y] of ring) best = Math.min(best, distanceM({ lat, lng }, { lat: y, lng: x }));
+	if (g.point) best = Math.min(best, distanceM({ lat, lng }, g.point));
+	return Math.round(best / 10) / 100;
+}
 
 export type Tri = 'true' | 'false' | 'unknown';
 export type UnknownReason = 'missing' | 'stale' | 'conflict' | 'no_history' | 'unit' | 'derived';
@@ -63,7 +77,7 @@ const unitOf = (v: Value, declared: string | null | undefined): string | null =>
 const same = (a: Value, b: Value) => (num(a) !== null && num(b) !== null ? num(a) === num(b) : typeof a === 'string' && typeof b === 'string' ? a.trim().toLowerCase() === b.trim().toLowerCase() : canonicalJson(a) === canonicalJson(b));
 const show = (v: Value): string => (v === null ? '—' : typeof v === 'object' ? `${v.currency ?? ''} ${v.amount.toLocaleString('en-US')}`.trim() : typeof v === 'number' ? v.toLocaleString('en-US', { maximumFractionDigits: 4 }) : String(v));
 
-interface Ctx { ev: EntityEvidence; crit: CriteriaDefinition; now: number; derived: Map<string, Derived>; derivedCache: Map<string, { value: number | null; reason?: string; inputs: Array<{ attr: string; values: EvidenceValue[] }> }> }
+interface Ctx { areas: Areas; ev: EntityEvidence; crit: CriteriaDefinition; now: number; derived: Map<string, Derived>; derivedCache: Map<string, { value: number | null; reason?: string; inputs: Array<{ attr: string; values: EvidenceValue[] }> }> }
 
 function confirmedAt(r: EvidenceRecord): string { return r.current?.confirmedAt ?? r.current?.observedAt ?? ''; }
 
@@ -174,6 +188,20 @@ function evalLeaf(ctx: Ctx, c: Leaf, path: string): Node {
 	const base = { path, kind: 'leaf' as const, text };
 	const mk = (result: Tri, values: EvidenceValue[], extra: Partial<NonNullable<Node['leaf']>> = {}): Node => ({ ...base, result, leaf: { attr: c.attr, op: c.op, expected: c.value ?? null, values, ...extra } });
 
+	if (c.attr === LOCATION) {
+		const ref = c.value as AreaRef;
+		const area = ctx.areas.get(areaKey(ref));
+		if (!area) return mk('unknown', [], { reason: 'missing', note: `area ${ref.recordKey} is not available (its source was removed or the record withdrawn)` });
+		const pts = ctx.ev.records.filter((r) => r.current && r.source.status !== 'removed' && r.current.identity.lat !== null && (!c.sources || c.sources.includes(r.source.id)));
+		if (!pts.length) return mk('unknown', [], { reason: 'missing', note: 'no source gives this entity a location' });
+		const vals: EvidenceValue[] = pts.map((r) => {
+			const o = r.current!;
+			const km = kmFromArea(o.identity.lat!, o.identity.lng!, area.geometry);
+			return { sourceId: r.source.id, sourceName: r.source.name, synthetic: r.source.synthetic, observationId: o.observationId, recordKey: o.recordKey, version: o.version, value: km, raw: `${o.identity.lat}, ${o.identity.lng}`, unit: 'km from area', observedAt: o.observedAt, validAt: o.validAt, confirmedAt: confirmedAt(r), ageDays: 0, stale: false, link: r.link.status, linkConfidence: r.link.confidence, result: km <= (ref.bufferKm ?? 0) ? 'true' : 'false' };
+		});
+		const rs = [...new Set(vals.map((v) => v.result))];
+		return mk(rs.length === 1 ? rs[0]! : 'unknown', vals, { note: `area: ${area.label} (${area.sourceName})`, ...(rs.length > 1 ? { reason: 'conflict' as const } : {}) });
+	}
 	if (ctx.derived.has(c.attr)) {
 		const d = evalDerived(ctx, c.attr);
 		const dv: EvidenceValue[] = d.value === null ? [] : [{ sourceId: 'derived', sourceName: 'derived', synthetic: d.inputs.some((i) => i.values.some((v) => v.synthetic)), observationId: '', recordKey: '', version: 0, value: d.value, raw: null, unit: ctx.derived.get(c.attr)!.unit ?? null, observedAt: '', validAt: null, confirmedAt: '', ageDays: 0, stale: false, link: 'exact', linkConfidence: Math.min(1, ...d.inputs.flatMap((i) => i.values.map((v) => v.linkConfidence))), inputs: d.inputs }];
@@ -228,8 +256,8 @@ function evalCond(ctx: Ctx, c: Condition, path: string): Node {
 
 const leaves = (n: Node): Node[] => (n.kind === 'leaf' ? [n] : (n.children ?? []).flatMap(leaves));
 
-export function evaluate(ev: EntityEvidence, crit: CriteriaDefinition, nowIso: string): Outcome {
-	const ctx: Ctx = { ev, crit, now: Date.parse(nowIso), derived: new Map((crit.derive ?? []).map((d) => [d.name, d])), derivedCache: new Map() };
+export function evaluate(ev: EntityEvidence, crit: CriteriaDefinition, nowIso: string, areas: Areas = new Map()): Outcome {
+	const ctx: Ctx = { areas, ev, crit, now: Date.parse(nowIso), derived: new Map((crit.derive ?? []).map((d) => [d.name, d])), derivedCache: new Map() };
 	const require = crit.require.map((c, i) => evalCond(ctx, c, `require[${i}]`));
 	const exclude = (crit.exclude ?? []).map((c, i) => evalCond(ctx, c, `exclude[${i}]`));
 	const prefer = (crit.prefer ?? []).map((p, i) => ({ node: evalCond(ctx, p.when, `prefer[${i}]`), weight: p.weight, label: p.label }));

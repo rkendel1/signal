@@ -9,12 +9,14 @@
 import { fail } from "@feltdb/feltkit";
 import { canonicalJson, newId, sha256 } from "../lib/core/canonical.ts";
 import { validateCriteria, type CriteriaDefinition } from "../lib/engine/criteria.ts";
-import { evaluate, type Outcome } from "../lib/engine/evaluate.ts";
+import { areaKey, evaluate, type Areas, type Outcome } from "../lib/engine/evaluate.ts";
+import { isLeaf, LOCATION, type AreaRef, type Condition } from "../lib/engine/criteria.ts";
 import { addKeys, EntityIndex, emptyKeys, keysFrom, planIngestion, resolveIdentity } from "../lib/engine/identity.ts";
-import { decide, type Cause, type FindingState } from "../lib/engine/lifecycle.ts";
+import { decide, priority, type Cause, type FindingState } from "../lib/engine/lifecycle.ts";
+import { findingNotice, normalizePrefs, type NoticeKind, type NotificationPrefs, type Severity } from "../lib/engine/notify.ts";
 import { draftHash } from "../lib/engine/mapping.ts";
 import type { EntityEvidence, EntityInfo, EntityKeys, EvidenceRecord, LinkDecision, ObservationDraft, SourceInfo, StoredObservation } from "../lib/engine/types.ts";
-import { criteria, criteriaVersions, entities, findingEvents, findings, ingestions, links, observations, runs, sources } from "./app.js";
+import { criteria, criteriaVersions, entities, findingEvents, findings, ingestions, links, notices, observations, preferences, runs, sources } from "./app.js";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Ctx = any; // a FeltKit mutation context (db with writes, services, afterCommit, auth)
@@ -209,10 +211,15 @@ export async function ingest(ctx: Ctx, input: IngestInput) {
   const resolver = new Resolver(ctx, owner);
   // One read of the source's links instead of one per record (see EvidenceLoader).
   const linkByKey = new Map<string, any>((targeted ? (await Promise.all(keys.map((k) => ctx.db.find(links, { sourceId: source.id, recordKey: k })))).flat() : await ctx.db.find(links, { sourceId: source.id })).map((l: any) => [l.recordKey, l]));
+  const pageUrl = typeof input.provenance.url === "string" && input.trigger === "capture" ? normalizeUrl(input.provenance.url) : null;
+  const urlsOf = (d: ObservationDraft) => {
+    const own = [d.attributes.url?.value, d.identity.ids.url].find((v) => typeof v === "string" && /^https?:/i.test(v)) as string | undefined;
+    return { ...(own ? { url: normalizeUrl(own) } : {}), ...(pageUrl ? { pageUrl } : {}) };
+  };
   const write = async (d: ObservationDraft, version: number) => {
     await ctx.db.insert(observations, {
       observationId: newId("obs"), sourceId: source.id, recordKey: d.recordKey, version, ingestionId, status: "current", entityType: d.entityType,
-      observedAt: now, ...(d.validAt ? { validAt: d.validAt } : {}), contentHash: draftHash(d),
+      observedAt: now, ...(d.validAt ? { validAt: d.validAt } : {}), contentHash: draftHash(d), ...urlsOf(d),
       body: json({ attributes: d.attributes, identity: d.identity, locator: d.locator, keyBasis: d.keyBasis }), ownerId: owner,
     });
   };
@@ -269,6 +276,7 @@ export async function ingest(ctx: Ctx, input: IngestInput) {
     ...(source.status === "unavailable" ? { status: "connected", statusReason: undefined } : {}), lastError: undefined,
   });
 
+  if (source.status === "unavailable") await addNotice(ctx, { kind: "source_recovered", severity: "info", priority: 10, title: `Available again: ${source.name}`, body: `${source.name} answered again after: ${source.statusReason ?? "a failure"}.`, sourceId: source.id, dedupKey: `source:${source.id}:recovered:${source.lastRefreshAt ?? ""}` }, owner, now);
   const newInfo = added + changed + retracted > 0;
   const freshnessChanged = reconfirmed > 0;
   const kind: Cause["kind"] = input.causeKind ?? (input.trigger === "removal" ? "source_removed" : input.trigger === "mapping" ? "mapping" : retracted && !added && !changed ? "retraction" : "ingestion");
@@ -293,6 +301,60 @@ export async function loadCriteria(ctx: ReadCtx, ownerId: string, onlyId?: strin
   return out;
 }
 
+/** The areas criteria refer to, loaded from their (owner's) source records. Missing → null: the condition is unknown. */
+export async function loadAreas(ctx: ReadCtx, ownerId: string, defs: CriteriaDefinition[]): Promise<Areas> {
+  const refs: AreaRef[] = [];
+  const walk = (c: Condition) => { if (isLeaf(c)) { if (c.attr === LOCATION && c.op === "within") refs.push(c.value as AreaRef); } else ("all" in c ? c.all : c.any).forEach(walk); };
+  for (const d of defs) [...d.require, ...(d.exclude ?? []), ...(d.prefer ?? []).map((p) => p.when)].forEach(walk);
+  const areas: Areas = new Map();
+  for (const r of refs) {
+    const k = areaKey(r);
+    if (areas.has(k)) continue;
+    const src = await ctx.db.get(sources, r.sourceId);
+    const [o] = src && src.ownerId === ownerId && src.status !== "removed" ? await ctx.db.find(observations, { sourceId: r.sourceId, recordKey: r.recordKey, status: "current" }) : [];
+    const obs = o ? storedObservation(o) : null;
+    const geometry = obs?.identity.geometry ?? (obs && obs.identity.lat !== null ? { point: { lat: obs.identity.lat, lng: obs.identity.lng! } } : null);
+    areas.set(k, geometry ? { geometry, label: obs!.identity.name ?? obs!.identity.address ?? r.recordKey, sourceName: src!.name, observationId: obs!.observationId } : null);
+  }
+  return areas;
+}
+
+// ------------------------------------------------------------------ notices
+
+export async function loadPrefs(ctx: ReadCtx, ownerId: string): Promise<NotificationPrefs> {
+  const [p] = await ctx.db.find(preferences, { ownerId });
+  return normalizePrefs(p ? parse(p.prefs) : null);
+}
+
+const short = (v: unknown): string => {
+  if (v === null || v === undefined) return "—";
+  if (typeof v === "object" && v && "amount" in (v as object)) return String((v as { amount: number }).amount);
+  const t = typeof v === "object" ? JSON.stringify(v) : String(v);
+  return t.length > 40 ? `${t.slice(0, 37)}…` : t;
+};
+
+/** Web addresses an entity's records name: how the overlay recognises "this page is about that". */
+export function entityUrls(ev: EntityEvidence): string[] {
+  const out = new Set<string>();
+  for (const r of ev.records) {
+    const o = r.current;
+    if (!o) continue;
+    for (const v of [o.attributes.url?.value, o.identity.ids.url]) if (typeof v === "string" && /^https?:/i.test(v)) out.add(normalizeUrl(v));
+  }
+  return [...out].slice(0, 5);
+}
+export function normalizeUrl(u: string): string {
+  try { const x = new URL(u); x.hash = ""; const s = x.toString(); return s.endsWith("/") && x.pathname !== "/" ? s.slice(0, -1) : s; } catch { return u; }
+}
+
+export interface NoticeInput { kind: NoticeKind; severity: Severity; priority: number; title: string; body: string; findingId?: string; sourceId?: string; entityId?: string; urls?: string[]; dedupKey: string; snoozedUntil?: string }
+/** Record a notice once: the same dedupKey never notifies twice. */
+export async function addNotice(ctx: Ctx, n: NoticeInput, ownerId: string, now: string): Promise<string | null> {
+  const [dup] = await ctx.db.find(notices, { dedupKey: n.dedupKey });
+  if (dup) return null;
+  return ctx.db.insert(notices, { ...n, urls: n.urls ?? [], createdAt: now, ownerId });
+}
+
 export interface RunSummary { runId: string; entities: number; evaluations: number; created: number; changed: number; closed: number; reopened: number; durationMs: number }
 
 /**
@@ -307,6 +369,8 @@ export async function evaluateEntities(ctx: Ctx, ownerId: string, entityIds: str
   const crits = opts.criteriaOverride ?? (await loadCriteria(ctx, ownerId, opts.onlyCriteriaId)).filter((c) => c.rec.enabled && !c.rec.removed);
   const sum: RunSummary = { runId, entities: 0, evaluations: 0, created: 0, changed: 0, closed: 0, reopened: 0, durationMs: 0 };
   const ids = [...new Set(entityIds)];
+  const areas = await loadAreas(ctx, ownerId, crits.map((c) => c.def));
+  const prefs = await loadPrefs(ctx, ownerId);
   const loader = new EvidenceLoader(ctx);
   await loader.preload(ownerId, ids);
   const existing = new Map<string, any>();
@@ -318,8 +382,8 @@ export async function evaluateEntities(ctx: Ctx, ownerId: string, entityIds: str
     for (const c of crits) {
       if (c.def.entityType !== ev.entity.type) continue;
       sum.evaluations++;
-      const o = evaluate(ev, c.def, now);
-      const r = await applyOutcome(ctx, { ownerId, criteria: c, ev, o, cause, now, runId, existing: loader.isBulk ? existing.get(`${c.rec.id}\u0000${entityId}`) ?? null : undefined });
+      const o = evaluate(ev, c.def, now, areas);
+      const r = await applyOutcome(ctx, { ownerId, criteria: c, ev, o, cause, now, runId, prefs, existing: loader.isBulk ? existing.get(`${c.rec.id}\u0000${entityId}`) ?? null : undefined });
       if (r === "new") sum.created++; else if (r === "changed") sum.changed++; else if (r === "closed") sum.closed++; else if (r === "reopened") sum.reopened++;
     }
   }
@@ -328,7 +392,7 @@ export async function evaluateEntities(ctx: Ctx, ownerId: string, entityIds: str
   return sum;
 }
 
-async function applyOutcome(ctx: Ctx, a: { ownerId: string; criteria: { rec: any; def: CriteriaDefinition; version: number }; ev: EntityEvidence; o: Outcome; cause: Cause; now: string; runId: string; existing?: any }): Promise<"new" | "changed" | "closed" | "reopened" | "none"> {
+async function applyOutcome(ctx: Ctx, a: { ownerId: string; criteria: { rec: any; def: CriteriaDefinition; version: number }; ev: EntityEvidence; o: Outcome; cause: Cause; now: string; runId: string; existing?: any; prefs?: NotificationPrefs }): Promise<"new" | "changed" | "closed" | "reopened" | "none"> {
   const { o, now, criteria: c } = a;
   const existing = a.existing !== undefined ? a.existing : (await ctx.db.find(findings, { criteriaId: c.rec.id, entityId: a.ev.entity.entityId }))[0];
   const prev: FindingState | null = existing ? { ...parse<FindingState>(existing.state), status: existing.status, change: existing.change, qualification: existing.qualification } : null;
@@ -354,14 +418,19 @@ async function applyOutcome(ctx: Ctx, a: { ownerId: string; criteria: { rec: any
       diff: json(d.event.diff), evidenceIds: json(o.evidenceIds), qualification: d.next.qualification, ownerId: a.ownerId,
     });
   }
-  if (d.notify && d.event) {
-    for (const recipient of c.rec.notify) {
-      ctx.afterCommit.notifications.send({
-        recipient, type: "signal.finding", title: `${c.rec.name}: ${d.event.kind}`.slice(0, 200),
-        body: `${a.ev.entity.label ?? a.ev.entity.entityId} — ${o.summary}`.slice(0, 2000),
-        data: { findingId, criteriaId: c.rec.id, entityId: a.ev.entity.entityId, kind: d.event.kind, qualification: d.next.qualification },
-        idempotencyKey: `signal.finding:${findingId}:${sha256(json([d.event.kind, o.digest])).slice(0, 16)}`,
-      });
+  if (d.event && d.event.kind !== "persistent" && a.prefs) {
+    const kind = findingNotice(d.event.kind, d.next.qualification, c.def, a.prefs);
+    if (kind) {
+      const label = a.ev.entity.label ?? a.ev.entity.entityId;
+      const what = { finding_new: "New", finding_changed: "Changed", finding_resolved: "Resolved", finding_reopened: "Reopened", finding_closed: "Closed" }[kind as string] ?? kind;
+      const diff = d.event.diff.filter((x) => !x.what.startsWith("condition")).slice(0, 3).map((x) => `${x.what}: ${short(x.from)} → ${short(x.to)}`).join("; ");
+      const snoozed = existing?.snoozedUntil && existing.snoozedUntil > now ? existing.snoozedUntil : undefined;
+      await addNotice(ctx, {
+        kind, severity: c.def.severity, priority: priority({ score: o.score, confidence: o.confidence, lastChangedAt: now, status: d.next.status, acknowledged: false }, now).value,
+        title: `${what}: ${label}`.slice(0, 200), body: `${c.rec.name} — ${diff || o.summary}`.slice(0, 600),
+        findingId, entityId: a.ev.entity.entityId, urls: entityUrls(a.ev),
+        dedupKey: `finding:${findingId}:${d.event.kind}:${sha256(json([d.event.diff, d.next.qualification])).slice(0, 16)}`, ...(snoozed ? { snoozedUntil: snoozed } : {}),
+      }, a.ownerId, now);
     }
   }
   if (!d.event || d.event.kind === "persistent") return "none";

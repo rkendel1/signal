@@ -13,19 +13,27 @@
 import { assertPermittedAttribute } from './policy.ts';
 import type { Value } from './types.ts';
 
-export type Op = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'between' | 'in' | 'not_in' | 'contains' | 'exists' | 'missing' | 'decreased_pct' | 'increased_pct' | 'changed';
-export const OPS: Record<Op, { label: string; value: 'none' | 'scalar' | 'number' | 'range' | 'list' | 'pct' }> = {
+export type Op = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'between' | 'in' | 'not_in' | 'contains' | 'exists' | 'missing' | 'decreased_pct' | 'increased_pct' | 'changed' | 'within';
+export const OPS: Record<Op, { label: string; value: 'none' | 'scalar' | 'number' | 'range' | 'list' | 'pct' | 'area' }> = {
 	eq: { label: 'is', value: 'scalar' }, neq: { label: 'is not', value: 'scalar' },
 	lt: { label: '<', value: 'number' }, lte: { label: '≤', value: 'number' }, gt: { label: '>', value: 'number' }, gte: { label: '≥', value: 'number' },
 	between: { label: 'between', value: 'range' }, in: { label: 'is one of', value: 'list' }, not_in: { label: 'is none of', value: 'list' },
 	contains: { label: 'contains', value: 'scalar' }, exists: { label: 'is known', value: 'none' }, missing: { label: 'is unknown', value: 'none' },
 	decreased_pct: { label: 'dropped by ≥ %', value: 'pct' }, increased_pct: { label: 'rose by ≥ %', value: 'pct' }, changed: { label: 'changed', value: 'none' },
+	within: { label: 'is within', value: 'area' },
 };
+
+/**
+ * A geographic area held in a source (a boundary in a GeoJSON file, a parcel…): the criteria name the record, not a
+ * copy of its geometry, so the area keeps its provenance. Used with `{ attr: '@location', op: 'within' }`.
+ */
+export interface AreaRef { sourceId: string; recordKey: string; bufferKm?: number }
+export const LOCATION = '@location';
 
 export interface Leaf {
 	attr: string;
 	op: Op;
-	value?: Value | Value[] | [number, number];
+	value?: Value | Value[] | [number, number] | AreaRef;
 	label?: string;
 	/** Evidence older than this does not count (overrides the criteria and source defaults). */
 	maxAgeDays?: number;
@@ -74,7 +82,7 @@ function exprAttrs(e: Expr, out: Set<string>): Set<string> {
 	return out;
 }
 export function conditionAttrs(c: Condition, out = new Set<string>()): Set<string> {
-	if (isLeaf(c)) out.add(c.attr);
+	if (isLeaf(c)) { if (c.attr !== LOCATION) out.add(c.attr); }
 	else ('all' in c ? c.all : c.any).forEach((x) => conditionAttrs(x, out));
 	return out;
 }
@@ -114,6 +122,12 @@ function validateCondition(c: Condition, where: string, depth: number, n: { v: n
 	if (spec.value === 'pct' && (typeof v !== 'number' || v <= 0)) throw new Error(`${where}: ${c.op} needs a positive percentage`);
 	if (spec.value === 'range' && !(Array.isArray(v) && v.length === 2 && v.every((x) => typeof x === 'number') && (v[0] as number) <= (v[1] as number))) throw new Error(`${where}: between needs [min, max]`);
 	if (spec.value === 'list' && !(Array.isArray(v) && v.length > 0)) throw new Error(`${where}: ${c.op} needs a non-empty list`);
+	if (spec.value === 'area') {
+		if (c.attr !== LOCATION) throw new Error(`${where}: within applies to ${LOCATION}, the entity's location`);
+		const a = v as AreaRef;
+		if (!a || typeof a !== 'object' || typeof a.sourceId !== 'string' || typeof a.recordKey !== 'string') throw new Error(`${where}: within needs { sourceId, recordKey } of an area record`);
+		if (a.bufferKm !== undefined && !(a.bufferKm >= 0 && a.bufferKm <= 2000)) throw new Error(`${where}: bufferKm must be 0–2000`);
+	} else if (c.attr === LOCATION) throw new Error(`${where}: ${LOCATION} only supports within`);
 	if (spec.value === 'scalar' && (v === undefined || v === null || Array.isArray(v))) throw new Error(`${where}: ${c.attr} ${spec.label} needs a value`);
 	if (c.maxAgeDays !== undefined && !(c.maxAgeDays > 0)) throw new Error(`${where}: maxAgeDays must be positive`);
 	if (c.withinDays !== undefined && !(c.withinDays > 0)) throw new Error(`${where}: withinDays must be positive`);
@@ -150,6 +164,7 @@ export function describe(c: Condition): string {
 	if (c.label) return c.label;
 	const fmt = (v: unknown): string => (Array.isArray(v) ? v.map(fmt).join(', ') : v && typeof v === 'object' && 'amount' in (v as object) ? String((v as { amount: number }).amount) : String(v));
 	const spec = OPS[c.op];
+	if (c.op === 'within') { const a = c.value as AreaRef; return `location is within ${a.bufferKm ? `${a.bufferKm} km of ` : ''}area ${a.recordKey}`; }
 	const tail = spec.value === 'none' ? '' : spec.value === 'range' ? ` ${fmt((c.value as number[])[0])}–${fmt((c.value as number[])[1])}` : ` ${fmt(c.value)}`;
 	return `${c.attr} ${spec.label}${tail}${c.withinDays ? ` within ${c.withinDays} days` : ''}`;
 }

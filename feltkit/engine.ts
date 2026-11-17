@@ -1,6 +1,6 @@
 import { s } from "@feltdb/feltkit";
 import { app, entities, findings, ingestions, runs, sources } from "./app.js";
-import { evaluateEntities, parse } from "./_store.js";
+import { addNotice, evaluateEntities, parse } from "./_store.js";
 
 /**
  * Time-driven re-evaluation. Nothing in a source changes when evidence merely ages, so freshness is checked
@@ -14,7 +14,13 @@ export const sweep = app.mutation({
     const ids = a.all
       ? (await ctx.db.find(entities, { ownerId })).map((e) => e.id)
       : [...new Set((await ctx.db.find(findings, { ownerId, status: "open" })).map((f) => f.entityId))];
-    return evaluateEntities(ctx, ownerId, ids, { kind: "time", ref: new Date().toISOString(), label: "freshness sweep" });
+    // Sources that have gone quiet past their freshness rule: one notice per stale period.
+    const now = new Date().toISOString();
+    for (const src of await ctx.db.find(sources, { ownerId })) {
+      if (src.status === "removed" || !src.staleAfterDays || !src.lastSuccessAt || src.refreshMode === "capture" || src.refreshMode === "push") continue;
+      if ((Date.now() - Date.parse(src.lastSuccessAt)) / 86_400_000 > src.staleAfterDays) await addNotice(ctx, { kind: "source_stale", severity: "warning", priority: 40, title: `Stale: ${src.name}`, body: `No successful refresh for more than ${src.staleAfterDays} days; its evidence no longer counts.`, sourceId: src.id, dedupKey: `source:${src.id}:stale:${src.lastSuccessAt}` }, ownerId, now);
+    }
+    return evaluateEntities(ctx, ownerId, ids, { kind: "time", ref: now, label: "freshness sweep" });
   },
 });
 

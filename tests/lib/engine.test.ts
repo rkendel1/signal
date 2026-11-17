@@ -180,3 +180,23 @@ test('determinism: identical inputs give an identical outcome and digest', () =>
 	const { l, p } = build();
 	assert.equal(JSON.stringify(evaluate(evidence(l[0], p[0]), CRIT, NOW)), JSON.stringify(evaluate(evidence(l[0], p[0]), CRIT, NOW)));
 });
+
+test('within an area held in a source: the real Rhode Island boundary (rhode island.geojson)', async () => {
+	const { readFileSync } = await import('node:fs');
+	const { parseGeoJson } = await import('../../lib/sources/records.ts');
+	const { areaKey } = await import('../../lib/engine/evaluate.ts');
+	const ri = parseGeoJson(readFileSync(new URL('../../rhode island.geojson', import.meta.url), 'utf8'));
+	const area = applyMapping(ri, { version: 1, entityType: 'region', fields: [{ source: 'abbreviation', attribute: 'abbreviation', type: 'text', role: 'key' }, { source: 'name', attribute: 'name', type: 'text', role: 'name' }] }).drafts[0];
+	assert.equal(area.recordKey, 'RI');
+	assert.ok(area.identity.geometry?.polygons?.length, 'the MultiPolygon is kept as the record\'s geometry');
+	const areas = new Map([[areaKey({ sourceId: 'regions', recordKey: 'RI' }), { geometry: area.identity.geometry!, label: 'Rhode Island', sourceName: 'regions', observationId: 'o' }]]);
+	const at = (lat: number, lng: number) => ({ entity: { entityId: 'e', type: 'earthquake', label: null, keys: keysFrom([]) }, records: [{ source: src('quakes'), link: { status: 'unmatched' as const, basis: 'none' as const, confidence: 1 }, current: stored({ recordKey: 'q', keyBasis: 'source-key', entityType: 'earthquake', attributes: { mag: { value: 3, raw: '3' } }, identity: { ids: {}, address: null, addressKey: null, lat, lng, name: null }, validAt: null, locator: null }, 'quakes'), history: [] }] });
+	const crit = (bufferKm?: number) => validateCriteria({ name: 'near RI', entityType: 'earthquake', severity: 'info', require: [{ attr: '@location', op: 'within', value: { sourceId: 'regions', recordKey: 'RI', ...(bufferKm ? { bufferKm } : {}) } }] });
+	assert.equal(evaluate(at(41.824, -71.4128), crit(), NOW, areas).qualification, 'match', 'Providence is inside');
+	const boston = evaluate(at(42.3601, -71.0589), crit(), NOW, areas);
+	assert.equal(boston.qualification, 'non_match', 'Boston is outside');
+	assert.ok((boston.require[0].leaf!.values[0].value as number) > 20, 'and its distance from the boundary is reported');
+	assert.equal(evaluate(at(42.3601, -71.0589), crit(100), NOW, areas).qualification, 'match', 'within 100 km of it');
+	assert.equal(evaluate(at(41.824, -71.4128), crit(), NOW, new Map()).qualification, 'insufficient', 'a missing area is unknown, never "outside"');
+	assert.throws(() => validateCriteria({ name: 'x', entityType: 'e', severity: 'info', require: [{ attr: 'mag', op: 'within', value: { sourceId: 's', recordKey: 'k' } }] }), /@location/);
+});

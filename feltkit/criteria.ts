@@ -1,6 +1,6 @@
 import { fail, s } from "@feltdb/feltkit";
 import { app, criteria, criteriaVersions, entities, findings, observations, sources } from "./app.js";
-import { EvidenceLoader, evaluateEntities, json, loadCriteria, parse, requireFound, storedObservation, type Ctx } from "./_store.js";
+import { EvidenceLoader, loadAreas, evaluateEntities, json, loadCriteria, parse, requireFound, storedObservation, type Ctx } from "./_store.js";
 import { criteriaAttrs, validateCriteria, type CriteriaDefinition } from "../lib/engine/criteria.ts";
 import { coverage } from "../lib/engine/coverage.ts";
 import { evaluate } from "../lib/engine/evaluate.ts";
@@ -112,10 +112,11 @@ export const preview = app.query({
     const top: Array<{ entityId: string; label: string | null; qualification: string; score: number; confidence: number; summary: string }> = [];
     const loader = new EvidenceLoader(ctx);
     await loader.preload(ownerId, ents.map((e) => e.id));
+    const areas = await loadAreas(ctx, ownerId, [def]);
     for (const e of ents) {
       const ev = await loader.evidence(e.id);
       if (!ev || !ev.records.some((r) => r.current)) continue;
-      const o = evaluate(ev, def, now);
+      const o = evaluate(ev, def, now, areas);
       counts[o.qualification]++;
       if (o.qualification === "match" || o.qualification === "possible") top.push({ entityId: e.id, label: e.label ?? null, qualification: o.qualification, score: o.score, confidence: o.confidence, summary: o.summary });
     }

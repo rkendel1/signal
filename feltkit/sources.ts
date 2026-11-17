@@ -2,7 +2,8 @@ import { fail, s } from "@feltdb/feltkit";
 import { gunzipSync, gzipSync } from "node:zlib";
 import { app, ingestions, links, observations, sources } from "./app.js";
 import { api } from "./_generated/api.js";
-import { evaluateEntities, ingest, json, parse, requireFound, storedObservation, type Ctx } from "./_store.js";
+import { recordFeedCheck, verifyAcquisition } from "./sites.js";
+import { addNotice, evaluateEntities, ingest, json, parse, requireFound, storedObservation, type Ctx } from "./_store.js";
 import { newId, sha256 } from "../lib/core/canonical.ts";
 import { coverage, refreshStatement } from "../lib/engine/coverage.ts";
 import { applyMapping, mapRow, profileFields, proposeMapping, validateMapping, type SourceMapping } from "../lib/engine/mapping.ts";
@@ -45,11 +46,15 @@ async function readRaw(ctx: Ctx, ref: string): Promise<string> {
   return gunzipSync(f.bytes).toString("utf8");
 }
 
+function parseFor(content: string, source: { config: string }) {
+  const cfg = parse<{ format: RecordFormat; recordsPath?: string | null; responsePrefix?: string }>(source.config);
+  const text = cfg.responsePrefix && content.trimStart().startsWith(cfg.responsePrefix) ? content.trimStart().slice(cfg.responsePrefix.length) : content;
+  return parseRecords(text, cfg.format ?? "json", cfg.format === "geojson" ? undefined : cfg.recordsPath ?? undefined);
+}
 function draftsFromRecords(content: string, source: { config: string; mapping: string }) {
-  const cfg = parse<{ format: RecordFormat; recordsPath?: string }>(source.config);
   let ds;
-  try { ds = parseRecords(content, cfg.format ?? "json", cfg.recordsPath); } catch (e) { return bad(e); }
-  try { return applyMapping(ds, parse<SourceMapping>(source.mapping)); } catch (e) { return bad(e); }
+  try { ds = parseFor(content, source); } catch (e) { return bad(e); }
+  try { return { ...applyMapping(ds, parse<SourceMapping>(source.mapping)), rows: ds.rows.map((r) => r.props) }; } catch (e) { return bad(e); }
 }
 
 function draftsFromPage(html: string, url: string, source: { id: string; mapping: string }) {
@@ -187,7 +192,7 @@ export const refreshContext = app.query({
   args: { sourceId: s.string() },
   handler: async (ctx, { sourceId }) => {
     const src = requireFound(await ctx.db.get(sources, sourceId), "That source");
-    return { kind: src.kind, status: src.status, url: parse<{ url?: string }>(src.config).url ?? null, etag: src.etag ?? null, lastModified: src.lastModified ?? null };
+    return { kind: src.kind, status: src.status, acquisition: src.acquisition ?? null, url: parse<{ url?: string }>(src.config).url ?? null, etag: src.etag ?? null, lastModified: src.lastModified ?? null };
   },
 });
 
@@ -196,8 +201,8 @@ export const refresh = app.action({
   access: "signal.write",
   args: { sourceId: s.string() },
   handler: async (ctx, { sourceId }) => {
-    const c = (await ctx.runQuery(self.refreshContext, { sourceId } as never)) as { kind: string; status: string; url: string | null; etag: string | null; lastModified: string | null };
-    if (c.kind !== "http_json" || !c.url) fail("FAILED_PRECONDITION", "Only HTTP sources are fetched by Signal.");
+    const c = (await ctx.runQuery(self.refreshContext, { sourceId } as never)) as { kind: string; status: string; acquisition: string | null; url: string | null; etag: string | null; lastModified: string | null };
+    if (!(c.kind === "http_json" || (c.kind === "site_feed" && c.acquisition === "server")) || !c.url) fail("FAILED_PRECONDITION", c.kind === "site_feed" ? "This feed is acquired in your browser with your own session (the Signal extension), not by Signal's server." : "Only HTTP sources are fetched by Signal.");
     if (c.status === "paused" || c.status === "removed") fail("FAILED_PRECONDITION", `The source is ${c.status}.`);
     const r = await fetchJson(c.url!, { etag: c.etag, lastModified: c.lastModified }, netPolicy());
     if (!r.ok) return ctx.runMutation(self.recordFailure, { sourceId, code: r.code, message: r.message, httpStatus: r.httpStatus ?? undefined, durationMs: r.durationMs } as never);
@@ -212,15 +217,21 @@ export const recordFetch = app.mutation({
   handler: async (ctx, a) => {
     const src = requireFound(await ctx.db.get(sources, a.sourceId), "That source");
     if (sha256(a.body) !== a.hash) fail("INVALID_ARGUMENT", "Body does not match its hash.");
+    if (src.kind !== "http_json" && src.kind !== "site_feed") fail("FAILED_PRECONDITION", "Only HTTP and site feeds record fetched responses.");
     const raw = await storeRaw(ctx, src.id, a.body, "application/json");
     let m;
     try { m = draftsFromRecords(a.body, src); } catch (e) {
-      await failure(ctx, src, "UNPARSEABLE", (e as Error).message);
-      return { status: "error", error: (e as Error).message };
+      // The response no longer fits this connection's mapping. For a shared feed, that is evidence the site changed.
+      let rows: Array<Record<string, unknown>> | null = null;
+      try { rows = parseFor(a.body, src).rows.map((r) => r.props); } catch { /* not even parseable */ }
+      const verification = src.kind === "site_feed" && rows ? await verifyAcquisition(ctx, src, rows) : null;
+      await failure(ctx, src, "UNPARSEABLE", (e as Error).message, {}, !verification);
+      return { status: "error", error: (e as Error).message, verification };
     }
     await ctx.db.patch(sources, src.id, { ...(a.etag ? { etag: a.etag } : {}), ...(a.lastModified ? { lastModified: a.lastModified } : {}) });
-    const r = await ingest(ctx, { source: { ...src }, drafts: m.drafts, mode: "snapshot", trigger: "refresh", ...raw, provenance: { method: "GET", url: a.finalUrl, httpStatus: a.httpStatus, etag: a.etag ?? null, fetchMs: a.durationMs }, issues: m.issues });
-    return { status: "ok", ...r };
+    const r = await ingest(ctx, { source: { ...src }, drafts: m.drafts, mode: "snapshot", trigger: "refresh", ...raw, provenance: { method: "GET", url: a.finalUrl, httpStatus: a.httpStatus, etag: a.etag ?? null, fetchMs: a.durationMs, acquiredBy: src.kind === "site_feed" ? src.acquisition : "server" }, issues: m.issues });
+    const verification = src.kind === "site_feed" ? await verifyAcquisition(ctx, src, m.rows) : null;
+    return { status: "ok", ...r, verification };
   },
 });
 
@@ -237,12 +248,16 @@ export const recordNotModified = app.mutation({
   },
 });
 
-async function failure(ctx: Ctx, src: any, code: string, message: string, extra: Record<string, unknown> = {}) {
+async function failure(ctx: Ctx, src: any, code: string, message: string, extra: Record<string, unknown> = {}, feedCheck = true) {
   const now = new Date().toISOString();
   const seq = await ctx.db.sequence(`signal.ingestions:${src.id}`);
   await ctx.db.insert(ingestions, { ingestionId: newId("ing"), sourceId: src.id, seq, at: now, trigger: "refresh", status: "unavailable", mappingVersion: src.mappingVersion, received: 0, added: 0, changed: 0, unchanged: 0, retracted: 0, issues: json({ count: 0, first: [] }), provenance: json(extra), error: `${code}: ${message}`, ownerId: src.ownerId });
   // Evidence already observed stays as it was (and ages): unavailability is not a retraction.
+  // One notice per outage (keyed by the last success), not one per failed attempt.
+  await addNotice(ctx, { kind: "source_failure", severity: "warning", priority: 60, title: `Source unavailable: ${src.name}`, body: `${code}: ${message}. Findings that rely on it keep its last evidence, which ages until it answers again.`.slice(0, 600), sourceId: src.id, dedupKey: `source:${src.id}:failure:${src.lastSuccessAt ?? src.createdAt}` }, src.ownerId, now);
   await ctx.db.patch(sources, src.id, { status: "unavailable", statusReason: `${code}: ${message}`, lastRefreshAt: now, lastError: `${code}: ${message}` });
+  // A refusal of this user's session says nothing about the site; an unreachable or changed site does.
+  if (src.feedId && feedCheck) await recordFeedCheck(ctx, src.feedId, { kind: "acquisition", ok: false, conformance: 1, records: 0, detail: `${code}`, counts: !/HTTP_(401|403)/.test(code) });
 }
 
 export const recordFailure = app.mutation({
@@ -335,6 +350,8 @@ function view(src: any) {
     entityType: src.entityType, refreshMode: src.refreshMode, intervalMinutes: src.intervalMinutes ?? null, staleAfterDays: src.staleAfterDays ?? null, synthetic: src.synthetic,
     records: src.records, mappingVersion: src.mappingVersion, lastRefreshAt: src.lastRefreshAt ?? null, lastSuccessAt: src.lastSuccessAt ?? null, lastChangeAt: src.lastChangeAt ?? null,
     lastError: src.lastError ?? null, createdAt: src.createdAt, refresh: refreshStatement(src.kind, src.refreshMode, src.intervalMinutes),
+    siteId: src.siteId ?? null, feedId: src.feedId ?? null, feedVersion: src.feedVersion ?? null, acquisition: src.acquisition ?? null,
+    nextRefreshAt: src.refreshMode === "poll" && src.intervalMinutes ? new Date(Date.parse(src.lastRefreshAt ?? src.createdAt) + src.intervalMinutes * 60_000).toISOString() : null,
     overdue: src.refreshMode === "poll" && src.intervalMinutes && ageDays !== null ? ageDays * 1440 > src.intervalMinutes * 2 : false,
     stale: src.staleAfterDays && ageDays !== null && src.refreshMode !== "capture" && src.refreshMode !== "push" ? ageDays > src.staleAfterDays : false,
     config: (() => { const c = parse<Record<string, unknown>>(src.config, {}); return { url: c.url ?? null, format: c.format ?? null, recordsPath: c.recordsPath ?? null }; })(),
@@ -363,5 +380,21 @@ export const get = app.query({
       ingestions: ings.map((i: any) => ({ id: i.id, seq: i.seq, at: i.at, trigger: i.trigger, status: i.status, received: i.received, added: i.added, changed: i.changed, unchanged: i.unchanged, retracted: i.retracted, mappingVersion: i.mappingVersion, error: i.error ?? null, issues: parse(i.issues), provenance: parse(i.provenance), rawHash: i.rawHash ?? null, durationMs: i.durationMs ?? null })),
       records: cur.slice(0, 200).map((o) => ({ recordKey: o.recordKey, version: o.version, observedAt: o.observedAt, validAt: o.validAt, locator: o.locator, label: o.identity.address ?? o.identity.name ?? o.recordKey, link: (() => { const l = ls.find((x: any) => x.recordKey === o.recordKey); return l ? { entityId: l.entityId, status: l.status, basis: l.basis, reason: l.reason } : null; })() })),
     };
+  },
+});
+
+/**
+ * Polled sources whose interval has elapsed. The extension's scheduler calls this while the browser runs:
+ * server-acquired feeds are then fetched by Signal (sources:refresh), browser-acquired ones by the extension with
+ * the user's own session (then recorded with sources:recordFetch). Nothing polls while no browser is running
+ * (GAP_REGISTER G-PLAT-1).
+ */
+export const due = app.query({
+  access: "signal.write",
+  handler: async (ctx) => {
+    const now = Date.now();
+    return (await ctx.db.find(sources, { ownerId: ctx.auth.requirePrincipal().id }))
+      .filter((x) => (x.kind === "http_json" || x.kind === "site_feed") && (x.status === "connected" || x.status === "unavailable") && x.intervalMinutes && now - Date.parse(x.lastRefreshAt ?? x.createdAt) >= x.intervalMinutes * 60_000 - 5_000)
+      .map((x) => ({ sourceId: x.id, name: x.name, acquisition: x.kind === "http_json" ? "server" : x.acquisition ?? "server", url: x.acquisition === "browser" ? parse<{ url: string }>(x.config).url : null, etag: x.etag ?? null, lastModified: x.lastModified ?? null }));
   },
 });

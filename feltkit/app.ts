@@ -17,11 +17,12 @@ export const app = feltkit({
   name: "signal",
   description: "Connect sources, define what matters, and continuously surface explainable findings with their evidence.",
   roles: {
-    member: ["signal.*", "files.read", "files.write", "notifications.*"],
-    viewer: ["signal.read", "files.read", "notifications.read"],
+    member: ["signal.read", "signal.write", "signal.push", "files.read", "files.write"],
+    viewer: ["signal.read", "files.read"],
     /** Systems that push records into sources their owner created (API keys hold this role). */
     agent: ["signal.read", "signal.push", "files.read", "files.write"],
-    admin: ["signal.*", "jobs.*", "schedules.*", "configuration.*", "apikeys.*", "credential.*", "files.*", "notifications.*", "webhooks.*"],
+    /** signal.curate: review shared site definitions (promote to production, deprecate). signal.admin: act for others. */
+    admin: ["signal.*", "jobs.*", "schedules.*", "configuration.*", "apikeys.*", "credential.*", "files.*", "webhooks.*"],
   },
   auth: { accounts: { roles: ["member"] } },
   dev: {
@@ -33,7 +34,6 @@ export const app = feltkit({
   },
   services: {
     files: true,
-    notifications: { types: ["signal.finding"] },
     configuration: true,
     apiKeys: { roles: ["agent"] },
     // A schedule can run the freshness sweep (a mutation: it reads and writes state, it does not fetch).
@@ -47,6 +47,8 @@ export const app = feltkit({
     const a = (args ?? {}) as Record<string, unknown>;
     const checks: Array<[string, unknown]> = [
       ["signal_sources", a.sourceId], ["signal_criteria", a.criteriaId], ["signal_findings", a.findingId], ["signal_entities", a.entityId],
+      ["signal_notices", a.noticeId], ["signal_site_analyses", a.analysisId],
+      // signal_sites and signal_site_feeds are shared knowledge: readable by everyone signed in, owned by no one.
     ];
     for (const [c, id] of checks) {
       if (typeof id !== "string") continue;
@@ -69,7 +71,12 @@ const owner = { ownerId: s.string() };
 export const sources = app.collection("signal_sources", {
   name: s.string({ minLength: 1, maxLength: 200 }),
   description: s.optional(s.string({ maxLength: 2000 })),
-  kind: s.enum(["file", "http_json", "push", "page_capture", "manual"] as const),
+  kind: s.enum(["file", "http_json", "push", "page_capture", "manual", "site_feed"] as const),
+  /** site_feed: the shared definition this connection instantiates, and how this user's copy is acquired. */
+  siteId: s.optional(s.string()),
+  feedId: s.optional(s.string()),
+  feedVersion: s.optional(s.integer()),
+  acquisition: s.optional(s.enum(["server", "browser"] as const)),
   /** native: produced inside Signal's environment (captures, manual records). user: brought by the user. */
   origin: s.enum(["native", "user"] as const),
   status: s.enum(["connected", "paused", "unavailable", "removed"] as const),
@@ -134,8 +141,11 @@ export const observations = app.collection("signal_observations", {
   body: s.string(), // canonical JSON { attributes, identity, locator, keyBasis }
   retractedAt: s.optional(s.string()),
   retractReason: s.optional(s.string()),
+  /** The record's own web address (a listing, an event page), and the page it was captured on: how the overlay finds context. */
+  url: s.optional(s.string()),
+  pageUrl: s.optional(s.string()),
   ...owner,
-}, { unique: [["observationId"]], indexes: [{ fields: ["sourceId"] }, { fields: ["sourceId", "status"] }, { fields: ["sourceId", "recordKey"] }] });
+}, { unique: [["observationId"]], indexes: [{ fields: ["url"] }, { fields: ["pageUrl"] }, { fields: ["sourceId"] }, { fields: ["sourceId", "status"] }, { fields: ["sourceId", "recordKey"] }] });
 
 export const entities = app.collection("signal_entities", {
   type: s.string(),
@@ -208,6 +218,8 @@ export const findings = app.collection("signal_findings", {
   acknowledgedAt: s.optional(s.string()),
   dismissedAt: s.optional(s.string()),
   dismissReason: s.optional(s.string()),
+  /** Hidden from the feed and silent until then; its history continues. */
+  snoozedUntil: s.optional(s.string()),
   ...owner,
 }, { unique: [["criteriaId", "entityId"]], indexes: [{ fields: ["ownerId"] }, { fields: ["ownerId", "status"] }, { fields: ["entityId"] }, { fields: ["criteriaId"] }, { fields: ["criteriaId", "status"] }] });
 
@@ -242,3 +254,103 @@ export const runs = app.collection("signal_runs", {
   durationMs: s.number(),
   ...owner,
 }, { unique: [["runId"]], indexes: [{ fields: ["ownerId", "seq"] }] });
+
+// ------------------------------------------------------------------ notifications (Signal's own, durable)
+
+/**
+ * What Signal tells a person, and what they did about it. Created in the same transaction as the change that
+ * caused it; deduplicated by `dedupKey`. Delivery channels (the extension's browser notifications, the overlay,
+ * the web app) read from here; acknowledging or snoozing never deletes history.
+ */
+export const notices = app.collection("signal_notices", {
+  kind: s.enum(["finding_new", "finding_changed", "finding_resolved", "finding_reopened", "finding_closed", "source_failure", "source_recovered", "source_stale", "monitor"] as const),
+  severity: s.enum(["info", "warning", "critical"] as const),
+  priority: s.number(),
+  title: s.string(),
+  body: s.string(),
+  findingId: s.optional(s.string()),
+  sourceId: s.optional(s.string()),
+  entityId: s.optional(s.string()),
+  /** Context for contextual delivery: the entity's web address(es), when known. */
+  urls: s.array(s.string()),
+  dedupKey: s.string(),
+  createdAt: s.string(),
+  ackAt: s.optional(s.string()),
+  snoozedUntil: s.optional(s.string()),
+  /** When a browser notification was shown for it (set by the extension). */
+  deliveredAt: s.optional(s.string()),
+  ...owner,
+}, { unique: [["dedupKey"]], indexes: [{ fields: ["ownerId"] }, { fields: ["ownerId", "createdAt"] }, { fields: ["findingId"] }] });
+
+export const preferences = app.collection("signal_preferences", {
+  prefs: s.string(), // canonical JSON NotificationPrefs
+  updatedAt: s.string(),
+  ...owner,
+}, { unique: [["ownerId"]] });
+
+// ------------------------------------------------------------------ shared site intelligence
+
+/** A website Signal has learned about. Shared: no owner, no user data. */
+export const sites = app.collection("signal_sites", {
+  domain: s.string(),
+  name: s.string(),
+  analyses: s.integer(),
+  firstSeenAt: s.string(),
+  lastAnalyzedAt: s.string(),
+}, { unique: [["domain"]] });
+
+/**
+ * A versioned, shareable description of one information source on a site (signal.site-feed/v1). Structure and
+ * semantics only: never values, never a user's parameters or session. Status:
+ *   discovered        seen by an analysis, not yet shown to work for acquisition
+ *   verified          an actual acquisition matched the described structure
+ *   production        reviewed by a curator: recommended for everyone
+ *   needs_reanalysis  acquisitions no longer match (the site changed)
+ *   broken            repeated failures
+ *   deprecated        withdrawn by a curator (kept: connections and history cite it)
+ */
+export const siteFeeds = app.collection("signal_site_feeds", {
+  siteId: s.string(),
+  feedKey: s.string(),
+  version: s.integer(),
+  status: s.enum(["discovered", "verified", "production", "needs_reanalysis", "broken", "deprecated"] as const),
+  verdict: s.string(),
+  label: s.string(),
+  score: s.number(),
+  definition: s.string(), // canonical JSON FeedDefinition
+  structureHash: s.string(),
+  pages: s.array(s.string()),
+  analyses: s.integer(),
+  verifications: s.integer(),
+  failures: s.integer(),
+  consecutiveFailures: s.integer(),
+  lastVerifiedAt: s.optional(s.string()),
+  lastFailureAt: s.optional(s.string()),
+  lastFailure: s.optional(s.string()),
+  reviewNote: s.optional(s.string()),
+  createdAt: s.string(),
+  updatedAt: s.string(),
+}, { unique: [["feedKey", "version"]], indexes: [{ fields: ["siteId"] }, { fields: ["feedKey"] }] });
+
+/** Verification history of a definition. Anonymous by design: no user id, no values; counts and outcomes only. */
+export const feedChecks = app.collection("signal_feed_checks", {
+  feedId: s.string(),
+  version: s.integer(),
+  at: s.string(),
+  kind: s.enum(["analysis", "acquisition", "report"] as const),
+  ok: s.boolean(),
+  conformance: s.number(),
+  records: s.integer(),
+  detail: s.string(),
+}, { indexes: [{ fields: ["feedId"] }] });
+
+/** One user's analysis of one page. PRIVATE: it holds what their browser saw (samples, their URLs). */
+export const siteAnalyses = app.collection("signal_site_analyses", {
+  siteId: s.string(),
+  url: s.string(),
+  at: s.string(),
+  durationMs: s.number(),
+  result: s.string(), // canonical JSON SiteAnalysis (with private samples)
+  contributed: s.array(s.string()), // feed ids this analysis contributed to or matched
+  ...owner,
+}, { indexes: [{ fields: ["ownerId"] }, { fields: ["siteId"] }] });
