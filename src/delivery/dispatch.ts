@@ -123,9 +123,10 @@ export async function deliverEvent(
 			await record(attempt + 1, { status: 'failed', retryable: false, detail: `No dispatcher configured for ${dest.type}` });
 			continue;
 		}
-		while (attempt < policy.maxAttempts) {
+		// Each delivery pass gets up to maxAttempts tries; attempt numbers continue across passes.
+		for (let tries = 1; tries <= policy.maxAttempts; tries++) {
 			attempt++;
-			if (attempt > 1) await policy.sleep(policy.backoffMs(attempt));
+			if (tries > 1) await policy.sleep(policy.backoffMs(tries));
 			const r = await dispatcher.dispatch(event, dest, { idempotencyKey, attempt });
 			await record(attempt, r);
 			if (r.status === 'delivered' || !r.retryable) break;

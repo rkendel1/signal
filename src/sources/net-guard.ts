@@ -35,6 +35,12 @@ export function isPrivateAddress(ip: string): boolean {
 	const v = ip.toLowerCase();
 	const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/.exec(v);
 	if (mapped) return ipv4Private(mapped[1]);
+	// WHATWG URL serialises IPv4-mapped addresses in hex (::ffff:7f00:1); decode before checking.
+	const hex = /^::ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/.exec(v);
+	if (hex) {
+		const hi = parseInt(hex[1], 16), lo = parseInt(hex[2], 16);
+		return ipv4Private(`${hi >> 8}.${hi & 255}.${lo >> 8}.${lo & 255}`);
+	}
 	return v === '::' || v === '::1' || v.startsWith('fc') || v.startsWith('fd') || v.startsWith('fe8') ||
 		v.startsWith('fe9') || v.startsWith('fea') || v.startsWith('feb') || v.startsWith('ff') || v.startsWith('64:ff9b');
 }

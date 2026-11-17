@@ -21,14 +21,14 @@ export async function tempStore(tenantId = 't_acme'): Promise<SignalStore> {
 export interface Fixture {
 	url: string;
 	server: Server;
-	set(path: string, res: { status?: number; body: string; type?: string; etag?: string; headers?: Record<string, string> }): void;
+	set(path: string, res: { status?: number; statusSeq?: number[]; body: string; type?: string; etag?: string; headers?: Record<string, string> }): void;
 	requests: Array<{ method: string; path: string; headers: IncomingMessage['headers']; body: string }>;
 	close(): Promise<void>;
 }
 
 /** Local HTTP fixture standing in for "an accessible webpage" and "a webhook receiver". */
 export async function fixture(): Promise<Fixture> {
-	const routes = new Map<string, { status?: number; body: string; type?: string; etag?: string; headers?: Record<string, string> }>();
+	const routes = new Map<string, { status?: number; statusSeq?: number[]; body: string; type?: string; etag?: string; headers?: Record<string, string> }>();
 	const requests: Fixture['requests'] = [];
 	const server = createServer((req, res) => {
 		let body = '';
@@ -38,7 +38,8 @@ export async function fixture(): Promise<Fixture> {
 			const r = routes.get(req.url!.split('?')[0]);
 			if (!r) { res.writeHead(404); res.end('not found'); return; }
 			if (r.etag && req.headers['if-none-match'] === r.etag) { res.writeHead(304, { etag: r.etag }); res.end(); return; }
-			res.writeHead(r.status ?? 200, { 'content-type': r.type ?? 'text/html; charset=utf-8', ...(r.etag ? { etag: r.etag } : {}), ...(r.headers ?? {}) });
+			const status = r.statusSeq?.length ? r.statusSeq.shift()! : r.status ?? 200;
+			res.writeHead(status, { 'content-type': r.type ?? 'text/html; charset=utf-8', ...(r.etag ? { etag: r.etag } : {}), ...(r.headers ?? {}) });
 			res.end(r.body);
 		});
 	});

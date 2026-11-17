@@ -45,6 +45,8 @@ export class SignalService {
 	constructor(store: SignalStore, auth: Authorizer, net: NetPolicy = {}, now = () => new Date()) { this.store = store; this.auth = auth; this.net = net; this.now = now; }
 
 	private async require(p: Principal, action: SignalAction, r: { type: string; id: string; tenantId: string; ownerId?: string }) {
+		// A service instance serves exactly one tenant's store; foreign principals are refused outright.
+		if (p.tenantId !== this.store.tenantId) throw new AuthorizationError(`${action} denied: principal tenant ${p.tenantId} is not ${this.store.tenantId}`);
 		const d = await this.auth.authorize(p, action, r);
 		if (!d.allowed) throw new AuthorizationError(`${action} on ${r.type}/${r.id} denied: ${d.reason ?? 'not allowed'}`);
 	}
@@ -52,7 +54,10 @@ export class SignalService {
 	async registerSource(p: Principal, input: Pick<SourceDefinition, 'type' | 'locator' | 'access' | 'observation'>): Promise<SourceDefinition> {
 		const s: SourceDefinition = { schema: 'signal.source/v1', id: newId('src'), tenantId: p.tenantId, ownerId: p.subjectId, createdAt: this.now().toISOString(), ...input };
 		await this.require(p, 'signal.source.write', { type: 'source', id: s.id, tenantId: s.tenantId, ownerId: s.ownerId });
-		if (s.type === 'http_page' || s.type === 'json') {
+		const isHttp = /^https?:/i.test(s.locator);
+		if (s.type === 'http_page' && !isHttp) throw new Error('http_page sources need an absolute http(s) URL');
+		if (!isHttp && s.observation.strategy === 'poll') throw new Error('Only http(s) sources can be polled; pushed sources use strategy event/manual');
+		if (s.type === 'http_page' || isHttp) {
 			// Validated at registration and again at every fetch (DNS can change).
 			await assertUrlAllowed(s.locator, this.net);
 		}
