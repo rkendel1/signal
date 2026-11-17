@@ -54,7 +54,7 @@ export const app = feltkit({
    * it owns (admins excepted). Roles decide *which* operations; this decides *on what*.
    */
   authorize: async ({ function: fn, args, principal, db }) => {
-    if (!principal) return { allowed: false, reason: "sign in" };
+    if (!principal) return { allowed: false, code: "UNAUTHORIZED", reason: "sign in" };
     if (principal.roles?.includes("admin")) return true;
     const a = (args ?? {}) as Record<string, unknown>;
     const owned = async (collection: string, id: unknown) => {
@@ -65,7 +65,7 @@ export const app = feltkit({
     const checks: Array<[string, unknown]> = [
       ["signal_sources", a.sourceId], ["signal_monitors", a.monitorId], ["signal_events", a.eventId],
     ];
-    for (const [c, id] of checks) if (!(await owned(c, id))) return { allowed: false, reason: `not the owner (${fn})` };
+    for (const [c, id] of checks) if (!(await owned(c, id))) return { allowed: false, code: "FORBIDDEN", reason: `not the owner (${fn})` };
     return true;
   },
 });

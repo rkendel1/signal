@@ -1,6 +1,9 @@
 import { fail, s } from "@feltdb/feltkit";
 import { app, criteria, evaluations, events, interpretations, monitors, observations, sources } from "./app.js";
 import { api } from "./_generated/api.js";
+
+// This module's own references: TypeScript cannot infer them inside the module that defines them.
+const self = api.monitors as unknown as { context: never; record: never };
 import type { Interpretation, Observation, SourceDefinition } from "../lib/contracts/types.ts";
 import { newId, sha256 } from "../lib/core/canonical.ts";
 import { runCycle } from "../lib/core/cycle.ts";
@@ -60,7 +63,7 @@ export const observe = app.action({
   access: "signal.monitors.run",
   args: { monitorId: s.string() },
   handler: async (ctx, { monitorId }) => {
-    const { monitor, source } = await ctx.runQuery(api.monitors.context, { monitorId });
+    const { monitor, source } = (await ctx.runQuery(self.context, { monitorId } as never)) as { monitor: Record<string, any>; source: Record<string, any> };
     if (!/^https?:/i.test(source.locator)) fail("FAILED_PRECONDITION", "This source receives pushed content; use monitors:push.");
     const def: SourceDefinition = {
       schema: "signal.source/v1", id: source.id, tenantId: TENANT, ownerId: source.ownerId, type: source.type, locator: source.locator,
@@ -70,9 +73,9 @@ export const observe = app.action({
       source: def, requestedAt: new Date().toISOString(),
       previous: { etag: monitor.etag, lastModified: monitor.lastModified, contentHash: monitor.lastContentHash },
     });
-    return ctx.runMutation(api.monitors.record, {
+    return ctx.runMutation(self.record, {
       monitorId, observation: json(r.observation), body: r.body ? new TextDecoder().decode(r.body) : undefined,
-    });
+    } as never) as Promise<{ outcome: string; eventId: string | null; observationId: string }>;
   },
 });
 

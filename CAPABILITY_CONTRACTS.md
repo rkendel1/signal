@@ -1,6 +1,6 @@
 # Signal — Capability Contracts (v1)
 
-**Normative source:** [`src/contracts/types.ts`](src/contracts/types.ts). It contains plain-data TypeScript types only, with no behaviour. Every durable record carries a `schema` discriminator `signal.<record>/v1`. This document explains the contracts and their rules. If the two disagree, `types.ts` wins.
+**Normative sources:** [`lib/contracts/types.ts`](lib/contracts/types.ts) (record shapes) and the FeltKit functions in [`feltkit/`](feltkit/) (operations, permissions, storage). It contains plain-data TypeScript types only, with no behaviour. Every durable record carries a `schema` discriminator `signal.<record>/v1`. This document explains the contracts and their rules. If the two disagree, `types.ts` wins.
 
 The brief proposed four starting interfaces. They were reconciled with the code as follows:
 
@@ -9,22 +9,23 @@ The brief proposed four starting interfaces. They were reconciled with the code 
 | `ObservationSource.observe(req) → ObservationResult{content: unknown}` | `observe(req) → {observation: Observation, body?: Uint8Array}` | Evidence must be the **exact bytes**, and they must be stored content-addressed *before* interpretation. `unknown` content cannot be hashed reproducibly. The `Observation` record carries status, provenance and `evidenceRef`. |
 | `SignalDecoder.detect()` + `decode()` (async) | `detect(input) → DetectedSignal[]` (sync) | Detection and decoding are the same pass for every codec built so far. A separate `decode` duplicated work and allowed the two to disagree, which is exactly Ghostpost's `isLikely…` vs `decode` problem. Decoders are pure and synchronous, so they are deterministic and cheap. |
 | `CriteriaEvaluator.evaluate(observation, criteria)` | `evaluate(current: Interpretation, previous?, criteria, ctx)` | Criteria run on the *interpretation* (fields and signals), not raw content. Change detection needs the previous interpretation. Time comes from `ctx.now`, so evaluation is a pure function. |
-| `AlertDispatcher.dispatch(event, destination)` | `dispatch(event, destination, {idempotencyKey, attempt})` | The receiver needs a key that is stable across retries in order to deduplicate. |
+| `AlertDispatcher.dispatch(event, destination)` | **Not Signal's.** `ctx.afterCommit.notifications.send` / `.webhooks.emit` (AppPort Services via FeltKit) | Boundry already has durable, idempotent, retried delivery with per-channel records. Signal only decides *that* something matters. The `AlertDispatcher` type remains in `types.ts` as the shape of a future non-AppPort channel; nothing implements it. |
 
 ## 1. Records and their separation
 
-A signal is not an alert, a detection is not an interpretation, and an interpretation is not evidence. Each record below is a separate fact with its own id. None of them overwrites another.
+A signal is not an alert, a detection is not an interpretation, and an interpretation is not evidence. Each record below is a separate fact in its own FeltDB collection. None of them overwrites another.
 
-| # | Fact | Record | Id | Written |
+| # | Fact | Collection (`feltkit/app.ts`) | Identity | Written |
 |---|---|---|---|---|
-| 1 | We looked at a source | `Observation` (+ evidence bytes in the FeltDB content store) | random `obs_…`; evidence `sha256:…` | Once |
-| 2 | We extracted / detected something | `Interpretation` (`fields`, `signals`) | `int_` + hash(observation, rules, decoders) | Once |
-| 3 | Criteria were evaluated | `Evaluation` (full trace + `outcome`) | `evl_` + hash(monitor, observation, criteria id+version) | Once, **including non-matches and suppressions** |
-| 4 | Something mattered | `MatchedEvent` | `evt_` + the same basis | Once, in the same transaction as 3 |
-| 5 | We tried to notify | `DeliveryAttempt` (`attempted→delivered/failed/suppressed`) | random `att_…` | Once per attempt |
-| 6 | A human or app saw it | `Acknowledgement` | `ack_{event}_{subject}` | Once per subject |
+| 1 | We looked at a source | `signal_observations` + evidence in **Files** (`files:<id>`, metadata `sha256`) | `obs_…` (random, unique) | Once |
+| 2 | We extracted / detected something | `signal_interpretations` | `int_` + hash(observation, rules, decoders) (unique) | Once |
+| 3 | Criteria were evaluated | `signal_evaluations` (full trace, `outcome`, per-monitor `seq`) | `evl_` + hash(monitor, observation, criteria id+version) (unique) | Once, **including non-matches and suppressions** |
+| 4 | Something mattered | `signal_events` | `evt_` + the same basis (unique). Callers address events by FeltKit record id | Once |
+| 5 | People were told | AppPort `notifications` + `notification_deliveries` | idempotency key `signal.event:<evt>:<recipient>` | By AppPort, after commit |
+| 6 | Systems were told | FeltKit outbox → AppPort webhook deliveries | one per committed effect | By AppPort, after commit |
+| 7 | Someone acknowledged | `signal_events.acknowledgedAt/By` (+ AppPort notification read/ack) | – | Once |
 
-The only mutable record is `signal_monitor_state` (current match flag, last dedup key, last interpretation, ETag). It is updated with a version fence in the same FeltDB transaction that writes facts 3–4.
+Facts 1–4 and the monitor's condition state (`signal_monitors.matched/lastDedupKey/…`) are written in **one FeltKit mutation**, so they commit together or not at all. Facts 5–6 are staged in that same transaction (`ctx.afterCommit`) and performed only if it commits. Replaying an observation id returns the recorded outcome and stages nothing.
 
 ## 2. Source contract
 
@@ -35,12 +36,12 @@ SourceDefinition { schema:'signal.source/v1', id, tenantId, ownerId,
   observation: { strategy:'manual'|'poll'|'event', intervalSeconds? }, createdAt }
 ```
 
-Rules (enforced in `SignalService.registerSource` and `HttpSource`):
-- `http_page` requires an absolute `http(s)` URL. Only `http(s)` sources may be `poll`ed. `text`/`json`/`dom` with logical locators are *pushed* by an authorized caller (`POST /v1/monitors/:id/run {content}`).
-- URLs pass the net guard **at registration and at every fetch, including every redirect hop**: no private, loopback, link-local, metadata, CGNAT or multicast addresses, no credentials in URLs, schemes limited to http(s).
+Rules (enforced in `feltkit/sources.ts`, `feltkit/monitors.ts` and `lib/sources/`):
+- `http_page` requires an absolute `http(s)` URL. Only `http(s)` sources may be `poll`ed. `text`/`json`/`dom` with logical locators are *pushed* by an authorized caller (`monitors:push`).
+- URLs pass the net guard: a synchronous shape check at registration (inside the mutation, no network), and the full DNS-resolved check **at every fetch, including every redirect hop** (inside the `observe` action): no private, loopback, link-local, metadata, CGNAT or multicast addresses, no credentials in URLs, schemes limited to http(s).
 - The poll interval is floored at 300 s.
 - `robots.txt` is honoured for polling (RFC 9309: 4xx means allowed, 5xx or unreachable means disallowed). 401, 403 and 451 are recorded as `denied`. Signal never retries around an access decision.
-- `credential_ref` sources are refused with `CREDENTIALS_UNAVAILABLE` until a host credential resolver is wired (gap G-SRC-2). Signal never stores secrets.
+- `credential_ref` sources are not registrable yet (gap G-SRC-2). Signal never stores secrets.
 
 Observation `status`: `ok` (evidence stored) · `not_modified` (conditional GET 304; nothing re-evaluated) · `denied` · `error`. Every status is persisted with its provenance.
 
@@ -113,44 +114,41 @@ MatchedEvent { schema, eventId, tenantId, ownerId, monitorId, sourceId, sourceLo
 
 `excerpts` never replace evidence. `evidence.observationRef` resolves to the exact observed bytes, and `contentHash` lets anyone verify them.
 
-## 6. Delivery contract
+## 6. Delivery (AppPort Services, via FeltKit)
 
-```ts
-AlertDestination { id, type: 'webhook'|'inbox'|'appport_notification', target, secretRef?, minSeverity?, quietHours? }
-DeliveryAttempt  { schema:'signal.delivery/v1', attemptId, eventId, destinationId, attempt, attemptedAt,
-                   status:'delivered'|'failed'|'suppressed', retryable, detail?, responseStatus?, idempotencyKey }
-```
+Signal does not deliver. When an event is recorded, `monitors.ts` stages delivery in the same transaction:
 
-Rules (`delivery/dispatch.ts`):
-- `idempotencyKey = hash(eventId, destinationId)`. It is identical on every retry and across reprocessing.
-- A destination that has a `delivered` or `suppressed` attempt is never sent again. Reprocessing resumes only the destinations that failed, and attempt numbers continue.
-- Retryable means 5xx, 408, 429 or a network error. A 4xx or a blocked destination is final. Backoff is exponential, `500 ms × 2^(n-2)`, capped at 30 s, with 4 attempts per pass.
-- `minSeverity` produces a `suppressed` attempt. `quietHours` produces **no** attempt (held, not dropped).
-- A failed delivery never alters or removes the event.
+- **People:** for each monitor recipient (`notify`, default the owner; only admins may name others), Signal stages `ctx.afterCommit.notifications.send` with these fields:
+  - `type: "signal.criteria_matched"`
+  - `title`: the criteria name
+  - `body`: the matched values, each with its previous value, plus the source
+  - `data`: `{eventRecordId, eventId, monitorId, severity, sourceLocator, evidenceRef}`
+  - `idempotencyKey: "signal.event:<eventId>:<recipient>"`
 
-**Webhook wire format:**
-- Method and body: `POST` with the `MatchedEvent` JSON as the body.
-- Headers: `idempotency-key`, `x-signal-event-id`, `x-signal-attempt`, `x-signal-timestamp`, and `x-signal-signature: sha256=HMAC(secret, "<timestamp>.<body>")` when `secretRef` is set. The secret is resolved by the host (a Resolver `secret` ref).
-- Destinations must be `https` and pass the net guard. Redirects are not followed.
+  AppPort Services persists the notification, routes it to channels (in-app by default), retries on its job service, and tracks read/acknowledge. Recipients read it with `events:inbox`.
+- **Systems:** if `emitWebhook`, Signal stages `ctx.afterCommit.webhooks.emit("signal.event", {…event, eventRecordId})`. Delivery goes to endpoints that an admin registered in Studio, signed with a custody-held credential, by AppPort Webhooks.
 
-`appport_notification` is declared but has **no dispatcher** in this slice. It records `failed: No dispatcher configured` rather than pretending (see GAP_REGISTER).
+What Signal guarantees is that the event and its evidence are durable *before* anything is sent, and that delivery is staged exactly once per committed event. Delivery outcomes are AppPort's records, not Signal's.
 
-## 7. Application-facing API (`src/api/server.ts`)
+## 7. Operations (FeltKit functions)
 
-| Method | Path | Authorization (action) |
-|---|---|---|
-| GET | `/v1/events?sourceLocator=` | `signal.event.read` (own events; `signal.admin` sees the tenant) |
-| GET | `/v1/events/:id/evidence` | `signal.evidence.read` + ownership |
-| POST | `/v1/events/:id/ack` | `signal.event.ack` + ownership |
-| POST | `/v1/monitors/:id/run` `{content?}` | `signal.monitor.run` + ownership |
-| GET | `/overlay.js`, `/codec/*` | public static assets |
+| Function | Kind | Permission (`access`) | AppPort capability | Notes |
+|---|---|---|---|---|
+| `sources:register` | mutation | `signal.sources.write` | `signal.sources.register` | shape-checked URL; poll floor 300 s |
+| `sources:list` | query | `signal.sources.read` | – | own sources |
+| `criteria:define` | mutation | `signal.criteria.write` | `signal.criteria.define` | `definition` = signal.criteria/v1 JSON; immutable versions; ids are per-owner |
+| `criteria:get` | query | `signal.criteria.read` | – | |
+| `monitors:create` | mutation | `signal.monitors.write` | `signal.monitors.create` | `notify` limited to owner unless `signal.admin` |
+| `monitors:observe` | **action** | `signal.monitors.run` | – (actions are not capabilities) | fetches (robots, SSRF guard, conditional GET), then calls `monitors:record` |
+| `monitors:push` | mutation | `signal.monitors.run` | `signal.monitors.push` | pushed sources only |
+| `monitors:record` | mutation | `signal.monitors.run` | – | the atomic record step; body must match `contentHash` |
+| `monitors:history` | query | `signal.monitors.read` | – | evaluations in `seq` order |
+| `events:list` / `events:forPage` | query | `signal.events.read` | `signal.events.list` | own events |
+| `events:evidence` | query | `signal.events.read` | – | raw + normalized evidence; hash re-verified on read |
+| `events:acknowledge` | mutation | `signal.events.ack` | – | |
+| `events:inbox` | query | `notifications.read` | – | the caller's Signal notifications |
 
-Other rules:
-- **Authentication is injected** (`authenticate(req) → Principal`). Signal does not mint or verify credentials.
-- **A service instance serves one tenant.** A principal from another tenant is refused before any lookup.
-- **Definition writes** (`registerSource`, `defineCriteria`, `createMonitor`) are exposed as `SignalService` methods for in-process hosts. They are not yet HTTP routes (gap G-API-1).
-
-**Actions** a host's authority must know about: `signal.source.write`, `signal.criteria.write`, `signal.monitor.write`, `signal.monitor.run`, `signal.event.read`, `signal.event.ack`, `signal.evidence.read`, `signal.admin`.
+**Ownership** is enforced by the app's `authorize` hook for every function that takes `sourceId`, `monitorId` or `eventId`, and inside handlers for criteria. Admins are exempt. Roles (`feltkit/app.ts`): `member`, `viewer`, `agent`, `admin`.
 
 ## 8. Codec contract — `ghostpost-unicode/v1` wire format
 

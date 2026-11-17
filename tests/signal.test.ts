@@ -183,7 +183,7 @@ test('pushed content: structured JSON criteria, embedded Ghostpost signals, and 
 	const r = await ada.mutation(api.monitors.push, { monitorId: m2, content: `<article><p>${post}</p>${injection}</article>` });
 	assert.equal(r.outcome, 'event_recorded');
 	const ev = await ada.query(api.events.evidence, { eventId: r.eventId! });
-	const sig = ev.event.matched[0].actual[0];
+	const sig = (ev.event.matched[0].actual as Array<{ payload: { text: string } }>)[0];
 	assert.equal(sig.payload.text, 'Launch date: 2026-12-01');
 	assert.match(ev.raw, /ignore previous instructions/, 'preserved verbatim as evidence');
 	const [mon] = (await ada.query(api.monitors.list, {})).filter((m: { id: string }) => m.id === m2);
