@@ -103,31 +103,48 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	// Capture the rendered page the person is looking at.
 	await page.bringToFront();
 	await panel.click('#capture');
-	await panel.waitForFunction(() => /Captured:|error/i.test(document.getElementById('status')!.textContent ?? '') || document.getElementById('status')!.classList.contains('error'));
-	assert.match(String(await statusText()), /^Captured: \d+ entities\. Page [\d,]+ KB, structure-relevant part [\d,]+ KB sent; Signal keeps the structure, not the page\.$/);
+	await panel.waitForFunction(() => /Captured:.*match ·|error/i.test(document.getElementById('status')!.textContent ?? '') || document.getElementById('status')!.classList.contains('error'));
+	assert.match(String(await statusText()), /^Captured: \d+ entities\. Page [\d,]+ KB, structure-relevant part [\d,]+ KB sent; Signal keeps the structure, not the page\. 7 match · 0 possible · 0 not a match$/, 'with no filters on, everything found is listed');
 
-	// Discover over the captured page.
-	const intent = {
-		schema: 'signal.intent/v1', id: 'riverside', version: 1, name: 'under 350k, 3+ beds', target: { type: ['RealEstateListing', 'SingleFamilyResidence'] },
-		criteria: [{ id: 'price', label: 'under $350k', where: { attr: 'price', op: 'lt', value: 350000 } }, { id: 'beds', label: '3+ beds', where: { attr: 'numberOfBedrooms', op: 'gte', value: 3 } }]
+	// The controls come from what the page contains: types as chips, attributes as sliders and toggles.
+	assert.deepEqual(await panel.$$eval('#types .chip', (els: Element[]) => els.map((e) => [e.textContent, e.getAttribute('aria-pressed')])), [
+		['Real Estate Listing · 7', 'true'], ['Product · 1', 'false'], ['Single Family Residence · 2', 'true']
+	]);
+	assert.deepEqual(await panel.$$eval('#filters .filter .top label', (els: Element[]) => els.map((e) => e.textContent)), ['Floor size', 'HOA fee', 'Bedrooms', 'Price', 'Year built', 'Has price reduction']);
+	assert.equal(await panel.$$eval('#intent', (els: Element[]) => (els[0] as HTMLTextAreaElement).readOnly), true, 'JSON is shown, not required');
+
+	const rows = async () => {
+		const r: Array<[string, string]> = await panel.$$eval('.cand', (els: Element[]) => els.map((e) => [e.querySelector('.head > :first-child')!.textContent!, e.querySelector('.badge')!.textContent!]));
+		assert.equal(new Set(r.map((x) => x[0])).size, r.length, `one candidate per home: ${JSON.stringify(r)}`);
+		return Object.fromEntries(r);
 	};
-	await panel.fill('#intent', JSON.stringify(intent));
-	const runDiscovery = async () => {
+	/** Drag a slider the way a person does: the value snaps to the slider's step, then results update live. */
+	const slide = async (attr: string, bound: 'lo' | 'hi', value: number) => {
 		await panel.evaluate(() => { document.getElementById('status')!.textContent = ''; });
-		await panel.click('#discover');
-		await panel.waitForFunction(() => /match ·|rror/.test(document.getElementById('status')!.textContent ?? ''));
-		const rows: Array<[string, string]> = await panel.$$eval('.cand', (els: Element[]) => els.map((e) => [e.querySelector('.head > :first-child')!.textContent!, e.querySelector('.badge')!.textContent!]));
-		assert.equal(new Set(rows.map((r) => r[0])).size, rows.length, `one candidate per home: ${JSON.stringify(rows)}`);
-		return Object.fromEntries(rows);
+		await panel.$eval(`input[type=range][data-attr="${attr}"][data-bound="${bound}"]`, (r: Element, v: number) => { (r as HTMLInputElement).value = String(v); r.dispatchEvent(new Event('input', { bubbles: true })); }, value);
+		await panel.waitForFunction(() => / match · /.test(document.getElementById('status')!.textContent ?? ''));
 	};
-	const first = await runDiscovery();
+	await slide('price', 'hi', 350000); // snaps to $349,000 (199,000 + n × 5,000)
+	await slide('numberOfBedrooms', 'lo', 3);
+	assert.match(String(await panel.textContent('#filters')), /\$199,000 – \$349,000/);
+	const first = await rows();
 	assert.deepEqual(first, {
 		'121 Elm St': 'match', '48 Oak Ave': 'match', '9 Pine Ct': 'match', '15 Maple Dr': 'match',
 		'300 Birch Rd': 'possible', '77 Cedar Ln': 'not a match', '62 Aspen Way': 'not a match'
 	});
 	assert.match(String(await statusText()), /^4 match · 1 possible · 2 not a match$/);
 	assert.match(String(await panel.textContent('#results')), /Complete: the page declares 8 and all 8 were examined \(1 not of the target type\)/);
-	assert.match(String(await panel.textContent('#results')), /Undecided: beds: not shown/);
+	assert.match(String(await panel.textContent('#results')), /Undecided: Bedrooms: not shown/);
+	// "Items that don't show it are not a match": Birch (no bedrooms shown) moves from possible to not a match.
+	await panel.evaluate(() => { document.getElementById('status')!.textContent = ''; });
+	await panel.click('.filter:has(input[data-attr="numberOfBedrooms"]) .missing input');
+	await panel.waitForFunction(() => / match · /.test(document.getElementById('status')!.textContent ?? ''));
+	assert.equal((await rows())['300 Birch Rd'], 'not a match');
+	await panel.evaluate(() => { document.getElementById('status')!.textContent = ''; });
+	await panel.click('.filter:has(input[data-attr="numberOfBedrooms"]) .missing input');
+	await panel.waitForFunction(() => / match · /.test(document.getElementById('status')!.textContent ?? ''));
+	const intentJson = JSON.parse(String(await panel.$eval('#intent', (t: Element) => (t as HTMLTextAreaElement).value)));
+	assert.deepEqual(intentJson.criteria.map((c: any) => [c.where.attr, c.where.op, c.where.value]), [['numberOfBedrooms', 'between', [3, 4]], ['price', 'between', [199000, 349000]]]);
 
 	// The page changes; the person captures it again: changes are detected against the previous capture.
 	site.set('/search', { body: served('neighborhood-later.html', site.url) });
@@ -135,16 +152,17 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	await page.bringToFront();
 	await panel.evaluate(() => { document.getElementById('status')!.textContent = ''; });
 	await panel.click('#capture');
-	await panel.waitForFunction(() => /Captured:/.test(document.getElementById('status')!.textContent ?? ''));
+	await panel.waitForFunction(() => /Captured:.*match ·/.test(document.getElementById('status')!.textContent ?? ''));
 	assert.match(String(await panel.textContent('#pages')), /changed since last capture/);
-	const second = await runDiscovery();
+	const second = await rows(); // the same filters, kept across the new capture, re-evaluated automatically
 	assert.equal(second['48 Oak Ave'], 'match · changed');
 	assert.equal(second['3 Juniper Rd'], 'match');
 	assert.equal(second['9 Pine Ct'], 'match', 'an unchanged listing is not flagged');
 	// Elm St: the first page also stated a stale $279,000 in JSON-LD; the later page states only $289,000.
 	// The set of stated prices changed, so it is reported (as "Changed: price"), not hidden.
 	assert.equal(second['121 Elm St'], 'match · changed');
-	assert.match(String(await panel.textContent('#results')), /Changed: price/);
+	assert.match(String(await panel.textContent('#results')), /Changed: Price/);
+	assert.match(String(await panel.textContent('#results')), /detail page: may resolve: Bedrooms/);
 	if (process.env.SIGNAL_SCREENSHOTS) { // optional: `SIGNAL_SCREENSHOTS=<dir> npm run test:extension`
 		await panel.setViewportSize({ width: 400, height: 1400 });
 		await panel.screenshot({ path: join(process.env.SIGNAL_SCREENSHOTS, 'extension-panel.png'), fullPage: true });

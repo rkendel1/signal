@@ -40,9 +40,23 @@
 	<ul id="pages" class="list"></ul>
 	<button id="clear" type="button" class="link">Clear captured pages</button>
 
-	<h2><label for="intent">Intent</label></h2>
-	<textarea id="intent" rows="10" spellcheck="false"></textarea>
-	<div class="row"><button id="discover" type="button">Find candidates</button><button id="example" type="button" class="link">Example intent</button></div>
+	<form id="intent-form">
+		<fieldset id="controls">
+			<legend class="h2">Looking for</legend>
+			<div id="types" class="chips" role="group" aria-label="What to look for"></div>
+			<h2>Filters <span id="filter-count" class="muted"></span></h2>
+			<div id="filters"><p class="muted">Capture a page to see what you can filter on.</p></div>
+		</fieldset>
+		<details id="advanced">
+			<summary>Intent as JSON</summary>
+			<label class="inline"><input type="checkbox" id="json-mode"> Edit as JSON instead (derived metrics, other operators)</label>
+			<textarea id="intent" rows="10" spellcheck="false" readonly aria-label="Intent JSON"></textarea>
+		</details>
+		<div class="row">
+			<button id="discover" type="button">Find candidates</button>
+			<label class="inline"><input type="checkbox" id="live" checked> Update as I change filters</label>
+		</div>
+	</form>
 
 	<div id="results"></div>
 	<footer class="foot"><button id="signout" type="button" class="link">Sign out</button> · <button id="disconnect" type="button" class="link">Disconnect</button></footer>

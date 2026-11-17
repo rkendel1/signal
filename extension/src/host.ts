@@ -147,6 +147,14 @@ export async function saveIntentDraft(t: string): Promise<void> { await chrome.s
 
 // ------------------------------------------------------------------ discovery
 
+export type { Facets, Facet } from '../../lib/discovery/discover.ts';
+import type { Facets } from '../../lib/discovery/discover.ts';
+
+/** What the captured pages offer to filter on (types, ranges, categories), for the intent controls. */
+export async function loadFacets(client: FeltKitClient, set: Captured[], types?: string[]): Promise<Facets> {
+	return (await client.query(api.discovery.facetsOf, { pageIds: set.map((p) => p.pageId), ...(types?.length ? { types } : {}) })) as unknown as Facets;
+}
+
 export interface DiscoveryView {
 	candidates: Array<{ key: string; name: string | null; type: string; status: 'match' | 'possible' | 'non_match' | 'out_of_scope'; missing: string[]; changed?: { fields: string[] }; criteria: Array<{ id: string; label: string; result: 'true' | 'false' | 'unknown'; reason?: string }> }>;
 	coverage: { declaredTotal: number | null; listed: number; discovered: number; notYetExamined: number | null; exhaustive: boolean; exhaustiveBasis: string; unavailable: Array<{ what: string; why: string }> };

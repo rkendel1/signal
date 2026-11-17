@@ -33,3 +33,23 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 .t { color: var(--match); } .f { color: var(--non); } .u { color: var(--possible); }
 .coverage { font-size: 13px; border-left: 3px solid var(--line); padding: 4px 8px; margin: 8px 0; }
 .foot { margin-top: 24px; font-size: 12px; color: var(--muted); }
+
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+fieldset:disabled { opacity: .5; }
+legend.h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 6px; padding: 18px 0 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { margin: 0; padding: 3px 10px; border-radius: 999px; background: transparent; color: var(--fg); border: 1px solid var(--line); font-size: 13px; }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.filter { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin: 8px 0; }
+.filter.off .body { opacity: .55; }
+.filter .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.filter .top label { margin: 0; font-size: 14px; color: var(--fg); display: flex; gap: 6px; align-items: center; }
+.filter input[type="checkbox"], .filter input[type="radio"], label.inline input { width: auto; margin: 0; }
+.filter input[type="range"] { width: 100%; padding: 0; border: 0; accent-color: var(--accent); }
+.range-row { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.range-value { font-weight: 600; font-size: 13px; margin-top: 2px; }
+.opts { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; }
+.opts label { display: flex; gap: 4px; align-items: center; margin: 0; font-size: 13px; color: var(--fg); }
+.missing { margin-top: 6px; font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+label.inline { display: inline-flex; gap: 6px; align-items: center; margin: 8px 0 0; font-size: 13px; color: var(--fg); }
+details summary { cursor: pointer; font-size: 12px; color: var(--muted); margin-top: 12px; }

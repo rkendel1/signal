@@ -152,6 +152,7 @@ What Signal guarantees is that the event and its evidence are durable *before* a
 | `pages:push` | mutation | `signal.pages.inspect` | `signal.pages.push` | `dom` sources: a rendered HTML snapshot |
 | `pages:record` | mutation | `signal.pages.inspect` | – | the atomic record step of `inspect` (hash-checked) |
 | `pages:get` / `pages:list` | query | `signal.pages.read` | – | full representation / summaries; ownership via `pageId`/`sourceId` |
+| `discovery:facetsOf` | query | `signal.pages.read` | `signal.discovery.facets` (with `returns` schema) | `{pageIds[≤20], types?}` → entity types, plus for the selected types: numeric ranges, categories with counts, booleans and presence. Computed with the evaluator's own reconciliation and attribute resolution. Selected types stay selected even when a page lacks them |
 | `discovery:evaluate` | query | `signal.pages.read` | `signal.discovery.evaluate` (with `returns` schema) | M7. Read-only: `{pageIds[≤20], intent, previousPageIds?, enrichments?, scope?}` → `signal.discovery/v1`. Ownership is checked per page id in the handler |
 
 **Ownership** is enforced by the app's `authorize` hook for every function that takes `sourceId`, `monitorId`, `eventId` or `pageId`, and inside handlers for criteria. Admins are exempt. Roles (`feltkit/app.ts`): `member`, `viewer`, `agent`, `admin`.
@@ -225,7 +226,7 @@ Normative types are in [`lib/discovery/discover.ts`](lib/discovery/discover.ts).
 
 | Contract | Rules |
 |---|---|
-| `signal.intent/v1` | `{id, version, name, target.type[], criteria[], metrics?, preferences?}`. `criteria[].where` is M5's `AttrPredicate`, restricted to decidable operators (`eq neq lt lte gt gte contains exists between`); others are rejected by `validateIntent`. `metric` references a `metrics[].name`. `absent: 'false'` is the only way absence can decide a criterion |
+| `signal.intent/v1` | `{id, version, name, target.type[], criteria[], metrics?, preferences?}`. `criteria[].where` is M5's `AttrPredicate`, restricted to decidable operators (`eq neq lt lte gt gte contains exists between in`); others are rejected by `validateIntent`. `metric` references a `metrics[].name`. `absent: 'false'` is the only way absence can decide a criterion |
 | `Formula` | `{attr}` \| `{const}` \| `{mul: […]}` \| `{add: […]}` \| `{div: [a, b]}` \| `{sub: [a, b]}`. Division by zero ⇒ no value. Combinations are bounded at 64 |
 | `Enrichment` | `{source: {id, name, method: external-estimate \| external-record, observedAt}, records: [{url, attribute, value}]}`. Joined by exact URL. Used only where the page states no value |
 | `signal.discovery/v1` | `{intent{id, version}, context, scope, candidates[], coverage, plan[], pages[{observationId, revision, factsRevision}], resultDigest}`. Deterministic: the same pages, intent and enrichments give the same `resultDigest` |

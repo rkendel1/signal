@@ -142,3 +142,30 @@ test('intents with undecidable operators are rejected, not evaluated as false', 
 	assert.ok(validateIntent({ ...intent1, criteria: [{ id: 'x', label: 'x', where: { attr: 'price', op: 'decreased' } }] }).length);
 	assert.throws(() => discover({ intent: { ...intent1, criteria: [{ id: 'x', label: 'x', where: { attr: 'price', op: 'changed' } }] }, pages: [metro] }), /not supported/);
 });
+
+test('facets: controls come from the captured pages, computed as the evaluator sees them', async () => {
+	const { facets, humanize } = await import('../../lib/discovery/discover.ts');
+	const f = facets([hood]);
+	assert.deepEqual(f.selected, ['RealEstateListing', 'SingleFamilyResidence'], 'the listed type plus the JSON-LD type that describes the same homes');
+	assert.equal(f.candidates, 7, 'reconciled homes, not entities (the lot is a separate type)');
+	const by = Object.fromEntries(f.facets.map((x) => [x.attr, x]));
+	assert.deepEqual([by.price.kind, by.price.min, by.price.max, by.price.currency, by.price.present, by.price.of], ['range', 199000, 410000, 'USD', 6, 7], 'Elm St has conflicting prices, so it has no decidable price');
+	assert.deepEqual([by.numberOfBedrooms.present, by.numberOfBedrooms.min, by.numberOfBedrooms.max], [6, 2, 4], '"3" in JSON-LD equals 3 on the card; Birch has none');
+	assert.equal(by.priceReduction.kind, 'presence');
+	assert.equal(by.numberOfBathrooms, undefined, 'the same value everywhere filters nothing');
+	assert.equal(by.name, undefined);
+	assert.equal(by.latitude, undefined, 'geography is scope, not a facet');
+	const kept = facets([hood], ['RealEstateListing', 'Event']);
+	assert.deepEqual(kept.selected, ['RealEstateListing', 'Event', 'SingleFamilyResidence'], 'a chosen type absent from these pages stays selected');
+	assert.deepEqual(kept.types.find((t) => t.type === 'Event'), { type: 'Event', candidates: 0, inCollections: 0 });
+	assert.equal(humanize('numberOfBedrooms'), 'Bedrooms');
+	assert.equal(humanize('hoaFee'), 'HOA fee');
+	// A range built from a facet selects exactly what the evaluator decides.
+	const intent: DiscoveryIntent = { ...intent1, metrics: [], criteria: [{ id: 'price', label: 'price', where: { attr: 'price', op: 'between', value: [199000, 300000] } }] };
+	const r = discover({ intent, pages: [hood] });
+	assert.deepEqual(r.candidates.filter((c) => c.status === 'match').map((c) => c.name).sort(), ['121 Elm St', '77 Cedar Ln', '9 Pine Ct'], 'Elm St: both conflicting prices ($279k, $289k) are in range, so it is decided');
+	const narrow = discover({ intent: { ...intent, criteria: [{ id: 'price', label: 'price', where: { attr: 'price', op: 'between', value: [199000, 285000] } }] }, pages: [hood] });
+	assert.equal(narrow.candidates.find((c) => c.name === '121 Elm St')!.status, 'possible', 'a range between the two prices cannot be decided');
+	const inOp = discover({ intent: { ...intent, criteria: [{ id: 'beds', label: 'beds', where: { attr: 'numberOfBedrooms', op: 'in', value: [2, 4] } }] }, pages: [hood] });
+	assert.deepEqual(inOp.candidates.filter((c) => c.status === 'match').map((c) => c.name).sort(), ['48 Oak Ave', '62 Aspen Way', '77 Cedar Ln']);
+});

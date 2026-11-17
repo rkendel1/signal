@@ -1,5 +1,42 @@
 # Signal — Acceptance Report
 
+## Capture at real-page size, and an intent editor built from the page (2026-11-17)
+
+**Reported by use.**
+- Capturing a large real listing page failed with "Files are limited to 1048576 bytes (got 1705755)". Signal was storing the whole page as raw evidence.
+- The intent could only be written as raw JSON.
+
+**Changes:**
+
+| Area | Change |
+|---|---|
+| Storage | Page intelligence keeps the structure, its per-value evidence and the content hash. The page is not stored (`bodyRetained: false`). Monitors still keep raw bytes for event evidence |
+| Snapshot | The extension sends a reduced DOM: script content except JSON-LD, styles, SVG drawing data, comments, templates and iframes are removed; elements and attributes are kept. FeltKit's real 2 MiB request limit is enforced with a clear message |
+| Extractor (found while proving the reduction) | `<noscript>`/`<template>` are not content. Microdata/RDFa on `<style>`/`<script>`/`<link>` are not entities: Wikipedia's templatestyles had used 248 of the 2,000-entity budget, and removing them recovered 73 table rows on heldout-tallest. Quality floor unchanged (all 16 pages) |
+| Intent editor | `discovery:facetsOf` (a new capability) lists types and filterable attributes, computed as the evaluator sees them. The panel renders chips, range sliders, category checkboxes, yes/no choices, "has …" toggles and a missing-value switch per filter, and re-evaluates live. JSON stays available |
+| Discovery | `in` operator; candidate grouping shared by evaluation and facets |
+
+### Verification
+
+| Command | Result |
+|---|---|
+| `npx feltkit test` | **96 passed**, 0 failed, 0 skipped. New: a capture larger than the 1 MiB file limit is represented (40 listings), plus facets and the intent builder |
+| `npm run test:e2e` | **2 passed**. `snapshot.e2e.ts`: reduced and full DOM give identical facts on all 16 real pages, with sizes 0–35% smaller on these mostly static pages. `extension.e2e.ts`: chips and generated filters; dragging the price and bedrooms sliders updates results live (4 match, 1 possible, 2 not a match); the missing-value switch moves Birch Rd from possible to not a match; filters survive a re-capture, which flags the changes |
+| `cargo test` | 12 passed |
+| `tsc` | 0 errors |
+
+### Found and fixed during this work
+1. **Reduction shifted positional identities.** Removing scripts renumbered `script:nth-of-type` for a JSON-LD record without `@id`. Scripts are now emptied, not removed.
+2. **Selection shrank silently.** A selected type absent from a later capture was dropped, which changed what the comparison with the previous capture meant. Selections are now kept and shown with count 0.
+3. **Value comparison in facets.** `"3"` (JSON-LD) vs `3` (card) was counted as a conflict. It now uses the evaluator's normalization.
+
+### Not verified
+- **Zillow-scale reduction is not measured.** The real evaluation pages are mostly static; heavily scripted pages should shrink much more.
+- **The editor in a real side panel** (G-EXT-2).
+- **Date facets** (G-EXT-8).
+
+---
+
 ## Browser extension — FeltKit extension host (2026-11-17)
 
 **Outcome.** The overlay and discovery now run where the information is, in the person's own browser. The extension is a FeltKit extension host: Signal's app and client reached from a Chrome side panel with a bearer session. FeltKit needed no extension-specific API, and none was added to Signal's server.

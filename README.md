@@ -62,6 +62,7 @@ npm run dev
 ```
 
 - `npm test` runs `feltkit test`: 91 tests against real FeltDB, AppPort services and headless Chromium.
+- `npm run test:e2e` runs both browser tests: the extension end to end, and the snapshot reduction on the real pages.
 - `npm run test:extension` builds the browser extension and runs it end to end. It uses a real `feltkit dev` server with isolated state and real Chromium with the extension loaded.
 - `npm run test:codec` runs the Rust codec tests (12).
 - `npm run bench` and `node scripts/bench-pages.ts` print the measurements behind ACCEPTANCE_REPORT.md.
@@ -86,6 +87,15 @@ Then in Chrome:
 2. Choose **Load unpacked** and select `extension/dist`.
 3. Click the Signal toolbar button.
 4. Enter your instance URL and sign in.
+
+**Building an intent.** You don't write JSON. After a capture, the panel lists what the page contains:
+- the item types, as chips;
+- for each attribute that varies: a range slider (price, size, year), value checkboxes (availability), a yes/no choice, or a "has …" toggle;
+- for each filter, a switch for whether items that don't show the value are "not a match" or stay "possible".
+
+Results update as you change filters. The generated intent is shown under "Intent as JSON", which can also be edited by hand for derived metrics.
+
+**Captures keep the structure, not the page.** Before sending, the extension strips script content (except JSON-LD), styles, SVG drawing data, comments and similar payload. On all 16 real evaluation pages this gives identical facts (`tests/e2e/snapshot.e2e.ts`). Signal stores the extracted structure and the content hash, not the page.
 
 **Permissions:**
 - `sidePanel`, `storage`, `tabs`.

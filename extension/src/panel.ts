@@ -1,18 +1,10 @@
 /** Side panel UI. All page-derived text is rendered with textContent; nothing observed is executed. */
 import type { FeltKitClient, SessionInfo } from '@feltdb/feltkit/client';
 import {
-	activeTab, capture, connect, discover, errorText, forgetInstance, instanceOrigin, intentDraft, lockStorage, navigableTarget,
-	relayOverlay, savedInstance, saveIntentDraft, saveWorkingSet, showOverlay, snapshotTab, workingSet, type Captured, type DiscoveryView
+	activeTab, capture, connect, discover, errorText, forgetInstance, instanceOrigin, intentDraft, loadFacets, lockStorage, navigableTarget,
+	relayOverlay, savedInstance, saveIntentDraft, saveWorkingSet, showOverlay, snapshotTab, workingSet, type Captured, type DiscoveryView, type Facet, type Facets
 } from './host.ts';
-
-const EXAMPLE_INTENT = {
-	schema: 'signal.intent/v1', id: 'example', version: 1, name: 'In-stock products under $50',
-	target: { type: ['Product'] },
-	criteria: [
-		{ id: 'price', label: 'price under $50', where: { attr: 'price', op: 'lt', value: 50 } },
-		{ id: 'stock', label: 'in stock', where: { attr: 'availability', op: 'eq', value: 'InStock' } }
-	]
-};
+import { buildIntent, formatValue, niceStep, reconcile, type EditorState, type FilterState } from './intent-builder.ts';
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const el = (tag: string, cls?: string, text?: string) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
@@ -33,6 +25,7 @@ async function refreshSession() {
 	if (!p) return renderSignIn();
 	show('work');
 	await renderPages();
+	await refreshFacets().catch((e) => status(errorText(e), true));
 }
 
 function renderSignIn() {
@@ -64,6 +57,12 @@ const MARK = { true: ['✓', 't'], false: ['✗', 'f'], unknown: ['?', 'u'] } as
 const STATUS_LABEL = { match: 'match', possible: 'possible — missing information', non_match: 'not a match', out_of_scope: 'outside the area' } as const;
 const BADGE = { match: 'match', possible: 'possible', non_match: 'not a match', out_of_scope: 'outside area' } as const;
 
+/** Criterion ids are attribute names; show the person's labels instead. */
+function labelled(text: string): string {
+	const labels = new Map((facetData?.facets ?? []).map((f) => [f.attr, f.label]));
+	return text.replace(/\b[A-Za-z][A-Za-z0-9]*\b/g, (w) => labels.get(w) ?? w);
+}
+
 function renderResults(r: DiscoveryView) {
 	const box = $('results'); box.replaceChildren();
 	const c = r.coverage;
@@ -89,8 +88,8 @@ function renderResults(r: DiscoveryView) {
 			const crit = el('div', 'crit');
 			for (const x of cand.criteria) { const [m, cls] = MARK[x.result]; const s = el('span', cls, `${m} ${x.label}`); if (x.reason) s.title = x.reason; crit.append(s); }
 			li.append(head, crit);
-			if (cand.changed) li.append(el('div', 'muted', `Changed: ${cand.changed.fields.join(', ')}`));
-			if (cand.missing.length) li.append(el('div', 'muted', `Undecided: ${cand.missing.join('; ')}`));
+			if (cand.changed) li.append(el('div', 'muted', `Changed: ${labelled(cand.changed.fields.join(', '))}`));
+			if (cand.missing.length) li.append(el('div', 'muted', `Undecided: ${labelled(cand.missing.join('; '))}`));
 			ul.append(li);
 		}
 		box.append(ul);
@@ -102,7 +101,7 @@ function renderResults(r: DiscoveryView) {
 		const ul = el('ul', 'list');
 		for (const step of r.plan.filter((s) => s.kind !== 'skip_unchanged').slice(0, 12)) {
 			const li = el('li');
-			li.append(el('div', '', `${step.kind.replace('_', ' ')}: ${step.reason}`));
+			li.append(el('div', '', `${step.kind.replace('_', ' ')}: ${labelled(step.reason)}`));
 			const url = navigableTarget(step.target);
 			if (step.executesIn === 'browser-session' && url) {
 				const b = el('button', 'secondary', 'Open here, then capture') as HTMLButtonElement; b.type = 'button';
@@ -113,6 +112,121 @@ function renderResults(r: DiscoveryView) {
 		}
 		box.append(ul);
 	}
+}
+
+
+// ------------------------------------------------------------------ intent editor (controls generated from the captured pages)
+
+let facetData: Facets | null = null;
+let editor: EditorState = { types: [], filters: {} };
+let jsonMode = false;
+let liveTimer: ReturnType<typeof setTimeout> | undefined;
+
+function currentIntent(): string {
+	return jsonMode ? $<HTMLTextAreaElement>('intent').value : JSON.stringify(buildIntent(editor, facetData?.facets ?? []), null, 2);
+}
+async function persistEditor() {
+	await saveIntentDraft(JSON.stringify({ editor, jsonMode, json: jsonMode ? $<HTMLTextAreaElement>('intent').value : undefined }));
+}
+function changed(evaluate = true) {
+	if (!jsonMode) $<HTMLTextAreaElement>('intent').value = currentIntent();
+	void persistEditor();
+	if (evaluate && $<HTMLInputElement>('live').checked && facetData) { clearTimeout(liveTimer); liveTimer = setTimeout(() => void runDiscovery(), 350); }
+}
+
+async function refreshFacets(types?: string[], evaluate = true) {
+	const set = await workingSet();
+	if (!conn || !set.length) { facetData = null; renderEditor(); return; }
+	facetData = await loadFacets(conn.client, set, types ?? (editor.types.length ? editor.types : undefined));
+	editor = reconcile({ types: facetData.selected, filters: editor.filters }, facetData.facets);
+	renderEditor();
+	changed(evaluate);
+}
+
+function renderEditor() {
+	const types = $('types'); types.replaceChildren();
+	const filters = $('filters'); filters.replaceChildren();
+	if (!facetData) { filters.append(el('p', 'muted', 'Capture a page to see what you can filter on.')); $('filter-count').textContent = ''; $<HTMLTextAreaElement>('intent').value = currentIntent(); return; }
+	for (const t of facetData.types) {
+		const b = el('button', 'chip', `${humanType(t.type)} · ${t.candidates}`) as HTMLButtonElement;
+		b.type = 'button';
+		b.setAttribute('aria-pressed', String(editor.types.includes(t.type)));
+		b.addEventListener('click', () => {
+			const next = editor.types.includes(t.type) ? editor.types.filter((x) => x !== t.type) : [...editor.types, t.type];
+			if (!next.length) return; // something must be looked for
+			void refreshFacets(next).catch((e) => status(errorText(e), true));
+		});
+		types.append(b);
+	}
+	$('filter-count').textContent = `(${facetData.candidates} ${facetData.candidates === 1 ? 'item' : 'items'})`;
+	if (!facetData.facets.length) filters.append(el('p', 'muted', 'Nothing on these items varies enough to filter on.'));
+	for (const f of facetData.facets) filters.append(filterRow(f, editor.filters[f.attr]));
+	$<HTMLTextAreaElement>('intent').value = currentIntent();
+}
+
+const humanType = (t: string) => t.replace(/([a-z])([A-Z])/g, '$1 $2');
+let uid = 0;
+
+function filterRow(f: Facet, s: FilterState): HTMLElement {
+	const row = el('div', `filter${s.on ? '' : ' off'}`);
+	const id = `f${uid++}`;
+	const top = el('div', 'top');
+	const toggle = document.createElement('input'); toggle.type = 'checkbox'; toggle.id = id; toggle.checked = s.on;
+	const lab = el('label') as HTMLLabelElement; lab.htmlFor = id; lab.append(toggle, document.createTextNode(f.kind === 'presence' ? `Has ${f.label.toLowerCase()}` : f.label));
+	top.append(lab, el('span', 'muted', `${f.present} of ${f.of} show it`));
+	row.append(top);
+	const body = el('div', 'body');
+	const on = () => { if (!s.on) { s.on = true; toggle.checked = true; row.classList.remove('off'); } };
+	toggle.addEventListener('change', () => { s.on = toggle.checked; row.classList.toggle('off', !s.on); changed(); });
+
+	if (s.kind === 'range') {
+		const step = niceStep(f);
+		const value = el('div', 'range-value');
+		const show = () => { value.textContent = `${formatValue(f, Math.min(s.lo, s.hi))} – ${formatValue(f, Math.max(s.lo, s.hi))}`; };
+		const slider = (which: 'lo' | 'hi', text: string) => {
+			const r = document.createElement('input');
+			r.type = 'range'; r.min = String(f.min); r.max = String(f.max); r.step = String(step); r.value = String(s[which]);
+			r.setAttribute('aria-label', `${f.label} ${text}`); r.dataset.attr = f.attr; r.dataset.bound = which;
+			r.addEventListener('input', () => { s[which] = Number(r.value); on(); show(); changed(); });
+			const line = el('div', 'range-row'); line.append(el('span', '', text), r); return line;
+		};
+		body.append(slider('lo', 'from'), slider('hi', 'to'), value);
+		show();
+	} else if (s.kind === 'category') {
+		const opts = el('div', 'opts');
+		for (const v of f.values ?? []) {
+			const c = document.createElement('input'); c.type = 'checkbox'; c.checked = s.values.some((x) => String(x) === String(v.value));
+			c.dataset.attr = f.attr; c.value = String(v.value);
+			c.addEventListener('change', () => { s.values = c.checked ? [...s.values, v.value] : s.values.filter((x) => String(x) !== String(v.value)); if (s.values.length) on(); changed(); });
+			const l = el('label'); l.append(c, document.createTextNode(`${humanType(String(v.value))} (${v.count})`)); opts.append(l);
+		}
+		body.append(opts);
+	} else if (s.kind === 'boolean') {
+		const opts = el('div', 'opts');
+		for (const v of [true, false]) {
+			const r = document.createElement('input'); r.type = 'radio'; r.name = id + 'b'; r.checked = s.value === v;
+			r.addEventListener('change', () => { s.value = v; on(); changed(); });
+			const l = el('label'); l.append(r, document.createTextNode(v ? 'Yes' : 'No')); opts.append(l);
+		}
+		body.append(opts);
+	}
+	if (f.present < f.of || f.kind === 'presence') {
+		const miss = document.createElement('input'); miss.type = 'checkbox'; miss.checked = s.missing === 'false';
+		miss.addEventListener('change', () => { s.missing = miss.checked ? 'false' : 'unknown'; changed(); });
+		const l = el('label', 'missing'); l.append(miss, document.createTextNode(f.kind === 'presence' ? `Items that don’t show it are not a match (${f.of - f.present})` : `Items that don’t show it are not a match (otherwise “possible”, ${f.of - f.present})`));
+		body.append(l);
+	}
+	row.append(body);
+	return row;
+}
+
+async function runDiscovery(prefix = ''): Promise<void> {
+	if (!conn) return;
+	const r = await discover(conn.client, currentIntent(), await workingSet()).catch((e) => { status(errorText(e), true); return null; });
+	if (!r) return;
+	renderResults(r);
+	const n = (s: string) => r.candidates.filter((c) => c.status === s).length;
+	status(`${prefix}${n('match')} match · ${n('possible')} possible · ${n('non_match')} not a match`);
 }
 
 // ------------------------------------------------------------------ wiring
@@ -138,25 +252,27 @@ $('capture').addEventListener('click', () => void busy($<HTMLButtonElement>('cap
 	const snap = await snapshotTab(tab);
 	const c: Captured = await capture(conn!.client, snap);
 	const kb = (n: number) => `${Math.round(n / 1024).toLocaleString()} KB`;
-	status(`Captured: ${c.entities} entities${c.unchanged ? ' (unchanged since last capture)' : ''}. Page ${kb(snap.originalChars)}, structure-relevant part ${kb(snap.chars)} sent; Signal keeps the structure, not the page.`);
+	const message = `Captured: ${c.entities} entities${c.unchanged ? ' (unchanged since last capture)' : ''}. Page ${kb(snap.originalChars)}, structure-relevant part ${kb(snap.chars)} sent; Signal keeps the structure, not the page.`;
 	await renderPages();
+	await refreshFacets(undefined, false);
+	if (facetData) await runDiscovery(`${message} `); else status(message);
 }));
 $('overlay').addEventListener('click', () => void busy($<HTMLButtonElement>('overlay'), 'Opening alerts on the page…', async () => {
 	const tab = await activeTab();
 	await showOverlay(tab.id!);
 	status('Alerts are shown on the page while this panel is open.');
 }));
-$('clear').addEventListener('click', async () => { await saveWorkingSet([]); $('results').replaceChildren(); await renderPages(); status('Cleared. Recorded pages stay in your Signal instance.'); });
-$('example').addEventListener('click', () => { $<HTMLTextAreaElement>('intent').value = JSON.stringify(EXAMPLE_INTENT, null, 2); void saveIntentDraft($<HTMLTextAreaElement>('intent').value); });
-$('intent').addEventListener('change', () => void saveIntentDraft($<HTMLTextAreaElement>('intent').value));
-$('discover').addEventListener('click', () => void busy($<HTMLButtonElement>('discover'), 'Evaluating…', async () => {
-	const intent = $<HTMLTextAreaElement>('intent').value;
-	await saveIntentDraft(intent);
-	const r = await discover(conn!.client, intent, await workingSet());
-	renderResults(r);
-	const n = (s: string) => r.candidates.filter((c) => c.status === s).length;
-	status(`${n('match')} match · ${n('possible')} possible · ${n('non_match')} not a match`);
-}));
+$('clear').addEventListener('click', async () => { await saveWorkingSet([]); $('results').replaceChildren(); await renderPages(); await refreshFacets(); status('Cleared. Recorded pages stay in your Signal instance.'); });
+$('intent-form').addEventListener('submit', (ev) => ev.preventDefault());
+$('json-mode').addEventListener('change', () => {
+	jsonMode = $<HTMLInputElement>('json-mode').checked;
+	$<HTMLTextAreaElement>('intent').readOnly = !jsonMode;
+	$<HTMLFieldSetElement>('controls').disabled = jsonMode;
+	if (!jsonMode) $<HTMLTextAreaElement>('intent').value = currentIntent();
+	void persistEditor();
+});
+$('intent').addEventListener('change', () => void persistEditor());
+$('discover').addEventListener('click', () => void busy($<HTMLButtonElement>('discover'), 'Evaluating…', runDiscovery));
 $('signout').addEventListener('click', async () => { await conn?.client.signOut().catch(() => undefined); await refreshSession(); });
 const disconnect = async () => { await forgetInstance(conn?.client); conn = null; $('results').replaceChildren(); show('connect'); $('who').textContent = ''; };
 $('disconnect').addEventListener('click', disconnect);
@@ -172,7 +288,11 @@ chrome.runtime.onMessage.addListener((msg, sender, respond) => {
 
 (async () => {
 	await lockStorage();
-	$<HTMLTextAreaElement>('intent').value = (await intentDraft()) ?? JSON.stringify(EXAMPLE_INTENT, null, 2);
+	try {
+		const draft = JSON.parse((await intentDraft()) ?? 'null') as { editor?: EditorState; jsonMode?: boolean; json?: string } | null;
+		if (draft?.editor?.filters) editor = draft.editor;
+		if (draft?.jsonMode && draft.json) { jsonMode = true; $<HTMLInputElement>('json-mode').checked = true; $<HTMLTextAreaElement>('intent').readOnly = false; $<HTMLFieldSetElement>('controls').disabled = true; $<HTMLTextAreaElement>('intent').value = draft.json; }
+	} catch { /* an older draft format: start fresh */ }
 	const origin = await savedInstance();
 	if (!origin) return show('connect');
 	try { conn = await connect(origin, false); await refreshSession(); } catch (e) { show('connect'); $<HTMLInputElement>('instance').value = origin; status(errorText(e), true); }

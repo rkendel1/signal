@@ -1,7 +1,7 @@
 import { fail, s } from "@feltdb/feltkit";
 import { app, pages } from "./app.js";
 import { readPage, requireFound } from "./_shared.js";
-import { discover, validateIntent, type DiscoveryIntent, type DiscoveryScope, type Enrichment } from "../lib/discovery/discover.ts";
+import { discover, facets, validateIntent, type DiscoveryIntent, type DiscoveryScope, type Enrichment } from "../lib/discovery/discover.ts";
 import type { PageRepresentation } from "../lib/page/types.ts";
 
 /**
@@ -38,6 +38,41 @@ const Result = s.object({
   resultDigest: s.string(),
 });
 
+type QueryCtx = Parameters<Parameters<typeof app.query>[0]["handler"]>[0];
+
+/** Load page representations, every one owned by the caller (the authorize hook checks single ids only). */
+async function loadOwnPages(ctx: QueryCtx, ids: string[]): Promise<PageRepresentation[]> {
+  const principal = ctx.auth.requirePrincipal();
+  const admin = (principal as { roles?: string[] }).roles?.includes("admin");
+  const out: PageRepresentation[] = [];
+  for (const id of ids) {
+    const rec = requireFound(await ctx.db.get(pages, id), "That page");
+    if (!admin && rec.ownerId !== principal.id) fail("FORBIDDEN", "not the owner of every page");
+    out.push(await readPage(ctx as never, rec.pageRef));
+  }
+  return out;
+}
+
+const FacetsResult = s.object({
+  types: s.array(s.object({ type: s.string(), candidates: s.integer(), inCollections: s.integer() })),
+  selected: s.array(s.string()),
+  candidates: s.integer(),
+  facets: s.array(s.object({
+    attr: s.string(), label: s.string(), kind: s.enum(["range", "category", "boolean", "presence"] as const), present: s.integer(), of: s.integer(),
+    min: s.optional(s.number()), max: s.optional(s.number()), currency: s.optional(s.nullable(s.string())), unit: s.optional(s.enum(["money", "number", "percent", "rating"] as const)),
+    values: s.optional(s.array(s.object({ value: s.union([s.string(), s.number(), s.boolean()]), count: s.integer() }))),
+  })),
+});
+
+/** What the pages offer to filter on: entity types and, for the selected types, ranges, categories and toggles. */
+export const facetsOf = app.query({
+  access: "signal.pages.read",
+  args: { pageIds: s.array(s.string(), { minItems: 1, maxItems: MAX_PAGES }), types: s.optional(s.array(s.string({ maxLength: 200 }), { maxItems: 20 })) },
+  returns: FacetsResult,
+  capability: { name: "signal.discovery.facets", description: "List the entity types on recorded pages and, for the selected types, the attributes an intent can filter on: numeric ranges, categories with counts, booleans and presence." },
+  handler: async (ctx, a) => JSON.parse(JSON.stringify(facets(await loadOwnPages(ctx, a.pageIds), a.types))) as never,
+});
+
 export const evaluate = app.query({
   access: "signal.pages.read",
   args: {
@@ -50,18 +85,7 @@ export const evaluate = app.query({
   returns: Result,
   capability: { name: "signal.discovery.evaluate", description: "Evaluate a discovery intent over recorded page representations: candidates with match/possible/non_match status, evidence, coverage and a scan plan." },
   handler: async (ctx, a) => {
-    // The authorize hook checks a single pageId; lists are checked here, per page.
-    const principal = ctx.auth.requirePrincipal();
-    const admin = (principal as { roles?: string[] }).roles?.includes("admin");
-    const load = async (ids: string[]): Promise<PageRepresentation[]> => {
-      const out: PageRepresentation[] = [];
-      for (const id of ids) {
-        const rec = requireFound(await ctx.db.get(pages, id), "That page");
-        if (!admin && rec.ownerId !== principal.id) fail("FORBIDDEN", "not the owner of every page");
-        out.push(await readPage(ctx as never, rec.pageRef));
-      }
-      return out;
-    };
+    const load = (ids: string[]) => loadOwnPages(ctx, ids);
     const intent = parse<DiscoveryIntent>(a.intent, "intent");
     const invalid = validateIntent(intent);
     if (invalid.length) fail("INVALID_ARGUMENT", invalid.join("; "));

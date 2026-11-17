@@ -198,6 +198,7 @@ function triCompare(values: AttributeValue[], p: AttrPredicate): { result: Tri; 
 			case 'contains': return String(v).toLowerCase().includes(String(p.value).toLowerCase());
 			case 'exists': return true;
 			case 'between': { const [a, b] = p.value as number[]; return n !== null && n >= a && n <= b; }
+			case 'in': return Array.isArray(p.value) && p.value.some((x) => (n !== null && typeof x === 'number' ? n === x : String(v).toLowerCase() === String(x).toLowerCase()));
 			default: return false;
 		}
 	};
@@ -228,7 +229,25 @@ export interface DiscoverInput {
 	user?: { bounds?: Bounds; selection?: string[] };
 }
 
-const SUPPORTED_OPS = new Set(['eq', 'neq', 'lt', 'lte', 'gt', 'gte', 'contains', 'exists', 'between']);
+/** Reconcile: descriptions of the same thing (sameAs, or the same source URL) form one candidate. */
+function groupCandidates(pages: PageRepresentation[], targets: Set<string>): Map<string, Group> {
+	const groups = new Map<string, Group>();
+	const keyOf = new Map<string, string>();
+	for (const page of pages) {
+		const sameAs = new Map<string, string[]>();
+		for (const r of page.relationships.filter((x) => x.type === 'sameAs')) { (sameAs.get(r.from) ?? sameAs.set(r.from, []).get(r.from)!).push(r.to); (sameAs.get(r.to) ?? sameAs.set(r.to, []).get(r.to)!).push(r.from); }
+		for (const e of page.entities.filter((x) => targets.has(x.type))) {
+			const url = e.identity.strength === 'strong' && /^https?:/.test(e.identity.key) ? e.identity.key : null;
+			const linked = (sameAs.get(e.id) ?? []).map((id) => keyOf.get(id)).find(Boolean);
+			const key = linked ?? url ?? (String(e.attributes.find((a) => a.name === 'url')?.value ?? '') || e.id);
+			keyOf.set(e.id, key);
+			(groups.get(key) ?? groups.set(key, { key, entities: [] }).get(key)!).entities.push({ e, page });
+		}
+	}
+	return groups;
+}
+
+const SUPPORTED_OPS = new Set(['eq', 'neq', 'lt', 'lte', 'gt', 'gte', 'contains', 'exists', 'between', 'in']);
 
 /** Rejects intents the evaluator cannot decide, instead of silently evaluating them as false. */
 export function validateIntent(intent: DiscoveryIntent): string[] {
@@ -252,20 +271,7 @@ export function discover(input: DiscoverInput): DiscoveryResult {
 	const scope: DiscoveryScope = input.scope ?? (context.bounds.value ? { bounds: context.bounds.value, source: context.bounds.source } : { source: 'unknown' });
 	const targets = new Set(intent.target.type);
 
-	// Reconcile: descriptions of the same thing (sameAs, or the same source URL) form one candidate.
-	const groups = new Map<string, Group>();
-	const keyOf = new Map<string, string>();
-	for (const page of pages) {
-		const sameAs = new Map<string, string[]>();
-		for (const r of page.relationships.filter((x) => x.type === 'sameAs')) { (sameAs.get(r.from) ?? sameAs.set(r.from, []).get(r.from)!).push(r.to); (sameAs.get(r.to) ?? sameAs.set(r.to, []).get(r.to)!).push(r.from); }
-		for (const e of page.entities.filter((x) => targets.has(x.type))) {
-			const url = e.identity.strength === 'strong' && /^https?:/.test(e.identity.key) ? e.identity.key : null;
-			const linked = (sameAs.get(e.id) ?? []).map((id) => keyOf.get(id)).find(Boolean);
-			const key = linked ?? url ?? (String(e.attributes.find((a) => a.name === 'url')?.value ?? '') || e.id);
-			keyOf.set(e.id, key);
-			(groups.get(key) ?? groups.set(key, { key, entities: [] }).get(key)!).entities.push({ e, page });
-		}
-	}
+	const groups = groupCandidates(pages, targets);
 	const enrich = new Map<string, Array<{ attribute: string; value: AttributeValue; source: Enrichment['source'] }>>();
 	for (const en of input.enrichments ?? []) for (const r of en.records) (enrich.get(r.url) ?? enrich.set(r.url, []).get(r.url)!).push({ attribute: r.attribute, value: r.value, source: en.source });
 
@@ -377,4 +383,107 @@ export function discover(input: DiscoverInput): DiscoveryResult {
 		pages: pages.map((p) => ({ observationId: p.source.observationId, revision: p.revision, factsRevision: p.factsRevision })),
 		resultDigest: sha256(canonicalJson(body)).slice(0, 16)
 	};
+}
+
+// ------------------------------------------------------------------ facets: what an intent can be built from
+
+/**
+ * What the captured pages offer to filter on, so an intent can be built with controls instead of JSON.
+ * Computed with the same reconciliation and attribute resolution the evaluator uses, so a range shown
+ * here is exactly the range criteria will be tested against. Counts are candidates, not entities.
+ */
+export interface FacetType { type: string; candidates: number; inCollections: number }
+export interface Facet {
+	attr: string;
+	label: string;
+	kind: 'range' | 'category' | 'boolean' | 'presence'; // presence: a fact only some candidates have ("has a price reduction")
+	present: number; // candidates with a decidable value
+	of: number; // candidates of the selected types
+	min?: number; max?: number; currency?: string | null; unit?: 'money' | 'number' | 'percent' | 'rating';
+	values?: Array<{ value: string | number | boolean; count: number }>;
+}
+export interface Facets { types: FacetType[]; selected: string[]; candidates: number; facets: Facet[] }
+
+/** Attributes that identify or describe rather than qualify; geography is handled by scope. */
+const NOT_FILTERABLE = new Set(['name', 'url', 'image', 'description', 'text', 'heading', 'title', 'latitude', 'longitude', 'sku', 'gtin', 'gtin13', 'identifier', 'sameAs', 'canonicalUrl', 'inLanguage', 'nextPage', 'previousPage', 'viewportBounds', 'viewportMarkers', 'selected', 'headline', 'priceCurrency']);
+const ALIAS_ROOTS = ['price', 'latitude', 'longitude'];
+const NON_TARGET_TYPES = new Set(['WebPage', 'Unknown', 'Offer', 'GeoCoordinates', 'PostalAddress', 'ImageObject', 'AggregateRating', 'Rating', 'QuantitativeValue', 'MonetaryAmount', 'BreadcrumbList', 'ListItem', 'SearchAction', 'EntryPoint', 'WebSite']);
+const ACRONYMS = new Set(['hoa', 'sku', 'url', 'isbn', 'gpu', 'cpu', 'ram', 'ssd', 'tv', 'id']);
+
+export function humanize(attr: string): string {
+	const words = attr.replace(/^numberOf(?=[A-Z])/, '').replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/[_.-]+/g, ' ').trim().split(/\s+/);
+	return words.map((w, i) => (ACRONYMS.has(w.toLowerCase()) ? w.toUpperCase() : i === 0 ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w.toLowerCase())).join(' ');
+}
+
+export function facets(pages: PageRepresentation[], types?: string[]): Facets {
+	const all = new Map<string, FacetType>();
+	for (const p of pages) {
+		const members = new Set(p.collections.flatMap((c) => c.members));
+		for (const e of p.entities) {
+			if (NON_TARGET_TYPES.has(e.type)) continue;
+			const t = all.get(e.type) ?? all.set(e.type, { type: e.type, candidates: 0, inCollections: 0 }).get(e.type)!;
+			if (members.has(e.id)) t.inCollections++;
+		}
+	}
+	for (const t of all.values()) t.candidates = groupCandidates(pages, new Set([t.type])).size;
+	const typeList = [...all.values()].sort((a, b) => b.inCollections - a.inCollections || b.candidates - a.candidates || (a.type < b.type ? -1 : 1));
+	// Default selection: the type the page lists most (a result list is what people filter), else the commonest.
+	// A person's selection is kept even when these pages lack a type (it shows with 0): it must not shrink silently,
+	// or comparisons with earlier captures would change meaning.
+	const chosen = types?.length ? [...types] : typeList.length ? [typeList[0].type] : [];
+	for (const t of chosen) if (!all.has(t)) typeList.push({ type: t, candidates: 0, inCollections: 0 });
+	// Types linked to the chosen ones by sameAs describe the same things (JSON-LD records of listed cards): include them.
+	const linked = new Set(chosen);
+	for (const p of pages) {
+		const typeOf = new Map(p.entities.map((e) => [e.id, e.type]));
+		for (const r of p.relationships) if (r.type === 'sameAs') {
+			const [a, b] = [typeOf.get(r.from), typeOf.get(r.to)];
+			if (a && b && chosen.includes(a) && !NON_TARGET_TYPES.has(b)) linked.add(b);
+			if (a && b && chosen.includes(b) && !NON_TARGET_TYPES.has(a)) linked.add(a);
+		}
+	}
+	const selected = [...linked];
+	const groups = [...groupCandidates(pages, new Set(selected)).values()];
+	const names = new Set<string>(ALIAS_ROOTS);
+	for (const g of groups) for (const { e } of g.entities) for (const a of e.attributes) names.add(a.name);
+	const out: Facet[] = [];
+	for (const attr of [...names].sort()) {
+		if (NOT_FILTERABLE.has(attr)) continue;
+		const per = groups.map((g) => g.entities.flatMap(({ e, page }) => resolve(page, e, attr)));
+		const withAny = per.filter((as) => as.length);
+		if (!withAny.length) continue;
+		const types = new Set(withAny.flat().map((a) => a.dataType));
+		// Distinct values per candidate, compared as the evaluator compares them ("3" from JSON-LD equals 3 on the card).
+		const vals = withAny.map((as) => { const m = new Map<string, AttributeValue>(); for (const a of as) if (a.value !== null) m.set(canonicalJson(num(a.value) ?? a.value), a.value); return [...m.values()]; });
+		const decidable = vals.filter((vs) => vs.length === 1); // conflicting or ambiguous descriptions are not counted as having a value
+		if (!decidable.length) continue;
+		const base = { attr, label: humanize(attr), present: decidable.length, of: groups.length };
+		const numeric = types.has('money') || types.has('number') || types.has('percent') || types.has('rating');
+		if (numeric) {
+			const ns = decidable.map((vs) => num(vs[0])).filter((n): n is number => n !== null);
+			if (ns.length) {
+				const lo = Math.min(...ns), hi = Math.max(...ns);
+				if (lo === hi) { if (ns.length < groups.length) out.push({ ...base, kind: 'presence', present: ns.length }); continue; }
+				const currencies = new Set(decidable.map((vs) => (vs[0] && typeof vs[0] === 'object' && 'currency' in vs[0] ? (vs[0] as { currency: string | null }).currency : null)).filter(Boolean));
+				out.push({ ...base, kind: 'range', present: ns.length, min: Math.min(...ns), max: Math.max(...ns), unit: types.has('money') ? 'money' : types.has('percent') ? 'percent' : types.has('rating') ? 'rating' : 'number', ...(types.has('money') ? { currency: currencies.size === 1 ? [...currencies][0] as string : null } : {}) });
+				continue;
+			}
+		}
+		const flat = decidable.map((vs) => vs[0]).filter((v) => typeof v === 'string' || typeof v === 'boolean' || typeof v === 'number') as Array<string | number | boolean>;
+		if (!flat.length) continue;
+		if (flat.every((v) => typeof v === 'boolean')) {
+			out.push({ ...base, kind: 'boolean', values: [true, false].map((v) => ({ value: v, count: flat.filter((x) => x === v).length })) });
+			continue;
+		}
+		const counts = new Map<string, { value: string | number | boolean; count: number }>();
+		for (const v of flat) { const k = String(v).toLowerCase(); const c = counts.get(k) ?? counts.set(k, { value: v, count: 0 }).get(k)!; c.count++; }
+		// A category is a small set of repeated values; free text that is unique per item is not a filter.
+		if (counts.size >= 2 && counts.size <= 12 && counts.size < flat.length) out.push({ ...base, kind: 'category', values: [...counts.values()].sort((a, b) => b.count - a.count || String(a.value).localeCompare(String(b.value))) });
+		// One value everywhere filters nothing, unless it is a normalized vocabulary (availability) worth requiring for later captures.
+		else if (counts.size === 1 && types.has('availability')) out.push({ ...base, kind: 'category', values: [...counts.values()] });
+		else if (counts.size === 1 && decidable.length < groups.length) out.push({ ...base, kind: 'presence' });
+	}
+	// Most widely present first: those are the filters that apply to most candidates.
+	out.sort((a, b) => b.present - a.present || a.label.localeCompare(b.label));
+	return { types: typeList, selected, candidates: groups.length, facets: out };
 }

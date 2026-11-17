@@ -200,7 +200,11 @@ Storage uses only what FeltKit already provides:
 - the representation's canonical JSON in **Files** (`metadata.kind = signal.page`). Since M7 it is **gzip-compressed** (`encoding: "gzip"`, about 10× smaller; the decision is in PAGE_QUALITY.md §6). Pre-M7 uncompressed files are still read;
 - an index row in `signal_pages`.
 
-The representation is a **derived projection**. The raw bytes remain the authority, and the representation can be rebuilt from them with any extractor version.
+**Page intelligence keeps the structure, not the page.**
+- `pages:push` and `pages:inspect` record the content hash, size and provenance (`bodyRetained: false`) of what was observed, plus the representation. Every value in the representation carries its own evidence: locator, observed text and the raw string.
+- The page itself is not copied into Signal. A page is re-read by capturing it again, not by re-extracting stored bytes.
+- **Monitors still retain the exact bytes**, because an event's evidence is re-verified against them (`events:evidence`).
+- This replaced M5's "raw bytes are the authority" for page intelligence. It was changed after a real capture (1.7 MB) exceeded the runtime's 1 MiB file limit, and because storing whole third-party pages is not the product.
 
 ## 5. Security and bounds
 
