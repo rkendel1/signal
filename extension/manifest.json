@@ -1,17 +1,42 @@
 {
 	"manifest_version": 3,
 	"name": "Signal",
-	"version": "0.1.0",
-	"description": "Capture the page you are viewing into your Signal instance, discover candidates for your intent, and see alerts for the page.",
+	"version": "0.4.0",
+	"description": "Signal where you work: findings and notifications on the sites you choose, an understanding of what those sites expose, and capture of what you see.",
 	"minimum_chrome_version": "116",
-	"background": { "service_worker": "background.js", "type": "module" },
-	"action": { "default_title": "Open Signal", "default_icon": { "16": "icons/icon16.png", "48": "icons/icon48.png" } },
-	"side_panel": { "default_path": "panel.html" },
-	"permissions": ["sidePanel", "storage", "activeTab", "scripting", "tabs", "notifications"],
-	"icons": { "16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
-	"optional_host_permissions": ["http://*/*", "https://*/*"],
-	"web_accessible_resources": [
-		{ "resources": ["codec/ghostpost_unicode_codec.js", "codec/ghostpost_unicode_codec_bg.wasm"], "matches": ["http://*/*", "https://*/*"] }
+	"background": {
+		"service_worker": "background.js",
+		"type": "module"
+	},
+	"action": {
+		"default_title": "Open Signal",
+		"default_icon": {
+			"16": "icons/icon16.png",
+			"48": "icons/icon48.png"
+		}
+	},
+	"side_panel": {
+		"default_path": "panel.html"
+	},
+	"permissions": [
+		"sidePanel",
+		"storage",
+		"activeTab",
+		"scripting",
+		"tabs",
+		"alarms",
+		"notifications"
 	],
-	"content_security_policy": { "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'" }
+	"icons": {
+		"16": "icons/icon16.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
+	},
+	"optional_host_permissions": [
+		"http://*/*",
+		"https://*/*"
+	],
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; object-src 'self'"
+	}
 }

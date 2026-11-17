@@ -7,7 +7,6 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { extractPage } from '../../lib/page/extract.ts';
-import { GhostpostUnicodeDecoder } from '../../lib/codecs/ghostpost-unicode.ts';
 import { scorePage, summarize, type Label } from '../eval/score.ts';
 
 const dir = new URL('../fixtures/real/', import.meta.url);
@@ -19,7 +18,7 @@ for (const f of readdirSync(new URL('labels/', dir)).filter((x) => x.endsWith('.
 	test(`real page ${label.id} (${label.category}) does not regress`, () => {
 		const prov = JSON.parse(readFileSync(new URL(`${label.id}.provenance.json`, dir), 'utf8'));
 		const html = readFileSync(new URL(`${label.id}.html`, dir), 'utf8');
-		const rep = extractPage({ html, locator: prov.url, baseUrl: prov.finalUrl ?? prov.url, observationId: `eval_${label.id}`, contentHash: prov.sha256, contentType: prov.contentType, observedAt: prov.fetchedAt, decoders: [new GhostpostUnicodeDecoder()] });
+		const rep = extractPage({ html, locator: prov.url, baseUrl: prov.finalUrl ?? prov.url, observationId: `eval_${label.id}`, contentHash: prov.sha256, contentType: prov.contentType, observedAt: prov.fetchedAt });
 		const s = summarize(scorePage(label, rep, html)) as Record<string, any>;
 		const base = measured.get(label.id);
 		assert.ok(base, `no committed measurement for ${label.id}`);

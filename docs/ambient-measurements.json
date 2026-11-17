@@ -1,0 +1,16 @@
+{
+  "source": "tests/e2e/ambient.e2e.ts on the SYNTHETIC session-bound SPA (tests/e2e/fixture-site.ts); real Chromium + extension + feltkit dev; 2026-11-17",
+  "recognizeMs": 15,
+  "siteAnalysisMs": 228,
+  "connectAndFirstAcquisitionMs": 263,
+  "changeToFindingMs": 56184,
+  "changeToOverlayMs": 56474,
+  "findingToOverlayMs": 290,
+  "noticesForTwoFindings": 2,
+  "overlayPageHeapDeltaKB": 856,
+  "notes": [
+    "change-to-finding is bounded by the feed's interval (the site declares max-age=60, so Signal polls every 60 s) plus the scheduler period; the overlay updates ~0.3 s after the finding exists (FeltKit change stream → service worker → port)",
+    "repeat checks with no change were conditional requests answered 304 and created no notice",
+    "the overlay survived pushState navigation, a <body> replacement and a script removing it"
+  ]
+}

@@ -171,3 +171,19 @@ export const DEFAULT_PAGE_LIMITS: PageLimits = {
 	maxJsonLdBytes: 512_000,
 	maxJsonLdNodes: 2_000
 };
+
+/** A deterministic interpreter that finds embedded signals in a block of visible text. Optional; none ship by default. */
+export interface DetectedSignal {
+	codec: string;
+	kind: string;
+	ok: boolean;
+	payload?: Record<string, unknown>;
+	error?: string;
+	span?: [number, number];
+	warnings?: string[];
+	confidence: number;
+}
+export interface SignalDecoder {
+	readonly codec: string;
+	detect(input: { text: string; contentType?: string }): DetectedSignal[];
+}

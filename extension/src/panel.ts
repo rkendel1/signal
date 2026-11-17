@@ -1,450 +1,145 @@
-/** Side panel UI. All page-derived text is rendered with textContent; nothing observed is executed. */
-import type { FeltKitClient, SessionInfo } from '@feltdb/feltkit/client';
-import {
-	activeTab, capture, connect, discover, errorText, forgetInstance, instanceOrigin, intentDraft, loadFacets, lockStorage, navigableTarget,
-	relayOverlay, savedInstance, saveIntentDraft, saveWorkingSet, showOverlay, snapshotTab, workingSet, type DiscoveryView, type Facet, type Facets,
-	can, clearOtherScope, findWatch, isMonitored, notify, pageLocator, parentLocator, setWatch, showOnPage, stopWatch, watchedPages
-} from './host.ts';
-import { initData, renderFacts } from './data-panel.ts';
-import { Latest } from './datasets.ts';
-import { buildIntent, formatValue, niceStep, reconcile, type EditorState, type FilterState } from './intent-builder.ts';
+/**
+ * The side panel: a capture client for Signal. Connect → sign in → choose a browser-capture source →
+ * capture the page you are viewing → see which of your findings its items are part of. Criteria, sources and
+ * investigation live in the Signal app; the panel does not duplicate them.
+ */
+import type { FeltKitClient } from '@feltdb/feltkit/client';
+import { activeTab, affected, can, capture, captureSources, chooseSource, chosenSource, connect, createCaptureSource, errorText, forgetInstance, instanceOrigin, lockStorage, savedInstance, snapshotTab, type Connection } from './host.ts';
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
-const el = (tag: string, cls?: string, text?: string) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
-let conn: { client: FeltKitClient; origin: string; session: SessionInfo } | null = null;
-const data = initData({ client: () => conn?.client ?? null, status, errorText, onSelection: () => { if ($<HTMLInputElement>('live').checked && facetData) void runDiscovery(); } });
-const discoveryGuard = new Latest();
+const status = (text: string, error = false) => { const s = $('status'); s.textContent = text; s.classList.toggle('error', error); };
+const show = (id: 'connect' | 'signin' | 'work') => { for (const s of ['connect', 'signin', 'work']) $(s).hidden = s !== id; };
+let conn: Connection | null = null;
 
-function status(text: string, error = false) { const s = $('status'); s.textContent = text; s.classList.toggle('error', error); }
-function show(view: 'connect' | 'signin' | 'work') { for (const v of ['connect', 'signin', 'work']) $(v).hidden = v !== view; }
-async function busy<T>(button: HTMLButtonElement, label: string, f: () => Promise<T>): Promise<T | undefined> {
-	button.disabled = true; status(label);
-	try { return await f(); } catch (e) { status(errorText(e), true); return undefined; } finally { button.disabled = false; }
+function el(tag: string, props: Record<string, string> = {}, ...children: Array<Node | string | null>) {
+	const e = document.createElement(tag);
+	for (const [k, v] of Object.entries(props)) e.setAttribute(k, v);
+	for (const c of children) if (c !== null) e.append(c);
+	return e;
 }
 
-async function refreshSession() {
-	if (!conn) return show('connect');
-	conn.session = await conn.client.session();
-	const p = conn.session.principal;
-	$('who').textContent = p ? `${p.displayName ?? p.id} · ${new URL(conn.origin).host}` : new URL(conn.origin).host;
-	if (!p) return renderSignIn();
-	show('work');
-	const access = applyAccess();
-	await renderPages();
-	await refreshFacets().catch((e) => status(errorText(e), true));
-	watched = await watchedPages(conn.client).catch(() => new Set<string>());
-	await renderWatch().catch(() => undefined);
-	if (access.data) await data.refresh().catch((e) => status(errorText(e), true));
-}
-
-/**
- * What this account may do, from the session's own permission list. A viewer can read alerts but cannot capture pages
- * or import data; say so, and turn off the controls that cannot work, instead of letting each fail with a raw 403.
- */
-function applyAccess(): { capture: boolean; data: boolean } {
-	const perms = conn?.session.permissions as string[] | undefined;
-	const capture = can(perms, 'signal.sources.read') && can(perms, 'signal.pages.read');
-	const data = can(perms, 'signal.datasets.read');
-	const write = can(perms, 'signal.datasets.write');
-	const p = conn?.session.principal;
-	const note = $('access');
-	const lacking = [!capture && 'capture pages', !write && 'import data'].filter(Boolean) as string[];
-	note.hidden = !lacking.length;
-	note.textContent = lacking.length ? `${p?.displayName ?? p?.id ?? 'This account'} (${(p as { roles?: string[] } | null)?.roles?.join(', ') ?? 'no role'}) cannot ${lacking.join(' or ')}. Sign out and sign in with a member account to use those parts of Signal.` : '';
-	$<HTMLButtonElement>('capture').disabled = !capture;
-	$<HTMLButtonElement>('import-go').disabled = !write;
-	$('mydata').hidden = !data;
-	return { capture, data };
-}
-
-function renderSignIn() {
-	show('signin');
-	const box = $('devusers'); box.replaceChildren();
-	if (conn && !conn.session.environment.production && conn.session.devUsers.length) {
-		box.append(el('p', 'muted', 'Development instance: sign in as'));
-		for (const u of conn.session.devUsers) {
-			const b = el('button', 'secondary', u.name) as HTMLButtonElement; b.type = 'button';
-			b.addEventListener('click', () => busy(b, 'Signing in…', async () => { await conn!.client.signInAsDevUser(u.id); status(''); await refreshSession(); }));
-			box.append(b, document.createTextNode(' '));
-		}
-	}
-}
-
-async function renderPages() {
-	const set = await workingSet();
-	$('count').textContent = set.length ? `(${set.length})` : '';
-	const ul = $('pages'); ul.replaceChildren();
-	for (const p of set) {
-		const li = el('li');
-		li.append(el('div', '', p.title || p.url), el('div', 'muted', `${p.entities} entities · ${new Date(p.capturedAt).toLocaleTimeString()}${p.previousPageId ? (p.unchanged ? ' · unchanged since last capture' : ' · changed since last capture') : ''}`));
-		ul.append(li);
-	}
-	if (!set.length) ul.append(el('li', 'muted', 'Nothing captured yet. Open a page and choose “Capture this page”.'));
-}
-
-const MARK = { true: ['✓', 't'], false: ['✗', 'f'], unknown: ['?', 'u'] } as const;
-const STATUS_LABEL = { match: 'match', possible: 'possible — missing information', non_match: 'not a match', out_of_scope: 'outside the area' } as const;
-const BADGE = { match: 'match', possible: 'possible', non_match: 'not a match', out_of_scope: 'outside area' } as const;
-
-/** Criterion ids are attribute names; show the person's labels instead. */
-function labelled(text: string): string {
-	const labels = new Map((facetData?.facets ?? []).map((f) => [f.attr, f.label]));
-	return text.replace(/\b[A-Za-z][A-Za-z0-9]*\b/g, (w) => labels.get(w) ?? w);
-}
-
-function renderResults(r: DiscoveryView) {
-	const aug = r.augmentation;
-	const box = $('results'); box.replaceChildren();
-	const c = r.coverage;
-	const cov = el('div', 'coverage');
-	cov.append(el('div', '', c.exhaustive ? `Complete: ${c.exhaustiveBasis}.` : `Not complete: ${c.exhaustiveBasis}.`));
-	if (c.notYetExamined) cov.append(el('div', 'muted', `${c.notYetExamined} not yet examined.`));
-	for (const u of c.unavailable.slice(0, 5)) cov.append(el('div', 'muted', `${u.what} — ${u.why}`));
-	box.append(el('h2', '', 'Coverage'), cov);
-
-	const groups: Array<keyof typeof STATUS_LABEL> = ['match', 'possible', 'non_match', 'out_of_scope'];
-	for (const g of groups) {
-		const items = r.candidates.filter((x) => x.status === g);
-		if (!items.length) continue;
-		box.append(el('h2', '', `${STATUS_LABEL[g]} (${items.length})`));
-		const ul = el('ul', 'list');
-		for (const cand of items) {
-			const li = el('li', 'cand');
-			const head = el('div', 'head');
-			const url = navigableTarget(cand.key);
-			const name = el(url ? 'a' : 'span', '', cand.name ?? cand.key);
-			if (url) { (name as HTMLAnchorElement).href = url; (name as HTMLAnchorElement).target = '_blank'; (name as HTMLAnchorElement).rel = 'noopener noreferrer'; }
-			head.append(name, el('span', `badge ${g}`, cand.changed ? `${BADGE[g]} · changed` : BADGE[g]));
-			const crit = el('div', 'crit');
-			for (const x of cand.criteria) { const [m, cls] = MARK[x.result]; const s = el('span', cls, `${m} ${x.label}`); if (x.reason) s.title = x.reason; crit.append(s); }
-			li.append(head, crit);
-			const go = el('button', 'secondary small', 'Show on page') as HTMLButtonElement; go.type = 'button';
-			go.addEventListener('click', () => void (async () => {
-				li.querySelector('.miss')?.remove();
-				const tab = await activeTab().catch(() => null);
-				const found = tab?.id ? await showOnPage(tab.id, { key: cand.key, name: cand.name, locators: cand.locators ?? [], criteria: cand.criteria.filter((x) => x.result === 'true').map((x) => x.label), others: r.candidates.filter((o) => o.key !== cand.key).map((o) => ({ key: o.key, name: o.name })) }).catch(() => false) : false;
-				if (!found) li.append(el('div', 'muted miss', 'Not on the open page right now: it may be further down a list that has not loaded yet, on another captured page, or only described in the page’s data.'));
-			})());
-			li.append(go);
-				renderFacts(li, cand, aug);
-				if (aug?.values.some((v) => v.candidateKey === cand.key)) head.append(el('span', 'badge ds-approved', '+ your data'));
-			if (cand.changed) li.append(el('div', 'muted', `Changed: ${labelled(cand.changed.fields.join(', '))}`));
-			if (cand.missing.length) li.append(el('div', 'muted', `Undecided: ${labelled(cand.missing.join('; '))}`));
-			ul.append(li);
-		}
-		box.append(ul);
-	}
-	if (!r.candidates.length) box.append(el('p', 'muted', 'No entities of the intent’s target type on the captured pages.'));
-
-	if (r.plan.length) {
-		box.append(el('h2', '', 'Next steps'));
-		const ul = el('ul', 'list');
-		for (const step of r.plan.filter((s) => s.kind !== 'skip_unchanged').slice(0, 12)) {
-			const li = el('li');
-			li.append(el('div', '', `${step.kind.replace('_', ' ')}: ${labelled(step.reason)}`));
-			const url = navigableTarget(step.target);
-			if (step.executesIn === 'browser-session' && url) {
-				const b = el('button', 'secondary', 'Open here, then capture') as HTMLButtonElement; b.type = 'button';
-				b.addEventListener('click', async () => { const tab = await activeTab().catch(() => null); if (tab?.id) await chrome.tabs.update(tab.id, { url }); });
-				li.append(b);
-			} else li.append(el('div', 'muted', step.executesIn === 'background' ? 'Needs data from outside the page (not run by the extension).' : step.target));
-			ul.append(li);
-		}
-		box.append(ul);
-	}
-}
-
-
-// ------------------------------------------------------------------ intent editor (controls generated from the captured pages)
-
-let facetData: Facets | null = null;
-let editor: EditorState = { types: [], filters: {} };
-let jsonMode = false;
-let liveTimer: ReturnType<typeof setTimeout> | undefined;
-
-function currentIntent(): string {
-	return jsonMode ? $<HTMLTextAreaElement>('intent').value : JSON.stringify(buildIntent(editor, facetData?.facets ?? []), null, 2);
-}
-async function persistEditor() {
-	await saveIntentDraft(JSON.stringify({ editor, jsonMode, json: jsonMode ? $<HTMLTextAreaElement>('intent').value : undefined }));
-}
-function changed(evaluate = true) {
-	if (!jsonMode) $<HTMLTextAreaElement>('intent').value = currentIntent();
-	void persistEditor();
-	if (evaluate && $<HTMLInputElement>('live').checked && facetData) { clearTimeout(liveTimer); liveTimer = setTimeout(() => void runDiscovery(), 350); }
-}
-
-let facetSeq = 0;
-async function refreshFacets(types?: string[], evaluate = true) {
-	const set = await workingSet();
-	if (!conn || !set.length) { facetData = null; renderEditor(); return; }
-	const explicit = types ?? (editor.chosen ? editor.types : undefined);
-	const seq = ++facetSeq;
-	const data = await loadFacets(conn.client, set, explicit);
-	if (seq !== facetSeq) return; // a newer choice was made meanwhile: its refresh wins
-	facetData = data;
-	editor = { ...reconcile({ types: facetData.selected, filters: editor.filters }, facetData.facets), chosen: explicit !== undefined };
-	renderEditor();
-	changed(evaluate);
-}
-
-function renderEditor() {
-	const types = $('types'); types.replaceChildren();
-	const filters = $('filters'); filters.replaceChildren();
-	if (!facetData) { types.append(el('p', 'muted', 'Analyze a page first.')); filters.append(el('p', 'muted', 'Choose what you are looking for in step 2.')); $('filter-count').textContent = ''; $<HTMLTextAreaElement>('intent').value = currentIntent(); return; }
-	// Every kind of item found, with how many and examples; each can be selected and unselected, all of them included.
-	for (const t of facetData.types) {
-		const card = el('label', 'typecard');
-		const box = document.createElement('input'); box.type = 'checkbox'; box.checked = editor.types.includes(t.type); box.value = t.type;
-		box.addEventListener('change', () => {
-			// The choice takes effect immediately; the facets for it follow.
-			editor = { ...editor, chosen: true, types: box.checked ? [...new Set([...editor.types, t.type])] : editor.types.filter((x) => x !== t.type) };
-			void refreshFacets(editor.types).catch((err) => status(errorText(err), true));
-		});
-		const body = el('div');
-		const head = el('strong', '', t.label); head.append(el('span', 'count', ` · ${t.candidates}`));
-		body.append(head);
-		for (const ex of t.sample) body.append(el('div', 'ex', ex));
-		card.append(box, body);
-		types.append(card);
-	}
-	if (!facetData.types.length) types.append(el('p', 'muted', 'No items were recognised on this page.'));
-	$('filter-count').textContent = editor.types.length ? `(${facetData.candidates} ${facetData.candidates === 1 ? 'item' : 'items'})` : '';
-	if (!editor.types.length) filters.append(el('p', 'muted', 'Choose what you are looking for in step 2.'));
-	else if (!facetData.facets.length) filters.append(el('p', 'muted', 'Nothing on these items varies enough to filter on.'));
-	for (const f of facetData.facets) filters.append(filterRow(f, editor.filters[f.attr]));
-	$<HTMLTextAreaElement>('intent').value = currentIntent();
-}
-
-const humanType = (t: string) => t.replace(/([a-z])([A-Z])/g, '$1 $2');
-let uid = 0;
-
-function filterRow(f: Facet, s: FilterState): HTMLElement {
-	const row = el('div', `filter${s.on ? '' : ' off'}`);
-	const id = `f${uid++}`;
-	const top = el('div', 'top');
-	const toggle = document.createElement('input'); toggle.type = 'checkbox'; toggle.id = id; toggle.checked = s.on;
-	const lab = el('label') as HTMLLabelElement; lab.htmlFor = id; lab.append(toggle, document.createTextNode(f.kind === 'presence' ? `Has ${f.label.toLowerCase()}` : f.label));
-	top.append(lab, el('span', 'muted', `${f.present} of ${f.of} show it`));
-	row.append(top);
-	const body = el('div', 'body');
-	const on = () => { if (!s.on) { s.on = true; toggle.checked = true; row.classList.remove('off'); } };
-	toggle.addEventListener('change', () => { s.on = toggle.checked; row.classList.toggle('off', !s.on); changed(); });
-
-	if (s.kind === 'range') {
-		const step = niceStep(f);
-		const value = el('div', 'range-value');
-		const show = () => { value.textContent = `${formatValue(f, Math.min(s.lo, s.hi))} – ${formatValue(f, Math.max(s.lo, s.hi))}`; };
-		const slider = (which: 'lo' | 'hi', text: string) => {
-			const r = document.createElement('input');
-			r.type = 'range'; r.min = String(f.min); r.max = String(f.max); r.step = String(step); r.value = String(s[which]);
-			r.setAttribute('aria-label', `${f.label} ${text}`); r.dataset.attr = f.attr; r.dataset.bound = which;
-			r.addEventListener('input', () => { s[which] = Number(r.value); on(); show(); changed(); });
-			const line = el('div', 'range-row'); line.append(el('span', '', text), r); return line;
-		};
-		body.append(slider('lo', 'from'), slider('hi', 'to'), value);
-		show();
-	} else if (s.kind === 'category') {
-		const opts = el('div', 'opts');
-		for (const v of f.values ?? []) {
-			const c = document.createElement('input'); c.type = 'checkbox'; c.checked = s.values.some((x) => String(x) === String(v.value));
-			c.dataset.attr = f.attr; c.value = String(v.value);
-			c.addEventListener('change', () => { s.values = c.checked ? [...s.values, v.value] : s.values.filter((x) => String(x) !== String(v.value)); if (s.values.length) on(); changed(); });
-			const l = el('label'); l.append(c, document.createTextNode(`${humanType(String(v.value))} (${v.count})`)); opts.append(l);
-		}
-		body.append(opts);
-	} else if (s.kind === 'boolean') {
-		const opts = el('div', 'opts');
-		for (const v of [true, false]) {
-			const r = document.createElement('input'); r.type = 'radio'; r.name = id + 'b'; r.checked = s.value === v;
-			r.addEventListener('change', () => { s.value = v; on(); changed(); });
-			const l = el('label'); l.append(r, document.createTextNode(v ? 'Yes' : 'No')); opts.append(l);
-		}
-		body.append(opts);
-	}
-	if (f.present < f.of || f.kind === 'presence') {
-		const miss = document.createElement('input'); miss.type = 'checkbox'; miss.checked = s.missing === 'false';
-		miss.addEventListener('change', () => { s.missing = miss.checked ? 'false' : 'unknown'; changed(); });
-		const l = el('label', 'missing'); l.append(miss, document.createTextNode(f.kind === 'presence' ? `Items that don’t show it are not a match (${f.of - f.present})` : `Items that don’t show it are not a match (otherwise “possible”, ${f.of - f.present})`));
-		body.append(l);
-	}
-	row.append(body);
-	return row;
-}
-
-async function runDiscovery(prefix = ''): Promise<void> {
-	if (!conn) return;
-	if (!jsonMode && !editor.types.length) { discoveryGuard.cancel(); $('results').replaceChildren(el('p', 'muted', 'Choose what you are looking for in step 2.')); status(prefix.trim()); return; }
-	// Latest wins: a slower, older evaluation must not replace the results of a newer one (filters, datasets).
-	const ticket = discoveryGuard.next();
-	const r = await discover(conn.client, currentIntent(), await workingSet(), data.selected()).catch((e) => {
-		if (!discoveryGuard.isCurrent(ticket)) return null;
-		status(errorText(e), true);
-		if (data.selected().length) void data.resync(); // a dataset may have been retired or changed elsewhere
-		return null;
-	});
-	if (!r || !discoveryGuard.isCurrent(ticket)) return;
-	renderResults(r);
-	const n = (s: string) => r.candidates.filter((c) => c.status === s).length;
-	status(`${prefix}${n('match')} match · ${n('possible')} possible · ${n('non_match')} not a match${r.augmentation ? ` · using ${data.selected().length} of your dataset${data.selected().length === 1 ? '' : 's'}` : ''}`);
-}
-
-// ------------------------------------------------------------------ alerts (watches)
-
-let watched = new Set<string>();
-
-/** What the open page is watched for, in words, and where alerts go. Read from the server each time. */
-async function renderWatch() {
-	const box = $('watch-state'); const btn = $<HTMLButtonElement>('watch'); const stop = $('unwatch');
-	const tab = await activeTab().catch(() => null);
-	const set = await workingSet();
-	const locator = tab?.url ? pageLocator(tab.url) : null;
-	const captured = !!locator && set.some((p) => p.url === locator);
-	box.replaceChildren();
-	if (!conn || !locator || !captured) { box.append(document.createTextNode('Analyze this page to set alerts on it.')); btn.disabled = true; stop.hidden = true; return; }
-	const found = await findWatch(conn.client, tab!.url!);
-	const w = found?.watch;
-	const parent = parentLocator(tab!.url!);
-	$('scope-parent').textContent = `This search, wherever the map is (${parent.replace(/^https?:\/\//, '')})`;
-	for (const r of document.querySelectorAll<HTMLInputElement>('#scope input')) if (found) r.checked = r.value === found.scope;
-	btn.disabled = false;
-	if (!w) {
-		box.append(document.createTextNode('Not watching this page. Set the filters above, then choose “Alert me when this matches”.'));
-		btn.textContent = 'Alert me when this matches'; stop.hidden = true; return;
-	}
-	const d = el('div', 'watching');
-	d.append(el('strong', '', found!.scope === 'parent' ? `Watching ${found!.locator.replace(/^https?:\/\//, '')} — any map position or filters in the address. You are alerted when an item matches:` : 'Watching exactly this address. You are alerted when an item matches:'));
-	const ul = el('ul');
-	for (const c of w.criteria.length ? w.criteria : ['any item of the selected kind']) ul.append(el('li', '', c));
-	d.append(ul);
-	d.append(el('div', 'muted', `Where: outlined on this page, a browser notification, and your Signal inbox (${w.notify.join(', ')}). When: each time this page is captured${$<HTMLInputElement>('autocheck').checked ? ', including automatically whenever you open it — the panel can stay closed' : ''}. A new alert is recorded when the set of matching items or their values changes. “Possible” items (missing information) never alert.`));
-	box.append(d);
-	btn.textContent = 'Update alert to the current filters'; stop.hidden = false;
-}
-
-$('watch').addEventListener('click', () => void busy($<HTMLButtonElement>('watch'), 'Saving alert…', async () => {
-	const tab = await activeTab();
-	const intent = JSON.parse(currentIntent());
-	const kinds = (intent.target?.type ?? []).map(humanType).join(' / ');
-	const what = (intent.criteria ?? []).map((c: { label: string }) => c.label).join(' · ');
-	const scope = document.querySelector<HTMLInputElement>('#scope input:checked')?.value === 'exact' ? 'exact' : 'parent';
-	const target = scope === 'parent' ? parentLocator(tab.url!) : pageLocator(tab.url!);
-	await setWatch(conn!.client, target, intent, `${kinds}${what ? `: ${what}` : ''}`.slice(0, 200));
-	void chrome.runtime.sendMessage({ type: 'signal.watchesChanged' }).catch(() => undefined);
-	await clearOtherScope(conn!.client, tab.url!, target); // one page, one watch
-	watched = await watchedPages(conn!.client);
-	await captureTab(tab); // evaluate now: the current matches are the first alert
-}));
-$('unwatch').addEventListener('click', () => void busy($<HTMLButtonElement>('unwatch'), 'Stopping alerts…', async () => {
-	const tab = await activeTab();
-	await stopWatch(conn!.client, tab.url!);
-	void chrome.runtime.sendMessage({ type: 'signal.watchesChanged' }).catch(() => undefined);
-	await showOverlay(tab.id!).catch(() => undefined); // refreshes an existing overlay: unwatched, its badge goes away
-	watched = await watchedPages(conn!.client);
-	await renderWatch();
-	status('Alerts stopped for this page. Earlier alerts are kept.');
-}));
-$('autocheck').addEventListener('change', () => { void chrome.storage.local.set({ 'signal.autocheck': $<HTMLInputElement>('autocheck').checked }); void renderWatch(); });
-
-// The automatic check of watched pages runs in the background worker (also with this panel closed). Here the
-// panel only keeps its view current: the watch box follows the open tab, and a background check refreshes results.
-chrome.tabs.onUpdated.addListener((_tabId, change) => { if (change.status === 'complete' && conn) void renderWatch().catch(() => undefined); });
-chrome.runtime.onMessage.addListener((msg) => {
-	if (msg?.type !== 'signal.captured' || !conn) return;
-	void (async () => {
-		await renderPages();
-		await refreshFacets(undefined, false);
-		const prefix = `Checked automatically${msg.alert ? ' — alert recorded' : ''}: ${msg.entities} entities. `;
-		if (facetData) await runDiscovery(prefix); else status(prefix);
-		await renderWatch();
-	})().catch(() => undefined);
-});
-
-// ------------------------------------------------------------------ wiring
-
-$('connect-form').addEventListener('submit', (ev) => {
-	ev.preventDefault();
-	void busy($('connect-form').querySelector('button')!, 'Connecting…', async () => {
-		conn = await connect(instanceOrigin($<HTMLInputElement>('instance').value));
-		status('');
-		await refreshSession();
-	});
-});
-$('signin-form').addEventListener('submit', (ev) => {
-	ev.preventDefault();
-	void busy($('signin-form').querySelector('button')!, 'Signing in…', async () => {
-		await conn!.client.signIn({ email: $<HTMLInputElement>('email').value, password: $<HTMLInputElement>('password').value });
-		$<HTMLInputElement>('password').value = '';
-		status(''); await refreshSession();
-	});
-});
-/**
- * Capture a tab: record its structure (through the page's watch when it has one), notify about a recorded
- * alert, show the overlay on the page, and refresh facets and results.
- */
-async function captureTab(tab: chrome.tabs.Tab, quiet = false): Promise<void> {
-	const snap = await snapshotTab(tab, !quiet);
-	lastSnapshot = snap;
-	const c = await capture(conn!.client, snap);
-	if (c.alert) await notify(c.alert);
-	if (await isMonitored(conn!.client, snap.url)) await showOverlay(tab.id!).catch(() => undefined); // only on pages you chose to monitor
-	renderDiagnostics(snap, c);
-	const message = `${quiet ? 'Checked automatically. ' : ''}${c.alert ? 'Alert recorded. ' : ''}Analyzed: ${c.entities} entities${c.unchanged ? ' (unchanged since last time)' : ''}.`;
-	await renderPages();
-	await refreshFacets(undefined, false);
-	if (facetData) await runDiscovery(`${message} `); else status(message);
-	await renderWatch();
-}
-let lastSnapshot: import('./host.ts').Snapshot | null = null;
-let downloadUrl: string | null = null;
-/** What was read, honestly: how much of the page, what was dropped, and a way to hand it over when something is missing. */
-function renderDiagnostics(snap: import('./host.ts').Snapshot, c: { entities: number; truncated?: boolean }) {
-	const box = $('diag'); box.hidden = false; box.replaceChildren();
-	box.classList.toggle('warn', !!c.truncated);
-	const kb = (n: number) => `${Math.round(n / 1024).toLocaleString()} KB`;
-	if (c.truncated) box.append(el('div', '', 'Signal read only part of this page (its size limit was reached), so items further down may be missing.'));
-	box.append(el('div', '', `${c.entities} entities from ${snap.elements.toLocaleString()} page elements · sent ${kb(snap.chars)} of ${kb(snap.originalChars)} (scripts, styles and drawings removed) · ${snap.notDisplayed} hidden parts skipped · ${snap.revealed} visible parts kept that the page had marked hidden.`));
-	if (downloadUrl) URL.revokeObjectURL(downloadUrl);
-	downloadUrl = URL.createObjectURL(new Blob([snap.html ?? ''], { type: 'text/html' }));
-	const a = el('a', '', 'Something missing? Download what Signal read') as HTMLAnchorElement;
-	a.href = downloadUrl; a.download = `signal-read-${new URL(snap.url).hostname}.html`;
-	box.append(el('div'), a);
-}
-$('capture').addEventListener('click', () => void busy($<HTMLButtonElement>('capture'), 'Analyzing…', async () => captureTab(await activeTab())));
-$('overlay').addEventListener('click', () => void busy($<HTMLButtonElement>('overlay'), 'Opening alerts on the page…', async () => {
-	const tab = await activeTab();
-	if (!(await isMonitored(conn!.client, tab.url!))) { status('This page is not monitored. Set an alert above first; the overlay appears only on pages you chose to monitor.'); return; }
-	await showOverlay(tab.id!);
-	status('Alerts are shown on the page, also with this panel closed.');
-}));
-$('clear').addEventListener('click', async () => { await saveWorkingSet([]); editor = { types: [], filters: {} }; $('results').replaceChildren(); await renderPages(); await refreshFacets(); status('Cleared. Recorded pages stay in your Signal instance.'); });
-$('intent-form').addEventListener('submit', (ev) => ev.preventDefault());
-$('json-mode').addEventListener('change', () => {
-	jsonMode = $<HTMLInputElement>('json-mode').checked;
-	$<HTMLTextAreaElement>('intent').readOnly = !jsonMode;
-	$<HTMLFieldSetElement>('controls').disabled = jsonMode;
-	$<HTMLFieldSetElement>('types-fs').disabled = jsonMode;
-	if (!jsonMode) $<HTMLTextAreaElement>('intent').value = currentIntent();
-	void persistEditor();
-});
-$('intent').addEventListener('change', () => void persistEditor());
-$('discover').addEventListener('click', () => void busy($<HTMLButtonElement>('discover'), 'Evaluating…', runDiscovery));
-$('signout').addEventListener('click', async () => { await conn?.client.signOut().catch(() => undefined); data.reset(); await refreshSession(); });
-const disconnect = async () => { await forgetInstance(conn?.client); conn = null; data.reset(); $('results').replaceChildren(); show('connect'); $('who').textContent = ''; };
-$('disconnect').addEventListener('click', disconnect);
-$('disconnect-signin').addEventListener('click', disconnect);
-
-// The overlay's requests are answered by the background worker, so they work with this panel closed.
-
-(async () => {
+async function start() {
 	await lockStorage();
-	$<HTMLInputElement>('autocheck').checked = (await chrome.storage.local.get('signal.autocheck'))['signal.autocheck'] ?? true;
-	try {
-		const draft = JSON.parse((await intentDraft()) ?? 'null') as { editor?: EditorState; jsonMode?: boolean; json?: string } | null;
-		if (draft?.editor?.filters) editor = draft.editor;
-		if (draft?.jsonMode && draft.json) { jsonMode = true; $<HTMLInputElement>('json-mode').checked = true; $<HTMLTextAreaElement>('intent').readOnly = false; $<HTMLFieldSetElement>('controls').disabled = true; $<HTMLTextAreaElement>('intent').value = draft.json; }
-	} catch { /* an older draft format: start fresh */ }
 	const origin = await savedInstance();
 	if (!origin) return show('connect');
-	try { conn = await connect(origin, false); await refreshSession(); } catch (e) { show('connect'); $<HTMLInputElement>('instance').value = origin; status(errorText(e), true); }
-})();
+	try { conn = await connect(origin, false); } catch (e) { status(errorText(e), true); return show('connect'); }
+	await afterConnect();
+}
+
+async function afterConnect() {
+	const s = conn!.session;
+	if (!s.principal) {
+		show('signin');
+		const dev = $('devusers'); dev.replaceChildren();
+		if (!s.environment.production) for (const [id, label] of [['ada', 'Ada (member)'], ['bob', 'Bob (member)']]) {
+			const b = el('button', { type: 'button', class: 'secondary' }, `Development: ${label}`);
+			b.onclick = async () => { try { await conn!.client.signInAsDevUser(id); conn = await connect(conn!.origin, false); await afterConnect(); } catch (e) { status(errorText(e), true); } };
+			dev.append(b);
+		}
+		return;
+	}
+	$('who').textContent = s.principal.displayName ?? s.principal.id;
+	($('open-app') as HTMLAnchorElement).href = conn!.origin;
+	show('work');
+	const writable = can(s.permissions, 'signal.write');
+	($('capture') as HTMLButtonElement).disabled = !writable;
+	if (!writable) status('Your account can read Signal but not add information (it needs the member role).', true);
+	await loadSources();
+}
+
+async function loadSources(select?: string) {
+	const c = conn!.client;
+	const list = await captureSources(c);
+	const sel = $<HTMLSelectElement>('source');
+	sel.replaceChildren(...list.map((x) => el('option', { value: x.id }, `${x.name} — ${x.records} items${x.status !== 'connected' ? ` (${x.status})` : ''}`)));
+	if (!list.length) { sel.append(el('option', { value: '' }, 'No capture source yet — create one below')); ($('new-source') as HTMLDetailsElement).open = true; }
+	const want = select ?? (await chosenSource());
+	if (want && list.some((x) => x.id === want)) sel.value = want;
+	await chooseSource(sel.value || null);
+}
+
+function renderResult(r: Awaited<ReturnType<typeof capture>>) {
+	const run = r.run;
+	$('result').replaceChildren(el('p', {}, `${r.title ?? r.url}: ${r.received} item${r.received === 1 ? '' : 's'} read — `,
+		r.newInformation ? `${r.added} new, ${r.changed} changed` : 'nothing new since the last capture',
+		run ? `. ${run.entities} re-evaluated: ${run.created} new, ${run.changed} changed, ${run.closed} closed finding${run.closed === 1 ? '' : 's'}.` : '.'));
+}
+
+async function renderAffected(sourceId: string, keys: string[]) {
+	const list = await affected(conn!.client, sourceId, keys);
+	const ul = $('affected');
+	if (!list.length) { ul.replaceChildren(el('li', { class: 'muted' }, keys.length ? 'None of the items on this page is part of an open finding.' : 'Signal found no items of the chosen types on this page.')); return; }
+	ul.replaceChildren(...list.map((f) => {
+		const a = el('a', { href: `${conn!.origin}/#/findings/${encodeURIComponent(f.id)}`, target: '_blank', rel: 'noopener' }, f.entityLabel ?? f.recordKey);
+		return el('li', { class: 'cand' }, el('div', { class: 'head' }, a, el('span', { class: `badge ${f.qualification}` }, f.qualification)), el('div', { class: 'muted' }, `${f.criteriaName} · ${f.change} · ${f.sourceCount} source${f.sourceCount === 1 ? '' : 's'}`), el('div', {}, f.summary));
+	}));
+}
+
+$('connect-form').addEventListener('submit', async (e) => {
+	e.preventDefault();
+	try { status('Connecting…'); conn = await connect(instanceOrigin($<HTMLInputElement>('instance').value)); status(''); await afterConnect(); } catch (x) { status(errorText(x), true); }
+});
+$('signin-form').addEventListener('submit', async (e) => {
+	e.preventDefault();
+	try { await conn!.client.signIn({ email: $<HTMLInputElement>('email').value, password: $<HTMLInputElement>('password').value }); conn = await connect(conn!.origin, false); status(''); await afterConnect(); } catch (x) { status(errorText(x), true); }
+});
+$('source').addEventListener('change', () => void chooseSource($<HTMLSelectElement>('source').value || null));
+$('source-form').addEventListener('submit', async (e) => {
+	e.preventDefault();
+	try {
+		const types = $<HTMLInputElement>('src-types').value.split(',').map((x) => x.trim()).filter(Boolean);
+		const id = await createCaptureSource(conn!.client, $<HTMLInputElement>('src-name').value, $<HTMLInputElement>('src-entity').value.trim(), types);
+		($('new-source') as HTMLDetailsElement).open = false;
+		await loadSources(id); status('Capture source created.');
+	} catch (x) { status(errorText(x), true); }
+});
+$('capture').addEventListener('click', async () => {
+	const btn = $<HTMLButtonElement>('capture');
+	const sourceId = $<HTMLSelectElement>('source').value;
+	if (!sourceId) return status('Create or choose a capture source first.', true);
+	btn.disabled = true;
+	try {
+		status('Reading the page…');
+		const snap = await snapshotTab(await activeTab());
+		status('Sending to Signal…');
+		const r = await capture(conn!.client as FeltKitClient, sourceId, snap);
+		renderResult(r);
+		await renderAffected(sourceId, r.recordKeys);
+		await loadSources(sourceId);
+		status('Captured.');
+	} catch (e) { status(errorText(e), true); } finally { btn.disabled = false; }
+});
+$('signout').addEventListener('click', async () => { await conn?.client.signOut().catch(() => undefined); conn = await connect(conn!.origin, false); await afterConnect(); });
+for (const id of ['disconnect', 'disconnect-signin']) $(id).addEventListener('click', async () => { await forgetInstance(conn?.client); conn = null; status(''); show('connect'); });
+
+// ------------------------------------------------------------------ ambient: which sites show the overlay
+const send = <T>(m: Record<string, unknown>) => chrome.runtime.sendMessage<{ ok: boolean; value?: T; error?: string }>(m);
+async function siteState() {
+	const sites = (await send<string[]>({ type: 'signal.sites' })).value ?? [];
+	let origin: string | null = null;
+	try { origin = new URL((await activeTab()).url!).origin; } catch { /* no web page */ }
+	const on = !!origin && sites.includes(origin);
+	$('site-toggle').textContent = on ? 'Hide Signal on this site' : 'Show Signal on this site';
+	($('site-toggle') as HTMLButtonElement).disabled = !origin;
+	$('site-state').textContent = origin ? (on ? `on for ${new URL(origin).host}` : '') : 'open a web page';
+	$('sites-list').textContent = sites.length ? `Enabled on: ${sites.map((o) => new URL(o).host).join(', ')}` : '';
+	return { origin, on };
+}
+$('site-toggle').addEventListener('click', async () => {
+	const { origin, on } = await siteState();
+	if (!origin) return;
+	// The permission prompt needs this click (a user gesture in an extension page).
+	if (!on && !(await chrome.permissions.request({ origins: [`${origin}/*`] }))) return status(`Access to ${origin} was not granted.`, true);
+	const tab = await activeTab();
+	const r = await send({ type: 'signal.enableSite', origin, on: !on, tabId: tab.id });
+	if (!r.ok) return status(r.error ?? 'failed', true);
+	await siteState();
+	status(on ? 'Signal hidden on this site.' : 'Signal is now shown on this site.');
+});
+$('tick').addEventListener('click', async () => {
+	$('tick-state').textContent = 'checking…';
+	const r = await send<{ refreshed?: number; shown?: number; connected?: boolean }>({ type: 'signal.tick' });
+	$('tick-state').textContent = r.ok ? (r.value?.connected === false ? 'not connected' : `${r.value?.refreshed ?? 0} feeds refreshed, ${r.value?.shown ?? 0} notifications`) : r.error ?? 'failed';
+});
+
+void start().then(() => siteState()).catch(() => undefined);

@@ -17,7 +17,7 @@
 		<input id="instance" type="url" placeholder="http://localhost:3000" required autocomplete="url">
 		<button type="submit">Connect</button>
 	</form>
-	<p class="muted">This is where your Signal app runs — locally after <code>npm run dev</code>, or your deployed instance. Signal asks for access to that one address. To read a page, open it in a tab and press “Capture this page” after connecting.</p>
+	<p class="muted">Where your Signal app runs — locally after <code>npm run dev</code>, or your deployed instance. Signal asks for access to that one address.</p>
 </section>
 
 <section id="signin" hidden>
@@ -32,92 +32,33 @@
 </section>
 
 <section id="work" hidden>
-	<p id="access" class="notice" role="alert" hidden></p>
-	<ol class="steps">
-		<li class="step">
-			<h2><span class="num">1</span>Analyze this page</h2>
-			<p class="hint">Reads the page as you see it and works out what is on it. Signal keeps that structure, not the page.</p>
-			<div class="row"><button id="capture" type="button">Analyze this page</button></div>
-			<div id="diag" class="diag" hidden></div>
-			<details id="pages-box">
-				<summary>Analyzed pages <span id="count" class="muted"></span></summary>
-				<ul id="pages" class="list"></ul>
-				<button id="clear" type="button" class="link">Clear analyzed pages</button>
-			</details>
-		</li>
+	<h2>Signal on this site</h2>
+	<p class="muted">Shows your findings and notifications on this site, and lets Signal understand what it exposes. Signal asks for access to this one site.</p>
+	<div class="row"><button id="site-toggle" type="button">Show Signal on this site</button><span id="site-state" class="muted"></span></div>
+	<p class="muted" id="sites-list"></p>
+	<div class="row"><button id="tick" type="button" class="secondary">Check now</button><span id="tick-state" class="muted"></span></div>
+	<p class="muted">While the browser runs, the extension checks every minute: it refreshes your feeds that are due and shows new notifications. Nothing runs while the browser is closed.</p>
 
-		<li class="step">
-			<h2><span class="num">2</span>What’s on this page</h2>
-			<p class="hint">Choose what you are looking for. Every choice can be selected and unselected.</p>
-			<fieldset id="types-fs"><div id="types" class="typecards" role="group" aria-label="What to look for"><p class="muted">Analyze a page first.</p></div></fieldset>
-		</li>
+	<h2>Capture into</h2>
+	<p class="muted">A browser-capture source. Captures are partial: only what the page showed you. An item missing from a later capture is not treated as removed.</p>
+	<select id="source" aria-label="Capture source"></select>
+	<details id="new-source">
+		<summary>New capture source</summary>
+		<form id="source-form">
+			<label for="src-name">Name</label><input id="src-name" required maxlength="200" placeholder="Listings I browse">
+			<label for="src-entity">Each item describes a</label><input id="src-entity" value="property" required>
+			<label for="src-types">Item types to keep (comma-separated)</label><input id="src-types" value="RealEstateListing, Product">
+			<button type="submit">Create</button>
+		</form>
+	</details>
 
-		<li class="step">
-			<h2><span class="num">3</span>Narrow it down <span id="filter-count" class="muted"></span></h2>
-			<form id="intent-form">
-				<fieldset id="controls">
-					<div id="filters"><p class="muted">Choose what you are looking for in step 2.</p></div>
-				</fieldset>
-				<details id="advanced">
-					<summary>Intent as JSON</summary>
-					<label class="inline"><input type="checkbox" id="json-mode"> Edit as JSON instead (derived metrics, other operators)</label>
-					<textarea id="intent" rows="10" spellcheck="false" readonly aria-label="Intent JSON"></textarea>
-				</details>
-				<fieldset id="use-data">
-					<legend>Use my data <span id="use-count" class="muted"></span></legend>
-					<p class="hint">Add facts from files you imported under “My data”, such as parcel records. They are shown separately from what the page says. Alerts do not use your data yet.</p>
-					<div id="dataset-pick"></div>
-					<div id="dataset-chips" class="chips"></div>
-				</fieldset>
-				<div class="row">
-					<button id="discover" type="button" class="secondary">Update results</button>
-					<label class="inline"><input type="checkbox" id="live" checked> Update as I change filters</label>
-				</div>
-			</form>
-		</li>
-
-		<li class="step">
-			<h2><span class="num">4</span>Results</h2>
-			<div id="results"><p class="muted">Results appear here.</p></div>
-		</li>
-
-		<li class="step" id="alerts-box" aria-labelledby="alerts-h">
-			<h2 id="alerts-h"><span class="num">5</span>Alerts on this page</h2>
-			<div id="watch-state" class="muted">Analyze this page to set alerts on it.</div>
-			<fieldset id="scope" aria-label="Which address the alert covers">
-				<label><input type="radio" name="scope" value="parent" checked> <span id="scope-parent">This search, wherever the map is</span></label>
-				<label><input type="radio" name="scope" value="exact"> Exactly this address</label>
-			</fieldset>
-			<div class="row">
-				<button id="watch" type="button" disabled>Alert me when this matches</button>
-				<button id="unwatch" type="button" class="link" hidden>Stop alerts</button>
-			</div>
-			<label class="inline"><input type="checkbox" id="autocheck" checked> Check watched pages automatically when I open them (the panel can stay closed)</label>
-			<div class="row"><button id="overlay" type="button" class="secondary">Show alerts on this page</button></div>
-		</li>
-	</ol>
-
-	<section id="mydata" aria-labelledby="mydata-h">
-		<h2 id="mydata-h">My data</h2>
-		<p class="hint">Your own files, such as a county parcel list. Signal keeps your file in your instance, proposes how its columns map to what Signal knows, and uses it only after you approve that mapping.</p>
-		<ul id="datasets" class="list"></ul>
-		<details id="import-box">
-			<summary>Import a file</summary>
-			<form id="import-form">
-				<label for="import-file">CSV or GeoJSON file</label>
-				<input id="import-file" type="file" accept=".csv,.geojson,.json">
-				<label for="import-name">Name (optional)</label>
-				<input id="import-name" type="text" maxlength="200" placeholder="County parcels">
-				<label for="import-asof">Data as of (optional)</label>
-				<input id="import-asof" type="date">
-				<p class="muted">An imported file is a snapshot: Signal does not refresh it. Up to about 1 MB compressed per file; larger files are refused, not cut down.</p>
-				<button id="import-go" type="submit">Import</button>
-				<div id="import-note" class="muted" role="status" aria-live="polite"></div>
-			</form>
-		</details>
-		<div id="review" class="review" hidden></div>
-	</section>
-	<footer class="foot"><button id="signout" type="button" class="link">Sign out</button> · <button id="disconnect" type="button" class="link">Disconnect</button></footer>
+	<h2>This page</h2>
+	<div class="row"><button id="capture" type="button">Capture this page</button></div>
+	<div id="result"></div>
+	<h2>Findings this page affects</h2>
+	<ul id="affected" class="list"><li class="muted">Capture a page to see which of your findings its items are part of.</li></ul>
+	<p class="muted">Signal evaluates captures against all your criteria and other sources at once. Investigate a finding in the Signal app.</p>
+	<footer class="foot"><a id="open-app" href="#" target="_blank" rel="noopener">Open Signal</a> · <button id="signout" type="button" class="link">Sign out</button> · <button id="disconnect" type="button" class="link">Disconnect</button></footer>
 </section>
 <script src="panel.js" type="module"></script>
 </body>

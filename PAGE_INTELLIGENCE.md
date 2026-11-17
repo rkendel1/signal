@@ -1,5 +1,7 @@
 # Page Intelligence (M5, corrected in M7)
 
+> **Rebuild note (2026-11).** The page extractor described here is retained unchanged as the adapter behind *browser-capture* sources (`lib/sources/page.ts` turns a page's entities into observations). Mentions of monitors, entity criteria, discovery intents and the Ghostpost decoder describe the previous model, removed in the rebuild (history at `cbeacff`). See README.md and ASSESSMENT.md.
+
 > **M7 corrections.**
 > - Real-page measurements are now in PAGE_QUALITY.md.
 > - The identity model gained a strength (§2 Identity) and per-entity `digest`; pages gained `factsRevision`.

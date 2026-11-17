@@ -9,7 +9,6 @@ import { load } from 'cheerio';
 import { extractPage, type PageInput } from '../../lib/page/extract.ts';
 import type { PageEntity, PageRepresentation } from '../../lib/page/types.ts';
 import { parseDate, parseMoney, parseMoneyRange, safeUrl } from '../../lib/page/values.ts';
-import { GhostpostUnicodeDecoder, ghostpostEncoder } from '../../lib/codecs/ghostpost-unicode.ts';
 
 const fixture = (name: string) => readFileSync(new URL(`../fixtures/pages/${name}.html`, import.meta.url), 'utf8');
 const run = (name: string, over: Partial<PageInput> = {}) => extractPage({
@@ -200,19 +199,6 @@ test('security: no secrets, no form values, no executable URLs; bounded work', (
 	const big = run('products', { html: huge });
 	assert.equal(big.stats.truncated, true);
 	assert.ok(performance.now() - t < 20000, 'bounded');
-});
-
-test('Ghostpost is a specialized interpreter: a typed signal with evidence, independent of extraction', () => {
-	const post = ghostpostEncoder.encodeText('Big news soon', 'Launch date: 2026-12-01');
-	const html = `<html><body><article><h2>Update</h2><p>${post}</p></article></body></html>`;
-	const plain = run('x', { html });
-	assert.equal(plain.signals.filter((s) => s.codec === 'ghostpost-unicode/v1').length, 0, 'no decoder injected → no codec dependency');
-	const r = run('x', { html, decoders: [new GhostpostUnicodeDecoder()] });
-	const [sig] = r.signals.filter((s) => s.codec === 'ghostpost-unicode/v1');
-	assert.equal(sig.payload!.text, 'Launch date: 2026-12-01');
-	const ev = r.evidence.find((e) => e.id === sig.evidenceRefs[0])!;
-	assert.equal(ev.element, 'p');
-	assert.ok(of(r, 'Article').length === 1, 'the page is still represented normally');
 });
 
 test('value typing: money, ranges, dates (relative dates inferred, never claimed as observed)', () => {

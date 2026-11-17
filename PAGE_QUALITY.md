@@ -1,5 +1,7 @@
 # Page Quality (M7)
 
+> **Rebuild note (2026-11).** The page extractor described here is retained unchanged as the adapter behind *browser-capture* sources (`lib/sources/page.ts` turns a page's entities into observations). Mentions of monitors, entity criteria, discovery intents and the Ghostpost decoder describe the previous model, removed in the rebuild (history at `cbeacff`). See README.md and ASSESSMENT.md.
+
 M5 established `signal.page/v1`. M7 asks whether it holds up on pages Signal did not write, and reports the answer per page, per category and per extraction method. There is no single aggregate score: one would hide exactly the failures this document exists to show.
 
 **Summary.**

@@ -1,8 +1,8 @@
 {
   "name": "signal",
   "private": true,
-  "version": "0.2.0",
-  "description": "Signal: observe authorized sources, interpret signals (incl. the Ghostpost codec), evaluate declarative criteria, record evidence-backed events, and alert. A FeltKit application.",
+  "version": "0.3.0",
+  "description": "Signal: connect sources, define what matters, and continuously surface explainable, evidence-backed findings. A FeltKit application.",
   "type": "module",
   "license": "MIT",
   "engines": {
@@ -14,14 +14,11 @@
     "start": "feltkit start",
     "test": "feltkit test",
     "test:lib": "node --test tests/lib/*.test.ts",
-    "test:codec": "cargo test --manifest-path codecs/ghostpost-unicode/Cargo.toml",
-    "build:codec": "sh scripts/build-codec.sh",
     "inspect": "feltkit inspect",
     "typecheck": "tsc --noEmit",
-    "bench": "node scripts/bench.ts",
     "build:extension": "node scripts/build-extension.ts",
-    "test:extension": "node --test tests/e2e/extension.e2e.ts",
-    "test:e2e": "node --test tests/e2e/*.e2e.ts"
+    "test:e2e": "node --test --test-concurrency=1 tests/e2e/*.e2e.ts",
+    "measure": "node scripts/measure.ts"
   },
   "dependencies": {
     "@feltdb/feltkit": "0.3.31",
@@ -30,6 +27,7 @@
   "devDependencies": {
     "@types/node": "22.19.1",
     "esbuild": "0.28.2",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "vite": "6.4.5"
   }
 }
