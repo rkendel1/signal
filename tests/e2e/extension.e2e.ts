@@ -104,7 +104,7 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	await page.bringToFront();
 	await panel.click('#capture');
 	await panel.waitForFunction(() => /Captured:|error/i.test(document.getElementById('status')!.textContent ?? '') || document.getElementById('status')!.classList.contains('error'));
-	assert.match(String(await statusText()), /^Captured: \d+ entities\.$/);
+	assert.match(String(await statusText()), /^Captured: \d+ entities\. Page [\d,]+ KB, structure-relevant part [\d,]+ KB sent; Signal keeps the structure, not the page\.$/);
 
 	// Discover over the captured page.
 	const intent = {

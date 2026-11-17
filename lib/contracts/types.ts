@@ -74,6 +74,8 @@ export interface Provenance {
 	redirects?: string[];
 	robots?: 'allowed' | 'disallowed' | 'unavailable' | 'not_checked';
 	submittedBy?: string; // for pushed content
+	/** false when the observed bytes were not kept (page intelligence keeps the structure, its evidence and the content hash). */
+	bodyRetained?: boolean;
 }
 
 export interface Observation {

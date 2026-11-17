@@ -13,9 +13,12 @@
 import { createClient, FeltKitClientError, type FeltKitClient, type SessionInfo, type TokenStore } from '@feltdb/feltkit/client';
 import { api } from '../../feltkit/_generated/api.ts';
 import { redactUrlString } from '../../lib/page/values.ts';
+import { snapshotPage, type Snapshot } from './snapshot.ts';
+export type { Snapshot };
 
 const K = { instance: 'signal.instance', token: 'signal.session', set: 'signal.workingSet', intent: 'signal.intentDraft' } as const;
-export const MAX_SNAPSHOT_CHARS = 5_000_000; // pages:push accepts up to 5,000,000 characters
+/** FeltKit accepts request bodies up to 2 MiB; leave room for the JSON envelope and escaping. */
+export const MAX_SNAPSHOT_BYTES = 1_800_000;
 
 export async function lockStorage(): Promise<void> {
 	await chrome.storage.local.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' }).catch(() => undefined);
@@ -74,16 +77,6 @@ export async function forgetInstance(client?: FeltKitClient): Promise<void> {
 
 // ------------------------------------------------------------------ capture
 
-export interface Snapshot { url: string; title: string; html: string | null; chars: number }
-
-/** Runs in the page (isolated world). Self-contained: it is serialized by chrome.scripting. */
-function snapshotPage(max: number): Snapshot {
-	const clone = document.documentElement.cloneNode(true) as HTMLElement;
-	clone.querySelectorAll('[data-signal-overlay]').forEach((n) => n.remove()); // never capture Signal's own UI
-	const html = '<!doctype html>\n' + clone.outerHTML;
-	return { url: location.href, title: document.title, html: html.length > max ? null : html, chars: html.length };
-}
-
 /**
  * The page the person is looking at: the active tab of the panel's window. When the panel itself is
  * open as a tab ("popped out"), the most recently used web tab in its window.
@@ -100,7 +93,7 @@ export async function activeTab(): Promise<chrome.tabs.Tab> {
 
 /** Read the rendered DOM of a tab once. Asks for that page's origin only if activeTab does not cover it. */
 export async function snapshotTab(tab: chrome.tabs.Tab): Promise<Snapshot> {
-	const run = () => chrome.scripting.executeScript({ target: { tabId: tab.id! }, func: snapshotPage, args: [MAX_SNAPSHOT_CHARS] });
+	const run = () => chrome.scripting.executeScript({ target: { tabId: tab.id! }, func: snapshotPage, args: [MAX_SNAPSHOT_BYTES] });
 	let res;
 	try { res = await run(); } catch {
 		const origin = new URL(tab.url!).origin;
@@ -109,7 +102,7 @@ export async function snapshotTab(tab: chrome.tabs.Tab): Promise<Snapshot> {
 	}
 	const snap = res[0]?.result;
 	if (!snap) throw new Error('The page could not be read.');
-	if (snap.html === null) throw new Error(`This page is ${snap.chars.toLocaleString()} characters; the limit is ${MAX_SNAPSHOT_CHARS.toLocaleString()}.`);
+	if (snap.html === null) throw new Error(`Even without scripts and styles this page is ${(snap.bytes / 1048576).toFixed(1)} MB; one capture can send up to ${(MAX_SNAPSHOT_BYTES / 1048576).toFixed(1)} MB.`);
 	return snap;
 }
 

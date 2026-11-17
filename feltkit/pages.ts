@@ -81,7 +81,7 @@ type Ctx = Parameters<Parameters<typeof app.mutation>[0]["handler"]>[0];
 async function recordPage(ctx: Ctx, src: { id: string; locator: string; ownerId: string }, obs: Observation, body: string | undefined) {
   const [existing] = await ctx.db.find(pages, { observationId: obs.observationId });
   if (existing) return { pageId: existing.id, observationId: obs.observationId, outcome: "already_recorded", revision: existing.revision, entities: existing.entities, relationships: existing.relationships, collections: existing.collections, signals: existing.signals, truncated: existing.truncated };
-  await storeObservation(ctx as never, obs, body, src.ownerId);
+  await storeObservation(ctx as never, obs, body, src.ownerId, undefined, false); // structure only: the page is not copied
   if (obs.status !== "ok" || body === undefined) {
     return { pageId: "", observationId: obs.observationId, outcome: `observation_${obs.status}`, revision: null, entities: 0, relationships: 0, collections: 0, signals: 0, truncated: false };
   }

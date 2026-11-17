@@ -137,7 +137,8 @@ $('capture').addEventListener('click', () => void busy($<HTMLButtonElement>('cap
 	const tab = await activeTab();
 	const snap = await snapshotTab(tab);
 	const c: Captured = await capture(conn!.client, snap);
-	status(`Captured: ${c.entities} entities${c.unchanged ? ' (unchanged since last capture)' : ''}.`);
+	const kb = (n: number) => `${Math.round(n / 1024).toLocaleString()} KB`;
+	status(`Captured: ${c.entities} entities${c.unchanged ? ' (unchanged since last capture)' : ''}. Page ${kb(snap.originalChars)}, structure-relevant part ${kb(snap.chars)} sent; Signal keeps the structure, not the page.`);
 	await renderPages();
 }));
 $('overlay').addEventListener('click', () => void busy($<HTMLButtonElement>('overlay'), 'Opening alerts on the page…', async () => {

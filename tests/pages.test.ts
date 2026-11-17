@@ -171,3 +171,17 @@ test('fetching is decided by source type: dom sources may name any page a person
 	const r = await ada.mutation(api.pages.push, { sourceId, html: '<h1>Q3</h1><table><tr><th>Region</th><th>Total</th></tr><tr><td>East</td><td>12</td></tr><tr><td>West</td><td>9</td></tr></table>', baseUrl: intranet }) as { outcome: string };
 	assert.equal(r.outcome, 'represented');
 });
+
+test('a captured page larger than a stored file can be is represented: the structure is kept, the page is not', async (t) => {
+	const { ada } = await setup(t);
+	const sourceId = await ada.mutation(api.sources.register, { type: 'dom', locator: 'https://listings.example/search', strategy: 'manual' });
+	const rows = Array.from({ length: 40 }, (_, i) => `<li class="card"><h3><a href="/homes/${i}">${i} Main St</a></h3><span class="price">$${(200 + i) * 1000}</span><p>${3 + (i % 2)} bd | 2 ba | 1,${400 + i} sqft</p></li>`).join('');
+	const filler = `<div hidden>${'x'.repeat(1_400_000)}</div>`; // page bulk the structure does not need (over the 1 MiB file limit)
+	const html = `<!doctype html><html><head><title>Homes</title></head><body><main><h1>Homes for sale</h1><ul>${rows}</ul>${filler}</main></body></html>`;
+	assert.ok(html.length > 1_048_576);
+	const r = await ada.mutation(api.pages.push, { sourceId, html, baseUrl: 'https://listings.example/search' }) as { pageId: string; outcome: string };
+	assert.equal(r.outcome, 'represented');
+	const rep = await ada.query(api.pages.get, { pageId: r.pageId }) as any;
+	assert.equal(rep.entities.filter((e: any) => e.type === 'RealEstateListing').length, 40);
+	assert.equal(rep.source.contentHash.length, 64, 'what was observed is identified by its hash');
+});

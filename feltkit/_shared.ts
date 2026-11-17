@@ -67,8 +67,15 @@ type MutationCtx = {
 };
 
 /** Store the exact observed bytes in Files and the observation record. Returns the evidence ref. */
-export async function storeObservation(ctx: MutationCtx, obs: Observation, body: string | undefined, ownerId: string, monitorId?: string): Promise<void> {
-  if (obs.status === "ok" && body !== undefined && !obs.evidenceRef) {
+/**
+ * Record an observation. `retainBody` keeps the exact observed bytes in Files: monitors do, because an
+ * event's evidence is re-verified against them. Page intelligence does not: its product is the structure,
+ * whose every value carries its own evidence (locator, observed text), plus the content hash and size of
+ * what was observed. The page itself is not copied into Signal.
+ */
+export async function storeObservation(ctx: MutationCtx, obs: Observation, body: string | undefined, ownerId: string, monitorId?: string, retainBody = true): Promise<void> {
+  if (!retainBody) obs.provenance = { ...obs.provenance, bodyRetained: false };
+  if (retainBody && obs.status === "ok" && body !== undefined && !obs.evidenceRef) {
     const f = await ctx.services.files.upload({
       name: `${obs.observationId}.raw`, contentType: obs.contentType ?? "text/plain", content: body,
       metadata: { kind: "signal.evidence.raw", observationId: obs.observationId, sha256: obs.contentHash! },
@@ -83,6 +90,9 @@ export async function storeObservation(ctx: MutationCtx, obs: Observation, body:
   } as never);
 }
 
+/** The smallest per-file limit among FeltKit runtimes (development: 1 MiB). Checked here so the message is about the page, not the runtime. */
+export const MAX_PAGE_FILE_BYTES = 1_048_576;
+
 /** Build signal.page/v1 for an HTML observation, store it in Files, and index it. */
 export async function storePage(ctx: MutationCtx, obs: Observation, body: string, source: { id: string; locator: string }, ownerId: string): Promise<{ representation: PageRepresentation; ref: string; recordId: string }> {
   const baseUrl = obs.provenance.finalUrl ?? (/^https?:/i.test(source.locator) ? source.locator : null);
@@ -91,8 +101,10 @@ export async function storePage(ctx: MutationCtx, obs: Observation, body: string
     contentType: obs.contentType ?? null, observedAt: obs.observedAt, decoders: signalDecoders(),
   });
   // Stored as gzip of the canonical JSON: the same document, ~10x smaller (docs/storage-options.json).
+  const content = new Uint8Array(gzipSync(json(representation)));
+  if (content.byteLength > MAX_PAGE_FILE_BYTES) fail("PAYLOAD_TOO_LARGE", `The page's structure is ${content.byteLength.toLocaleString("en-US")} bytes compressed (${representation.entities.length} entities); the limit is ${MAX_PAGE_FILE_BYTES.toLocaleString("en-US")}.`);
   const f = await ctx.services.files.upload({
-    name: `${obs.observationId}.page.json.gz`, contentType: "application/gzip", content: new Uint8Array(gzipSync(json(representation))),
+    name: `${obs.observationId}.page.json.gz`, contentType: "application/gzip", content,
     metadata: { kind: "signal.page", encoding: "gzip", observationId: obs.observationId, revision: representation.revision, factsRevision: representation.factsRevision, schema: representation.schema },
   });
   const ref = `files:${f.id}`;

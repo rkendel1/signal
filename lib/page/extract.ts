@@ -354,7 +354,10 @@ function jsonLd(b: Builder, pageId: string | null): void {
 
 function scoped(b: Builder, scopeSel: string, propAttr: string, typeAttr: string, method: 'microdata' | 'rdfa'): void {
 	const { $ } = b;
-	const scopes = $(scopeSel).toArray() as Element[];
+	// Annotations on non-content elements (e.g. Wikipedia's <style typeof="mw:Extension/templatestyles">) describe
+	// page machinery, not things on the page: they are not entities.
+	const NON_CONTENT = new Set(['style', 'script', 'link', 'noscript', 'template']);
+	const scopes = ($(scopeSel).toArray() as Element[]).filter((e) => !NON_CONTENT.has(e.tagName));
 	const nearestScope = (el: Element): Element | null => {
 		let p = el.parent;
 		while (isEl(p)) { if (p.attribs?.[method === 'microdata' ? 'itemscope' : 'typeof'] !== undefined) return p; p = p.parent; }
@@ -1147,6 +1150,9 @@ function residualText(b: Builder, pageId: string | null): void {
 
 export function extractPage(input: PageInput): PageRepresentation {
 	const $ = load(input.html, { scriptingEnabled: false } as never);
+	// <noscript> is fallback for clients that do not run scripts and <template> is inert: neither is what a
+	// person's browser shows. Removed before any stage, so no stage (residual text included) reads them.
+	$('noscript, template').remove();
 	const b = new Builder($, input);
 	const elements = $('*').length;
 	if (elements > b.limits.maxElements) b.truncated = true;

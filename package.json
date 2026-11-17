@@ -20,7 +20,8 @@
     "typecheck": "tsc --noEmit",
     "bench": "node scripts/bench.ts",
     "build:extension": "node scripts/build-extension.ts",
-    "test:extension": "node --test tests/e2e/extension.e2e.ts"
+    "test:extension": "node --test tests/e2e/extension.e2e.ts",
+    "test:e2e": "node --test tests/e2e/*.e2e.ts"
   },
   "dependencies": {
     "@feltdb/feltkit": "0.3.31",
