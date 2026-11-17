@@ -3,13 +3,17 @@ import type { FeltKitClient, SessionInfo } from '@feltdb/feltkit/client';
 import {
 	activeTab, capture, connect, discover, errorText, forgetInstance, instanceOrigin, intentDraft, loadFacets, lockStorage, navigableTarget,
 	relayOverlay, savedInstance, saveIntentDraft, saveWorkingSet, showOverlay, snapshotTab, workingSet, type DiscoveryView, type Facet, type Facets,
-	clearOtherScope, findWatch, isMonitored, notify, pageLocator, parentLocator, setWatch, showOnPage, stopWatch, watchedPages
+	can, clearOtherScope, findWatch, isMonitored, notify, pageLocator, parentLocator, setWatch, showOnPage, stopWatch, watchedPages
 } from './host.ts';
+import { initData, renderFacts } from './data-panel.ts';
+import { Latest } from './datasets.ts';
 import { buildIntent, formatValue, niceStep, reconcile, type EditorState, type FilterState } from './intent-builder.ts';
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const el = (tag: string, cls?: string, text?: string) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
 let conn: { client: FeltKitClient; origin: string; session: SessionInfo } | null = null;
+const data = initData({ client: () => conn?.client ?? null, status, errorText, onSelection: () => { if ($<HTMLInputElement>('live').checked && facetData) void runDiscovery(); } });
+const discoveryGuard = new Latest();
 
 function status(text: string, error = false) { const s = $('status'); s.textContent = text; s.classList.toggle('error', error); }
 function show(view: 'connect' | 'signin' | 'work') { for (const v of ['connect', 'signin', 'work']) $(v).hidden = v !== view; }
@@ -25,10 +29,32 @@ async function refreshSession() {
 	$('who').textContent = p ? `${p.displayName ?? p.id} · ${new URL(conn.origin).host}` : new URL(conn.origin).host;
 	if (!p) return renderSignIn();
 	show('work');
+	const access = applyAccess();
 	await renderPages();
 	await refreshFacets().catch((e) => status(errorText(e), true));
 	watched = await watchedPages(conn.client).catch(() => new Set<string>());
 	await renderWatch().catch(() => undefined);
+	if (access.data) await data.refresh().catch((e) => status(errorText(e), true));
+}
+
+/**
+ * What this account may do, from the session's own permission list. A viewer can read alerts but cannot capture pages
+ * or import data; say so, and turn off the controls that cannot work, instead of letting each fail with a raw 403.
+ */
+function applyAccess(): { capture: boolean; data: boolean } {
+	const perms = conn?.session.permissions as string[] | undefined;
+	const capture = can(perms, 'signal.sources.read') && can(perms, 'signal.pages.read');
+	const data = can(perms, 'signal.datasets.read');
+	const write = can(perms, 'signal.datasets.write');
+	const p = conn?.session.principal;
+	const note = $('access');
+	const lacking = [!capture && 'capture pages', !write && 'import data'].filter(Boolean) as string[];
+	note.hidden = !lacking.length;
+	note.textContent = lacking.length ? `${p?.displayName ?? p?.id ?? 'This account'} (${(p as { roles?: string[] } | null)?.roles?.join(', ') ?? 'no role'}) cannot ${lacking.join(' or ')}. Sign out and sign in with a member account to use those parts of Signal.` : '';
+	$<HTMLButtonElement>('capture').disabled = !capture;
+	$<HTMLButtonElement>('import-go').disabled = !write;
+	$('mydata').hidden = !data;
+	return { capture, data };
 }
 
 function renderSignIn() {
@@ -67,6 +93,7 @@ function labelled(text: string): string {
 }
 
 function renderResults(r: DiscoveryView) {
+	const aug = r.augmentation;
 	const box = $('results'); box.replaceChildren();
 	const c = r.coverage;
 	const cov = el('div', 'coverage');
@@ -95,10 +122,12 @@ function renderResults(r: DiscoveryView) {
 			go.addEventListener('click', () => void (async () => {
 				li.querySelector('.miss')?.remove();
 				const tab = await activeTab().catch(() => null);
-				const found = tab?.id ? await showOnPage(tab.id, { key: cand.key, name: cand.name, locators: cand.locators ?? [], criteria: cand.criteria.filter((x) => x.result === 'true').map((x) => x.label) }).catch(() => false) : false;
+				const found = tab?.id ? await showOnPage(tab.id, { key: cand.key, name: cand.name, locators: cand.locators ?? [], criteria: cand.criteria.filter((x) => x.result === 'true').map((x) => x.label), others: r.candidates.filter((o) => o.key !== cand.key).map((o) => ({ key: o.key, name: o.name })) }).catch(() => false) : false;
 				if (!found) li.append(el('div', 'muted miss', 'Not on the open page right now: it may be further down a list that has not loaded yet, on another captured page, or only described in the page’s data.'));
 			})());
 			li.append(go);
+				renderFacts(li, cand, aug);
+				if (aug?.values.some((v) => v.candidateKey === cand.key)) head.append(el('span', 'badge ds-approved', '+ your data'));
 			if (cand.changed) li.append(el('div', 'muted', `Changed: ${labelled(cand.changed.fields.join(', '))}`));
 			if (cand.missing.length) li.append(el('div', 'muted', `Undecided: ${labelled(cand.missing.join('; '))}`));
 			ul.append(li);
@@ -245,12 +274,19 @@ function filterRow(f: Facet, s: FilterState): HTMLElement {
 
 async function runDiscovery(prefix = ''): Promise<void> {
 	if (!conn) return;
-	if (!jsonMode && !editor.types.length) { $('results').replaceChildren(el('p', 'muted', 'Choose what you are looking for in step 2.')); status(prefix.trim()); return; }
-	const r = await discover(conn.client, currentIntent(), await workingSet()).catch((e) => { status(errorText(e), true); return null; });
-	if (!r) return;
+	if (!jsonMode && !editor.types.length) { discoveryGuard.cancel(); $('results').replaceChildren(el('p', 'muted', 'Choose what you are looking for in step 2.')); status(prefix.trim()); return; }
+	// Latest wins: a slower, older evaluation must not replace the results of a newer one (filters, datasets).
+	const ticket = discoveryGuard.next();
+	const r = await discover(conn.client, currentIntent(), await workingSet(), data.selected()).catch((e) => {
+		if (!discoveryGuard.isCurrent(ticket)) return null;
+		status(errorText(e), true);
+		if (data.selected().length) void data.resync(); // a dataset may have been retired or changed elsewhere
+		return null;
+	});
+	if (!r || !discoveryGuard.isCurrent(ticket)) return;
 	renderResults(r);
 	const n = (s: string) => r.candidates.filter((c) => c.status === s).length;
-	status(`${prefix}${n('match')} match · ${n('possible')} possible · ${n('non_match')} not a match`);
+	status(`${prefix}${n('match')} match · ${n('possible')} possible · ${n('non_match')} not a match${r.augmentation ? ` · using ${data.selected().length} of your dataset${data.selected().length === 1 ? '' : 's'}` : ''}`);
 }
 
 // ------------------------------------------------------------------ alerts (watches)
@@ -393,8 +429,8 @@ $('json-mode').addEventListener('change', () => {
 });
 $('intent').addEventListener('change', () => void persistEditor());
 $('discover').addEventListener('click', () => void busy($<HTMLButtonElement>('discover'), 'Evaluating…', runDiscovery));
-$('signout').addEventListener('click', async () => { await conn?.client.signOut().catch(() => undefined); await refreshSession(); });
-const disconnect = async () => { await forgetInstance(conn?.client); conn = null; $('results').replaceChildren(); show('connect'); $('who').textContent = ''; };
+$('signout').addEventListener('click', async () => { await conn?.client.signOut().catch(() => undefined); data.reset(); await refreshSession(); });
+const disconnect = async () => { await forgetInstance(conn?.client); conn = null; data.reset(); $('results').replaceChildren(); show('connect'); $('who').textContent = ''; };
 $('disconnect').addEventListener('click', disconnect);
 $('disconnect-signin').addEventListener('click', disconnect);
 

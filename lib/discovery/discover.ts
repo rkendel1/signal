@@ -58,7 +58,11 @@ export interface DiscoveryIntent {
 
 /** Values from an authorized external source, joined by URL. Never treated as page facts. */
 export interface Enrichment {
-	source: { id: string; name: string; method: 'external-estimate' | 'external-record'; observedAt: string };
+	source: {
+		id: string; name: string; method: 'external-estimate' | 'external-record'; observedAt: string;
+		/** Set for user datasets: which immutable import and which mapping produced the values, and how fresh they are. */
+		versionId?: string; mappingVersion?: number; freshness?: 'static' | 'periodic' | 'live'; dataAsOf?: string | null; retrievedAt?: string;
+	};
 	records: Array<{ url: string; attribute: string; value: AttributeValue }>;
 }
 

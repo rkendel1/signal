@@ -66,6 +66,7 @@ class Builder {
 	readonly entities = new Map<string, PageEntity>();
 	readonly entityEl = new Map<string, Element>();
 	readonly elEntity = new Map<Element, string>();
+	readonly embeddedDone = new Set<Element>();
 	readonly rels = new Map<string, PageRelationship>();
 	readonly collections: PageCollection[] = [];
 	readonly signals: PageSignal[] = [];
@@ -701,6 +702,55 @@ function recordFields(b: Builder, root: Element, opts: { excludeNested?: Set<Ele
 	return fields;
 }
 
+/**
+ * Keys of an embedded property record and the attribute each becomes. Deliberately a short allow-list: a key not
+ * listed is not read. Owner-related keys (e.g. owner-occupancy flags) are NOT listed on purpose.
+ */
+const EMBED_KEYS: Record<string, { attr: string; kind: 'money' | 'number' | 'text' }> = {
+	price: { attr: 'price', kind: 'money' }, taxAssessedValue: { attr: 'taxAssessedValue', kind: 'money' },
+	zestimate: { attr: 'zestimate', kind: 'money' }, rentZestimate: { attr: 'rentZestimate', kind: 'money' },
+	bedrooms: { attr: 'numberOfBedrooms', kind: 'number' }, bathrooms: { attr: 'numberOfBathrooms', kind: 'number' },
+	livingArea: { attr: 'floorSize', kind: 'number' }, yearBuilt: { attr: 'yearBuilt', kind: 'number' },
+	latitude: { attr: 'latitude', kind: 'number' }, longitude: { attr: 'longitude', kind: 'number' },
+	homeType: { attr: 'propertyType', kind: 'text' }, zpid: { attr: 'listingId', kind: 'text' }
+};
+const EMBED_SHAPE = ['price', 'bedrooms', 'bathrooms', 'livingArea', 'latitude', 'longitude', 'streetAddress', 'taxAssessedValue'];
+
+function embeddedRecord(b: Builder, el: Element): Field[] {
+	const out: Field[] = [];
+	for (const [name, value] of Object.entries(el.attribs ?? {})) {
+		if (!name.startsWith('data-') || value.length < 40 || value.length > 20_000) continue;
+		let text = value;
+		if (/^%7B/i.test(text)) { try { text = decodeURIComponent(text); } catch { continue; } }
+		if (text[0] !== '{') continue;
+		let obj: unknown;
+		try { obj = JSON.parse(text); } catch { continue; }
+		// the record is the first object (this one, or one level down) that has the shape of a property record
+		const candidates: Array<Record<string, unknown>> = [];
+		const walk = (o: unknown, depth: number) => { if (o && typeof o === 'object' && !Array.isArray(o)) { candidates.push(o as Record<string, unknown>); if (depth < 2) for (const v of Object.values(o)) walk(v, depth + 1); } };
+		walk(obj, 0);
+		const rec = candidates.find((o) => EMBED_SHAPE.filter((k) => o[k] !== undefined && o[k] !== null).length >= 3);
+		if (!rec) continue;
+		const currency = typeof rec.currency === 'string' ? rec.currency : null;
+		const mk = (attr: string, v: AttributeValue, dataType: DataType, raw: string): Field => ({ name: attr, typed: { value: v, dataType, provenance: 'observed' }, raw, el, method: 'html', confidence: 1 });
+		for (const [key, spec] of Object.entries(EMBED_KEYS)) {
+			const v = rec[key];
+			if (v === undefined || v === null) continue;
+			if (spec.kind === 'text') { if (typeof v === 'string' || typeof v === 'number') out.push(mk(spec.attr, String(v), 'text', String(v))); continue; }
+			const n = typeof v === 'number' ? v : Number(v);
+			if (!Number.isFinite(n)) continue;
+			out.push(spec.kind === 'money' ? mk(spec.attr, { amount: n, currency }, 'money', String(v)) : mk(spec.attr, n, 'number', String(v)));
+		}
+		const street = rec.streetAddress, city = rec.city, state = rec.state, zip = rec.zipcode ?? rec.postalCode;
+		if (typeof street === 'string' && street) {
+			const text = [street, [city, [state, zip].filter(Boolean).join(' ')].filter(Boolean).join(', ')].filter((x) => x && String(x).length).join(', ');
+			out.push(mk('address', text, 'text', text));
+		}
+		if (out.length) break; // one record per element
+	}
+	return out;
+}
+
 const PROFILE_RE = /\/(user|users|u|profile|profiles|member|members|people|author|authors)(\/|\?|=|$)|[?&](user|uid|author)=|(^|\/)user\?id=/i;
 
 /** Ordered, documented type rules for a record (first match wins). */
@@ -750,6 +800,54 @@ function addRecord(b: Builder, el: Element, ctx: { nestedInRecord: boolean; inCo
 }
 
 // ------------------------------------------------------------------ stage 4/5: tables, lists, articles, repeated structures
+
+/**
+ * Embedded property records (a data-* attribute holding a JSON object, e.g. one per listing card). The record
+ * describes the card it sits on, but the card's visible content is usually its own inner record, so the embedded
+ * facts are attached to the item already found inside that element (preferring one identified by a URL), and an
+ * item is created only when there is none.
+ */
+function embeddedRecords(b: Builder): void {
+	const { $ } = b;
+	const carriers = ($('*').toArray() as AnyNode[]).filter((e): e is Element => isEl(e) && Object.entries(e.attribs ?? {}).some(([n, v]) => n.startsWith('data-') && v.length >= 40 && /^(\{|%7B)/i.test(v)));
+	for (const el of carriers) {
+		if (!isEl(el) || b.embeddedDone.has(el)) continue;
+		b.embeddedDone.add(el);
+		const fields = embeddedRecord(b, el);
+		if (!fields.length) continue;
+		const inside = ($(el).find('*').toArray() as Element[]).slice(0, 600).map((x) => b.elEntity.get(x)).filter((x): x is string => !!x);
+		const own = b.elEntity.get(el);
+		const candidates = [...(own ? [own] : []), ...inside];
+		let target: string | undefined = candidates.find((id) => b.entities.get(id)?.identity.basis === 'url') ?? candidates[0];
+		if (!target) {
+			const cls = classifyRecord(fields, { element: el.tagName, nestedInRecord: false, inCollection: false, row: false });
+			const lid = fields.find((f) => f.name === 'listingId')?.typed.value;
+			target = b.entity({ type: cls.type, classification: cls.classification, method: 'html', rule: cls.rule, identity: typeof lid === 'string' ? { key: lid, basis: 'sku' } : { key: b.locator(el), basis: 'locator' }, el, evidenceRefs: [b.ev(el, 'html')], unique: true }) ?? undefined;
+		}
+		if (!target) continue;
+		const ev = b.ev(el, 'html');
+		const ent = b.entities.get(target)!;
+		if (!ent.evidenceRefs.includes(ev)) ent.evidenceRefs.push(ev);
+		for (const f of fields) b.attr(target, { name: f.name, value: f.typed.value, raw: f.raw, dataType: f.typed.dataType, provenance: f.typed.provenance, method: 'html', confidence: 1, evidenceRefs: [ev] });
+	}
+}
+
+/**
+ * An item's type is decided when it is first created, but its facts keep arriving (a card merged with the page's
+ * JSON-LD, a record read from two places). Once all facts are in, an item still typed Unknown gets the same
+ * documented rules a record gets at creation. Only Unknown is ever upgraded, and only to these three types.
+ */
+function lateTyping(b: Builder): void {
+	for (const e of b.entities.values()) {
+		if (e.type !== 'Unknown' || e.classification !== 'unknown') continue;
+		const fields = e.attributes.map((a) => ({ name: a.name, typed: { value: a.value, dataType: a.dataType, provenance: a.provenance }, raw: a.raw, method: a.method, confidence: a.confidence })) as unknown as Field[];
+		const cls = classifyRecord(fields, { element: 'div', nestedInRecord: false, inCollection: false, row: false });
+		if (cls.type === 'JobPosting' || cls.type === 'RealEstateListing' || cls.type === 'Product') {
+			e.type = cls.type; e.classification = 'inferred';
+			e.typeBasis = { method: 'structure', rule: `${cls.rule} (applied after the item's facts were merged)` };
+		}
+	}
+}
 
 function signature(el: Element): string {
 	const cls = (el.attribs.class ?? '').split(/\s+/).map((c) => c.replace(/\d+/g, '#')).filter((c) => c && !/^#+$/.test(c)).sort().join('.');
@@ -1189,6 +1287,8 @@ export function extractPage(input: PageInput): PageRepresentation {
 	repeated(b, pageId);
 	propertySections(b, pageId);
 	residualText(b, pageId);
+	embeddedRecords(b);
+	lateTyping(b);
 	identities(b);
 	for (const [a, c] of b.pendingPossiblySame) {
 		const id = `rel_${h({ from: a, to: c, type: 'possiblySameAs' })}`;

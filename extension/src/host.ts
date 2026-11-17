@@ -40,6 +40,11 @@ export function instanceOrigin(input: string): string {
 	return u.origin;
 }
 
+/** Does the session grant a permission? Grants may be wildcards: `signal.datasets.*`, `signal.*`, `*`. */
+export function can(permissions: readonly string[] | undefined, needed: string): boolean {
+	return (permissions ?? []).some((g) => g === '*' || g === needed || (g.endsWith('.*') && needed.startsWith(g.slice(0, -1))));
+}
+
 export interface Connection { client: FeltKitClient; origin: string; session: SessionInfo }
 
 /** Connect to an instance: host permission for that one origin, then check it is a Signal app. */
@@ -282,20 +287,22 @@ export async function loadFacets(client: FeltKitClient, set: Captured[], types?:
 }
 
 export interface DiscoveryView {
-	candidates: Array<{ key: string; name: string | null; type: string; status: 'match' | 'possible' | 'non_match' | 'out_of_scope'; missing: string[]; locators: string[]; changed?: { fields: string[] }; criteria: Array<{ id: string; label: string; result: 'true' | 'false' | 'unknown'; reason?: string }> }>;
+	candidates: Array<{ key: string; name: string | null; type: string; metrics?: Record<string, { value: number | null; possibleValues?: number[]; inputs: Array<{ attr: string; provenance: string; source?: string }> }>; status: 'match' | 'possible' | 'non_match' | 'out_of_scope'; missing: string[]; locators: string[]; changed?: { fields: string[] }; criteria: Array<{ id: string; label: string; result: 'true' | 'false' | 'unknown'; reason?: string }> }>;
 	coverage: { declaredTotal: number | null; listed: number; discovered: number; notYetExamined: number | null; exhaustive: boolean; exhaustiveBasis: string; unavailable: Array<{ what: string; why: string }> };
 	plan: Array<{ kind: string; target: string; reason: string; executesIn: 'browser-session' | 'background' | 'user'; priority: number }>;
 	context: Record<string, { value: unknown; source: string; basis: string }>;
 	resultDigest: string;
+	/** Present only when datasets took part: how each property was matched and every value they added. */
+	augmentation?: import('./datasets.ts').Augmentation;
 }
 
 /** Evaluate the intent over the working set; pages captured again are compared with their previous capture. */
-export async function discover(client: FeltKitClient, intent: string, set: Captured[]): Promise<DiscoveryView> {
+export async function discover(client: FeltKitClient, intent: string, set: Captured[], datasetIds: string[] = []): Promise<DiscoveryView> {
 	if (!set.length) throw new Error('Capture at least one page first.');
 	try { JSON.parse(intent); } catch { throw new Error('The intent is not valid JSON.'); }
 	const pageIds = set.map((p) => p.pageId);
 	const withPrev = set.some((p) => p.previousPageId);
-	const args = { pageIds, intent, ...(withPrev ? { previousPageIds: set.map((p) => p.previousPageId ?? p.pageId) } : {}) };
+	const args = { pageIds, intent, ...(withPrev ? { previousPageIds: set.map((p) => p.previousPageId ?? p.pageId) } : {}), ...(datasetIds.length ? { datasetIds } : {}) };
 	return (await client.query(api.discovery.evaluate, args)) as unknown as DiscoveryView;
 }
 
@@ -355,7 +362,7 @@ export async function showOverlay(tabId: number): Promise<void> {
 }
 
 /** Scroll to an item on the tab and frame it, with why it matched. False when it is not on the page right now. */
-export async function showOnPage(tabId: number, item: { key: string; name: string | null; locators: string[]; criteria: string[] }): Promise<boolean> {
+export async function showOnPage(tabId: number, item: { key: string; name: string | null; locators: string[]; criteria: string[]; others?: Array<{ key: string; name: string | null }> }): Promise<boolean> {
 	await showOverlay(tabId);
 	const [r] = await chrome.scripting.executeScript({
 		target: { tabId },

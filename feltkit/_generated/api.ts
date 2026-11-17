@@ -3,6 +3,7 @@
 import { createApi } from "@feltdb/feltkit/client";
 import type * as app_module from "../app.js";
 import type * as criteria_module from "../criteria.js";
+import type * as datasets_module from "../datasets.js";
 import type * as discovery_module from "../discovery.js";
 import type * as events_module from "../events.js";
 import type * as monitors_module from "../monitors.js";
@@ -10,4 +11,4 @@ import type * as pages_module from "../pages.js";
 import type * as sources_module from "../sources.js";
 
 /** Typed references to every query and mutation. Type-only imports: no backend code reaches the browser. */
-export const api = createApi<{ "app": typeof app_module; "criteria": typeof criteria_module; "discovery": typeof discovery_module; "events": typeof events_module; "monitors": typeof monitors_module; "pages": typeof pages_module; "sources": typeof sources_module }>();
+export const api = createApi<{ "app": typeof app_module; "criteria": typeof criteria_module; "datasets": typeof datasets_module; "discovery": typeof discovery_module; "events": typeof events_module; "monitors": typeof monitors_module; "pages": typeof pages_module; "sources": typeof sources_module }>();

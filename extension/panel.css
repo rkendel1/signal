@@ -78,3 +78,33 @@ details#pages-box { margin-top: 8px; }
 input[type="checkbox"], input[type="radio"] { width: auto; margin: 0; flex: none; }
 #scope { margin-top: 6px; }
 #scope label { display: flex; gap: 6px; align-items: baseline; margin: 2px 0; font-size: 13px; color: var(--fg); }
+
+/* My data */
+#mydata{margin-top:16px;border-top:1px solid var(--line,#ddd);padding-top:8px}
+.dataset{padding:6px 0}
+.badge.ds-proposed{background:#fff3cd;color:#664d03}
+.badge.ds-approved{background:#d1e7dd;color:#0a3622}
+#use-data{border:1px solid var(--line,#ddd);border-radius:6px;margin:8px 0;padding:6px 8px}
+.pick{display:block;padding:2px 0}.pick.off{opacity:.7}
+.chips{margin-top:4px}.chip{display:inline-block;background:#eef;border-radius:10px;padding:1px 8px;margin:2px 4px 2px 0}
+.chip .link{margin-left:6px}
+.review{margin-top:10px;padding:8px;border:1px solid var(--line,#ddd);border-radius:6px}
+.review h3{margin:0;font-size:14px}.review .head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mrow{padding:6px 0;border-bottom:1px solid var(--line,#eee);font-size:12px}
+.mrow .src{display:flex;justify-content:space-between;gap:8px}
+.mrow .becomes{display:flex;align-items:center;gap:6px;margin:3px 0}.mrow .becomes input{flex:1;min-width:0}
+.mrow .why{font-style:italic}
+.unmapped-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0;font-size:12px}
+.checks .ok{color:#0a3622}.checks .warn{color:#664d03}
+ul.issues,ul.warnings{margin:4px 0 4px 16px;padding:0;font-size:12px}ul.warnings li{color:#664d03}
+.pv{font-size:12px;margin:4px 0;word-break:break-word}
+/* where facts come from */
+details.facts{margin-top:6px;font-size:12px}
+details.facts h4{margin:6px 0 2px;font-size:12px}
+.fact.external{border-left:3px solid #6f42c1;padding-left:6px;margin:3px 0}
+.fact.calculated{border-left:3px solid #0d6efd;padding-left:6px;margin:3px 0}
+.link.ambiguous,.link.conflict{border-left:3px solid #dc3545;padding-left:6px}
+.link.matched{border-left:3px solid #198754;padding-left:6px}
+.conflict,.missing{color:#842029}
+
+.notice{background:#fff3cd;color:#664d03;border:1px solid #ffecb5;border-radius:6px;padding:8px;margin:8px 0}

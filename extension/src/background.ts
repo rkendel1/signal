@@ -56,29 +56,43 @@ const coveredBy = (url: string, set: Set<string>): string | null => {
 };
 const recent = new Map<string, number>();
 
+/**
+ * Check a watched search once its page has settled. Called after a page load and after a single-page app moves
+ * (a map pan or zoom rewrites the address without loading a page, so no `complete` event follows).
+ */
+async function checkTab(tabId: number, settleMs: number): Promise<void> {
+	const tab = await chrome.tabs.get(tabId).catch(() => null);
+	if (!tab?.url || !/^https?:/i.test(tab.url)) return;
+	const c = await client();
+	if (!c) return;
+	// Only pages the person chose to monitor get the overlay; only watched searches are checked automatically.
+	const shown = coveredBy(tab.url, await monitored(c).catch(() => new Set<string>()));
+	if (!shown) return;
+	if (!(await chrome.permissions.contains({ origins: [`${new URL(tab.url).origin}/*`] }))) return; // never prompts
+	await showOverlay(tabId).catch(() => undefined); // existing alerts, on the page, right away
+	const scope = coveredBy(tab.url, await watched(c).catch(() => new Set<string>()));
+	if (!scope) return;
+	const auto = (await chrome.storage.local.get('signal.autocheck'))['signal.autocheck'] ?? true;
+	const exact = pageLocator(tab.url);
+	if (!auto || Date.now() - (recent.get(exact) ?? 0) < 15_000) return;
+	recent.set(exact, Date.now());
+	await new Promise((r) => setTimeout(r, settleMs)); // let the page render its listings
+	const now = await chrome.tabs.get(tabId).catch(() => null);
+	if (!now?.url || coveredBy(now.url, new Set([scope])) !== scope) return; // the person moved on: read nothing
+	const snap = await snapshotTab(now, false);
+	const r = await capture(c, snap);
+	if (r.alert) await notify(r.alert);
+	await showOverlay(tabId).catch(() => undefined);
+	await chrome.runtime.sendMessage({ type: 'signal.captured', url: exact, alert: !!r.alert, entities: r.entities }).catch(() => undefined); // the panel, if open
+}
+
+const moving = new Map<number, ReturnType<typeof setTimeout>>();
 chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
-	if (change.status !== 'complete' || !tab.url || !/^https?:/i.test(tab.url)) return;
-	void (async () => {
-		const c = await client();
-		if (!c) return;
-		// Only pages the person chose to monitor get the overlay; only watched searches are checked automatically.
-		const shown = coveredBy(tab.url!, await monitored(c).catch(() => new Set<string>()));
-		if (!shown) return;
-		if (!(await chrome.permissions.contains({ origins: [`${new URL(tab.url!).origin}/*`] }))) return; // never prompts
-		await showOverlay(tabId).catch(() => undefined); // existing alerts, on the page, right away
-		const scope = coveredBy(tab.url!, await watched(c).catch(() => new Set<string>()));
-		if (!scope) return;
-		const auto = (await chrome.storage.local.get('signal.autocheck'))['signal.autocheck'] ?? true;
-		const exact = pageLocator(tab.url!);
-		if (!auto || Date.now() - (recent.get(exact) ?? 0) < 15_000) return;
-		recent.set(exact, Date.now());
-		await new Promise((r) => setTimeout(r, 2500)); // let the page render its listings
-		const now = await chrome.tabs.get(tabId).catch(() => null);
-		if (!now?.url || coveredBy(now.url, new Set([scope])) !== scope) return; // the person moved on: read nothing
-		const snap = await snapshotTab(now, false);
-		const r = await capture(c, snap);
-		if (r.alert) await notify(r.alert);
-		await showOverlay(tabId).catch(() => undefined);
-		await chrome.runtime.sendMessage({ type: 'signal.captured', url: exact, alert: !!r.alert, entities: r.entities }).catch(() => undefined); // the panel, if open
-	})().catch(() => undefined);
+	if (!tab.url || !/^https?:/i.test(tab.url)) return;
+	if (change.status === 'complete') { void checkTab(tabId, 2500).catch(() => undefined); return; }
+	if (change.url) {
+		// A single-page app moved (map pan/zoom, filters). Wait until it stops moving, then check what it now shows.
+		clearTimeout(moving.get(tabId));
+		moving.set(tabId, setTimeout(() => { moving.delete(tabId); void checkTab(tabId, 1500).catch(() => undefined); }, 2500));
+	}
 });

@@ -23,7 +23,7 @@ export const app = feltkit({
     // Members define what they care about and receive alerts. Ownership of each source,
     // criteria and monitor is enforced by `authorize` below, not by the role alone.
     member: [
-      "signal.sources.*", "signal.criteria.*", "signal.monitors.*", "signal.events.*", "signal.pages.*",
+      "signal.sources.*", "signal.criteria.*", "signal.monitors.*", "signal.events.*", "signal.pages.*", "signal.datasets.*",
       "files.read", "files.write", "notifications.*", "webhooks.emit", "webhooks.deliver",
     ],
     // Viewers read events and their evidence (their own; see authorize).
@@ -63,7 +63,7 @@ export const app = feltkit({
       return !rec || rec.ownerId === principal.id; // missing records are reported NOT_FOUND by the handler
     };
     const checks: Array<[string, unknown]> = [
-      ["signal_sources", a.sourceId], ["signal_monitors", a.monitorId], ["signal_events", a.eventId], ["signal_pages", a.pageId],
+      ["signal_sources", a.sourceId], ["signal_datasets", a.datasetId], ["signal_monitors", a.monitorId], ["signal_events", a.eventId], ["signal_pages", a.pageId],
     ];
     for (const [c, id] of checks) if (!(await owned(c, id))) return { allowed: false, code: "FORBIDDEN", reason: `not the owner (${fn})` };
     return true;
@@ -180,3 +180,35 @@ export const pages = app.collection("signal_pages", {
   truncated: s.boolean(),
   ownerId: s.string(),
 }, { unique: [["observationId"]], indexes: [{ fields: ["sourceId", "observedAt"] }, { fields: ["ownerId"] }] });
+
+/**
+ * A user-owned dataset: an independent source of facts that is not a page (a parcel file, a rent survey,
+ * an export). Distinct from `signal_sources`, which are pages Signal observes. The dataset is the identity
+ * and the declared update semantics; what it contains lives in immutable versions.
+ */
+export const datasets = app.collection("signal_datasets", {
+  name: s.string({ minLength: 1, maxLength: 200 }),
+  /** static: a snapshot; periodic: replaced on a schedule; live: queried at use. Declared by the owner, never inferred. */
+  freshness: s.union([s.literal("static"), s.literal("periodic"), s.literal("live")]),
+  retired: s.boolean(),
+  ...ownerAndTime,
+}, { indexes: [{ fields: ["ownerId"] }] });
+
+/**
+ * Immutable. An import creates version 1 (mapping proposed, not reviewed); changing the mapping creates the next
+ * version over the same raw bytes. A version is what a discovery result cites, so it is never edited.
+ */
+export const datasetVersions = app.collection("signal_dataset_versions", {
+  datasetId: s.string(),
+  version: s.integer(),
+  rawRef: s.string(), // files:<id> of the gzip of the exact bytes imported
+  rawHash: s.string(), // sha256 of those bytes
+  format: s.union([s.literal("csv"), s.literal("geojson")]),
+  rows: s.integer(),
+  mapping: s.string(), // canonical JSON of DatasetMapping (its version equals `version`)
+  /** False until a person accepted or edited the mapping. Unreviewed versions are never used in discovery. */
+  reviewed: s.boolean(),
+  dataAsOf: s.optional(s.string()), // when the provider says the data was true
+  retrievedAt: s.string(), // when Signal received it
+  ownerId: s.string(),
+}, { unique: [["datasetId", "version"]], indexes: [{ fields: ["datasetId"] }, { fields: ["ownerId"] }] });

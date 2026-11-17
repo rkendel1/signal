@@ -1,6 +1,8 @@
 import { fail, s } from "@feltdb/feltkit";
 import { app, pages } from "./app.js";
 import { readPage, requireFound } from "./_shared.js";
+import { discoverAugmented } from "../lib/datasets/resolve.ts";
+import { loadDatasetSources } from "./datasets.js";
 import { discover, facets, validateIntent, type DiscoveryIntent, type DiscoveryScope, type Enrichment } from "../lib/discovery/discover.ts";
 import type { PageRepresentation } from "../lib/page/types.ts";
 
@@ -36,6 +38,8 @@ const Result = s.object({
   plan: s.array(s.object({ kind: s.string(), target: s.string(), reason: s.string(), executesIn: s.enum(["browser-session", "background", "user"] as const), priority: n })),
   pages: s.array(s.object({ observationId: s.string(), revision: s.string(), factsRevision: s.string() })),
   resultDigest: s.string(),
+  /** Present when datasets were used: per-dataset resolutions (matched / ambiguous / conflict / unmatched) and every augmented value with its provenance. */
+  augmentation: s.optional(s.object({}, open)),
 });
 
 type QueryCtx = Parameters<Parameters<typeof app.query>[0]["handler"]>[0];
@@ -81,6 +85,8 @@ export const evaluate = app.query({
     previousPageIds: s.optional(s.array(s.string(), { maxItems: MAX_PAGES })),
     enrichments: s.optional(s.string({ maxLength: MAX_JSON })),
     scope: s.optional(s.string({ maxLength: 10_000 })),
+    /** Datasets (signal.datasets.*) whose reviewed mapping may enrich candidates. */
+    datasetIds: s.optional(s.array(s.string(), { maxItems: 10 })),
   },
   returns: Result,
   capability: { name: "signal.discovery.evaluate", description: "Evaluate a discovery intent over recorded page representations: candidates with match/possible/non_match status, evidence, coverage and a scan plan." },
@@ -93,6 +99,12 @@ export const evaluate = app.query({
     if (enrichments && (!Array.isArray(enrichments) || enrichments.some((e) => !e?.source?.id || !Array.isArray(e.records)))) fail("INVALID_ARGUMENT", "enrichments must be [{source:{id,...}, records:[...]}]");
     const scope = a.scope ? parse<DiscoveryScope>(a.scope, "scope") : undefined;
     const current = await load(a.pageIds);
+    if (a.datasetIds?.length) {
+      const sources = await loadDatasetSources(ctx, a.datasetIds);
+      const previousPages = a.previousPageIds?.length ? await load(a.previousPageIds) : undefined;
+      const { result, augmentation } = discoverAugmented({ intent, pages: current, enrichments, scope, datasets: sources, previousPages });
+      return JSON.parse(JSON.stringify({ ...result, augmentation })) as never;
+    }
     const previous = a.previousPageIds?.length ? discover({ intent, pages: await load(a.previousPageIds), enrichments, scope }) : undefined;
     return JSON.parse(JSON.stringify(discover({ intent, pages: current, enrichments, scope, previous }))) as never;
   },

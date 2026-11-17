@@ -32,6 +32,7 @@
 </section>
 
 <section id="work" hidden>
+	<p id="access" class="notice" role="alert" hidden></p>
 	<ol class="steps">
 		<li class="step">
 			<h2><span class="num">1</span>Analyze this page</h2>
@@ -62,6 +63,12 @@
 					<label class="inline"><input type="checkbox" id="json-mode"> Edit as JSON instead (derived metrics, other operators)</label>
 					<textarea id="intent" rows="10" spellcheck="false" readonly aria-label="Intent JSON"></textarea>
 				</details>
+				<fieldset id="use-data">
+					<legend>Use my data <span id="use-count" class="muted"></span></legend>
+					<p class="hint">Add facts from files you imported under “My data”, such as parcel records. They are shown separately from what the page says. Alerts do not use your data yet.</p>
+					<div id="dataset-pick"></div>
+					<div id="dataset-chips" class="chips"></div>
+				</fieldset>
 				<div class="row">
 					<button id="discover" type="button" class="secondary">Update results</button>
 					<label class="inline"><input type="checkbox" id="live" checked> Update as I change filters</label>
@@ -89,6 +96,27 @@
 			<div class="row"><button id="overlay" type="button" class="secondary">Show alerts on this page</button></div>
 		</li>
 	</ol>
+
+	<section id="mydata" aria-labelledby="mydata-h">
+		<h2 id="mydata-h">My data</h2>
+		<p class="hint">Your own files, such as a county parcel list. Signal keeps your file in your instance, proposes how its columns map to what Signal knows, and uses it only after you approve that mapping.</p>
+		<ul id="datasets" class="list"></ul>
+		<details id="import-box">
+			<summary>Import a file</summary>
+			<form id="import-form">
+				<label for="import-file">CSV or GeoJSON file</label>
+				<input id="import-file" type="file" accept=".csv,.geojson,.json">
+				<label for="import-name">Name (optional)</label>
+				<input id="import-name" type="text" maxlength="200" placeholder="County parcels">
+				<label for="import-asof">Data as of (optional)</label>
+				<input id="import-asof" type="date">
+				<p class="muted">An imported file is a snapshot: Signal does not refresh it. Up to about 1 MB compressed per file; larger files are refused, not cut down.</p>
+				<button id="import-go" type="submit">Import</button>
+				<div id="import-note" class="muted" role="status" aria-live="polite"></div>
+			</form>
+		</details>
+		<div id="review" class="review" hidden></div>
+	</section>
 	<footer class="foot"><button id="signout" type="button" class="link">Sign out</button> · <button id="disconnect" type="button" class="link">Disconnect</button></footer>
 </section>
 <script src="panel.js" type="module"></script>
