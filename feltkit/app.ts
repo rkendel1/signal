@@ -59,6 +59,13 @@ export const app = feltkit({
 
 const owner = { ownerId: s.string() };
 
+/*
+ * Index note (GAP_REGISTER G-PLAT-5). Every equality read that can match more than 1,000 records has an index on
+ * exactly those fields. With FeltDB 0.21, a read on only a PREFIX of a composite index was observed to stop after
+ * the first 1,000-record page (silently, for signal_links by sourceId) or to fail with a repeated cursor
+ * (signal_observations by sourceId). The single-field indexes below are load-bearing. scripts/repro-unique-prefix.ts.
+ */
+
 export const sources = app.collection("signal_sources", {
   name: s.string({ minLength: 1, maxLength: 200 }),
   description: s.optional(s.string({ maxLength: 2000 })),
@@ -128,7 +135,7 @@ export const observations = app.collection("signal_observations", {
   retractedAt: s.optional(s.string()),
   retractReason: s.optional(s.string()),
   ...owner,
-}, { unique: [["observationId"]], indexes: [{ fields: ["sourceId", "status"] }, { fields: ["sourceId", "recordKey"] }] });
+}, { unique: [["observationId"]], indexes: [{ fields: ["sourceId"] }, { fields: ["sourceId", "status"] }, { fields: ["sourceId", "recordKey"] }] });
 
 export const entities = app.collection("signal_entities", {
   type: s.string(),
@@ -139,13 +146,9 @@ export const entities = app.collection("signal_entities", {
   lng: s.optional(s.number()),
   createdAt: s.string(),
   ...owner,
-}, { indexes: [{ fields: ["ownerId", "type"] }] });
+}, { indexes: [{ fields: ["ownerId"] }, { fields: ["ownerId", "type"] }] });
 
-/**
- * Which entity a source record contributes to, and why. User decisions are never overwritten by the system.
- * The plain [sourceId] index is load-bearing: FeltDB 0.21 truncates a prefix read on the composite unique index
- * after one page (1,000 records) when other sources' links exist (GAP_REGISTER G-PLAT-5, scripts/repro-unique-prefix.ts).
- */
+/** Which entity a source record contributes to, and why. User decisions are never overwritten by the system. */
 export const links = app.collection("signal_links", {
   sourceId: s.string(),
   recordKey: s.string(),
@@ -158,7 +161,7 @@ export const links = app.collection("signal_links", {
   decidedBy: s.enum(["system", "user"] as const),
   at: s.string(),
   ...owner,
-}, { unique: [["sourceId", "recordKey"]], indexes: [{ fields: ["sourceId"] }, { fields: ["entityId"] }, { fields: ["ownerId", "status"] }] });
+}, { unique: [["sourceId", "recordKey"]], indexes: [{ fields: ["sourceId"] }, { fields: ["entityId"] }, { fields: ["ownerId"] }, { fields: ["ownerId", "status"] }] });
 
 export const criteria = app.collection("signal_criteria", {
   name: s.string({ minLength: 1, maxLength: 200 }),
@@ -206,7 +209,7 @@ export const findings = app.collection("signal_findings", {
   dismissedAt: s.optional(s.string()),
   dismissReason: s.optional(s.string()),
   ...owner,
-}, { unique: [["criteriaId", "entityId"]], indexes: [{ fields: ["ownerId", "status"] }, { fields: ["entityId"] }, { fields: ["criteriaId", "status"] }] });
+}, { unique: [["criteriaId", "entityId"]], indexes: [{ fields: ["ownerId"] }, { fields: ["ownerId", "status"] }, { fields: ["entityId"] }, { fields: ["criteriaId"] }, { fields: ["criteriaId", "status"] }] });
 
 export const findingEvents = app.collection("signal_finding_events", {
   findingId: s.string(),
@@ -225,6 +228,7 @@ export const findingEvents = app.collection("signal_finding_events", {
 
 /** One evaluation pass and what caused it. */
 export const runs = app.collection("signal_runs", {
+  runId: s.string(),
   seq: s.integer(),
   at: s.string(),
   cause: s.string(),
@@ -237,4 +241,4 @@ export const runs = app.collection("signal_runs", {
   reopened: s.integer(),
   durationMs: s.number(),
   ...owner,
-}, { indexes: [{ fields: ["ownerId", "seq"] }] });
+}, { unique: [["runId"]], indexes: [{ fields: ["ownerId", "seq"] }] });

@@ -194,7 +194,13 @@ export async function ingest(ctx: Ctx, input: IngestInput) {
   const owner = source.ownerId;
   const ingestionId = newId("ing");
   const drafts = input.drafts.map((d) => ({ ...d, validAt: d.validAt ?? input.validAt ?? null }));
-  const currentRecs = await ctx.db.find(observations, { sourceId: source.id, status: "current" });
+  // A small partial update (a push, a capture) reads only the records it names: the live path costs what changed,
+  // not the size of the source. A snapshot must read everything current to know what disappeared.
+  const targeted = input.mode === "partial" && drafts.length + (input.removed?.length ?? 0) <= 200;
+  const keys = [...new Set([...drafts.map((d) => d.recordKey), ...(input.removed ?? [])])];
+  const currentRecs = targeted
+    ? (await Promise.all(keys.map((k) => ctx.db.find(observations, { sourceId: source.id, recordKey: k })))).flat().filter((r: any) => r.status === "current")
+    : await ctx.db.find(observations, { sourceId: source.id, status: "current" });
   const byKey = new Map<string, any>(currentRecs.map((r: any) => [r.recordKey, r]));
   const plan = planIngestion(currentRecs.map((r: any) => ({ recordKey: r.recordKey, contentHash: r.contentHash, version: r.version })), drafts.map((d) => ({ draft: d, hash: draftHash(d) })), input.mode, input.removed);
 
@@ -202,7 +208,7 @@ export async function ingest(ctx: Ctx, input: IngestInput) {
   const toRecompute = new Set<string>();
   const resolver = new Resolver(ctx, owner);
   // One read of the source's links instead of one per record (see EvidenceLoader).
-  const linkByKey = new Map<string, any>((await ctx.db.find(links, { sourceId: source.id })).map((l: any) => [l.recordKey, l]));
+  const linkByKey = new Map<string, any>((targeted ? (await Promise.all(keys.map((k) => ctx.db.find(links, { sourceId: source.id, recordKey: k })))).flat() : await ctx.db.find(links, { sourceId: source.id })).map((l: any) => [l.recordKey, l]));
   const write = async (d: ObservationDraft, version: number) => {
     await ctx.db.insert(observations, {
       observationId: newId("obs"), sourceId: source.id, recordKey: d.recordKey, version, ingestionId, status: "current", entityType: d.entityType,
@@ -257,7 +263,7 @@ export async function ingest(ctx: Ctx, input: IngestInput) {
     mappingVersion: source.mappingVersion, received: drafts.length, added, changed, unchanged: plan.unchanged, retracted,
     issues: json({ count: input.issues?.length ?? 0, first: (input.issues ?? []).slice(0, 50) }), provenance: json({ ...input.provenance, ingestionId }), durationMs: Math.round(performance.now() - t0), ownerId: owner,
   });
-  const count = await ctx.db.count(observations, { sourceId: source.id, status: "current" });
+  const count = targeted ? source.records + added - retracted : await ctx.db.count(observations, { sourceId: source.id, status: "current" });
   await ctx.db.patch(sources, source.id, {
     records: count, lastRefreshAt: now, lastSuccessAt: now, ...(added + changed + retracted ? { lastChangeAt: now } : {}),
     ...(source.status === "unavailable" ? { status: "connected", statusReason: undefined } : {}), lastError: undefined,
@@ -318,7 +324,7 @@ export async function evaluateEntities(ctx: Ctx, ownerId: string, entityIds: str
     }
   }
   sum.durationMs = Math.round(performance.now() - t0);
-  await ctx.db.insert(runs, { seq: runSeq, at: now, cause: json({ ...cause, runId }), causeKind: cause.kind, entities: sum.entities, evaluations: sum.evaluations, created: sum.created, changed: sum.changed, closed: sum.closed, reopened: sum.reopened, durationMs: sum.durationMs, ownerId });
+  await ctx.db.insert(runs, { runId, seq: runSeq, at: now, cause: json({ ...cause, runId }), causeKind: cause.kind, entities: sum.entities, evaluations: sum.evaluations, created: sum.created, changed: sum.changed, closed: sum.closed, reopened: sum.reopened, durationMs: sum.durationMs, ownerId });
   return sum;
 }
 

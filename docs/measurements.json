@@ -1,212 +1,212 @@
 {
   "node": "v22.23.5",
   "platform": "linux/x64",
-  "at": "2026-11-17T21:34:10.992Z",
+  "at": "2026-11-17T21:48:30.359Z",
   "synthetic": true,
   "results": [
     {
       "n": 100,
-      "initialListingsMs": 196.5,
-      "initialParcelsMs": 306.8,
+      "initialListingsMs": 135.7,
+      "initialParcelsMs": 119.3,
       "parcelLinks": {
         "probable": 100
       },
-      "criteriaFullMs": 678.6,
+      "criteriaFullMs": 564.9,
       "criteriaRun": {
-        "runId": "run_10ad15517dee42778d17e45bce63e870",
+        "runId": "run_fdaa8c6639654b13b8ecfe94a5c283f4",
         "entities": 100,
         "evaluations": 100,
         "created": 25,
         "changed": 0,
         "closed": 0,
         "reopened": 0,
-        "durationMs": 174
+        "durationMs": 43
       },
-      "pushOneChangeMs": 35.1,
+      "pushOneChangeMs": 23.3,
       "pushOneChangeRun": {
-        "runId": "run_5a3ed9efc7a243529df3e00056bdf07e",
+        "runId": "run_80f660179b454af789af8b42f18a6d61",
         "entities": 1,
         "evaluations": 1,
         "created": 0,
         "changed": 0,
         "closed": 1,
         "reopened": 0,
-        "durationMs": 4
+        "durationMs": 6
       },
-      "pushDuplicateMs": 24.5,
+      "pushDuplicateMs": 12.4,
       "pushDuplicateNewInformation": false,
-      "uploadNoChangeMs": 34.8,
+      "uploadNoChangeMs": 32.3,
       "uploadNoChange": {
         "unchanged": 100,
         "run": null
       },
-      "uploadOneChangeMs": 33.7,
+      "uploadOneChangeMs": 38.2,
       "uploadOneChangeRun": {
-        "runId": "run_3d74cf4b7c2a4334ac7fc8e2d8827c3d",
+        "runId": "run_026f03c6c845470b86a15c9b64d3cf0c",
         "entities": 1,
         "evaluations": 1,
         "created": 0,
         "changed": 0,
         "closed": 0,
         "reopened": 0,
-        "durationMs": 3
+        "durationMs": 4
       },
-      "listFindingsMs": 5,
+      "listFindingsMs": 5.4,
       "openFindings": 24,
-      "getFindingMs": 3.4
+      "getFindingMs": 2.7
     },
     {
       "n": 500,
-      "initialListingsMs": 844.5,
-      "initialParcelsMs": 3488.1,
+      "initialListingsMs": 248,
+      "initialParcelsMs": 459,
       "parcelLinks": {
         "probable": 500
       },
-      "criteriaFullMs": 6552.3,
+      "criteriaFullMs": 2342.1,
       "criteriaRun": {
-        "runId": "run_967dd53cc49d4b238f8565c23dcdf1d8",
+        "runId": "run_159ee449e901458197b39f770c273ba6",
         "entities": 500,
         "evaluations": 500,
         "created": 117,
         "changed": 0,
         "closed": 0,
         "reopened": 0,
-        "durationMs": 2320
+        "durationMs": 183
       },
-      "pushOneChangeMs": 128.7,
+      "pushOneChangeMs": 38.1,
       "pushOneChangeRun": {
-        "runId": "run_b444004b45b64b2cb8fd2cf8161af185",
+        "runId": "run_3199f9090e784e269532ad6229415943",
         "entities": 1,
         "evaluations": 1,
         "created": 0,
         "changed": 0,
         "closed": 1,
         "reopened": 0,
-        "durationMs": 18
+        "durationMs": 9
       },
-      "pushDuplicateMs": 73.9,
+      "pushDuplicateMs": 18.5,
       "pushDuplicateNewInformation": false,
-      "uploadNoChangeMs": 111.8,
+      "uploadNoChangeMs": 115.5,
       "uploadNoChange": {
         "unchanged": 500,
         "run": null
       },
-      "uploadOneChangeMs": 136.3,
+      "uploadOneChangeMs": 155.1,
       "uploadOneChangeRun": {
-        "runId": "run_6426c50fe7b64a23b97ff2fc35321437",
+        "runId": "run_5a94e7a471c54d12bf5c0f5022e631e3",
         "entities": 1,
         "evaluations": 1,
         "created": 0,
         "changed": 0,
         "closed": 0,
         "reopened": 0,
-        "durationMs": 11
+        "durationMs": 31
       },
-      "listFindingsMs": 13.5,
+      "listFindingsMs": 13.4,
       "openFindings": 116,
-      "getFindingMs": 3
+      "getFindingMs": 2.5
     },
     {
       "n": 1000,
-      "initialListingsMs": 2434.3,
-      "initialParcelsMs": 12504,
+      "initialListingsMs": 399.5,
+      "initialParcelsMs": 1316.9,
       "parcelLinks": {
         "probable": 1000
       },
-      "criteriaFullMs": 22802.3,
+      "criteriaFullMs": 7362.6,
       "criteriaRun": {
-        "runId": "run_7be4135c2b044fada2a425da21a89d1f",
+        "runId": "run_9c10172bb358402a98c2d500b29b9ac3",
         "entities": 1000,
         "evaluations": 1000,
         "created": 227,
         "changed": 0,
         "closed": 0,
         "reopened": 0,
-        "durationMs": 9164
+        "durationMs": 425
       },
-      "pushOneChangeMs": 231.6,
+      "pushOneChangeMs": 87.6,
       "pushOneChangeRun": {
-        "runId": "run_6b322f6405c747739e2e0a46e30508a2",
+        "runId": "run_9586e09305814d6caa099173c3c0aa2f",
         "entities": 1,
         "evaluations": 1,
         "created": 0,
         "changed": 0,
         "closed": 1,
         "reopened": 0,
-        "durationMs": 26
+        "durationMs": 20
       },
-      "pushDuplicateMs": 160.2,
+      "pushDuplicateMs": 43.9,
       "pushDuplicateNewInformation": false,
-      "uploadNoChangeMs": 218.1,
+      "uploadNoChangeMs": 291.7,
       "uploadNoChange": {
         "unchanged": 1000,
         "run": null
       },
-      "uploadOneChangeMs": 228.5,
+      "uploadOneChangeMs": 317,
       "uploadOneChangeRun": {
-        "runId": "run_c0cd02ba256b4445a056063f9508515e",
+        "runId": "run_38a9a681ecaa4264b7b910a303279d79",
         "entities": 1,
         "evaluations": 1,
         "created": 0,
         "changed": 0,
         "closed": 0,
         "reopened": 0,
-        "durationMs": 19
+        "durationMs": 25
       },
-      "listFindingsMs": 31.3,
+      "listFindingsMs": 27.1,
       "openFindings": 226,
-      "getFindingMs": 4.1
+      "getFindingMs": 4.6
     },
     {
       "n": 2000,
-      "initialListingsMs": 8149.8,
-      "initialParcelsMs": 60039.1,
+      "initialListingsMs": 942.2,
+      "initialParcelsMs": 3323.2,
       "parcelLinks": {
         "probable": 2000
       },
-      "criteriaFullMs": 88912.3,
+      "criteriaFullMs": 14868.1,
       "criteriaRun": {
-        "runId": "run_89d578beca3b46f0abd172eae0b13ff1",
+        "runId": "run_0e9391bbc4964f25aaad0620d22f46a1",
         "entities": 2000,
         "evaluations": 2000,
         "created": 456,
         "changed": 0,
         "closed": 0,
         "reopened": 0,
-        "durationMs": 39343
+        "durationMs": 706
       },
-      "pushOneChangeMs": 395,
+      "pushOneChangeMs": 115.6,
       "pushOneChangeRun": {
-        "runId": "run_685fb044367143259cc95fba4516c1c7",
+        "runId": "run_72c2045a5fb046ca863c90fe5be98e17",
         "entities": 1,
         "evaluations": 1,
         "created": 0,
         "changed": 0,
         "closed": 1,
         "reopened": 0,
-        "durationMs": 42
+        "durationMs": 35
       },
-      "pushDuplicateMs": 273.4,
+      "pushDuplicateMs": 50.4,
       "pushDuplicateNewInformation": false,
-      "uploadNoChangeMs": 332.7,
+      "uploadNoChangeMs": 432.6,
       "uploadNoChange": {
         "unchanged": 2000,
         "run": null
       },
-      "uploadOneChangeMs": 419.4,
+      "uploadOneChangeMs": 481.6,
       "uploadOneChangeRun": {
-        "runId": "run_a4a6ed800bd74062a3db6afbd9907b6d",
+        "runId": "run_39425464fb9540408206572c89db4103",
         "entities": 1,
         "evaluations": 1,
         "created": 0,
         "changed": 0,
         "closed": 0,
         "reopened": 0,
-        "durationMs": 37
+        "durationMs": 35
       },
-      "listFindingsMs": 43.3,
+      "listFindingsMs": 38.7,
       "openFindings": 455,
-      "getFindingMs": 2.8
+      "getFindingMs": 2.7
     }
   ]
 }

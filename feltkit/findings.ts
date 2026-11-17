@@ -75,7 +75,7 @@ export const get = app.query({
       evidence.push({ ...storedObservation(o), source: { id: src.id, name: src.name, kind: src.kind, status: src.status, statusReason: src.statusReason ?? null, synthetic: src.synthetic, lastSuccessAt: src.lastSuccessAt ?? null }, ingestion: ingRec ? { at: ingRec.at, trigger: ingRec.trigger, rawHash: ingRec.rawHash ?? null, provenance: parse(ingRec.provenance) } : null });
     }
     const runIds = [...new Set(events.map((e) => e.runId))];
-    const runRecs = (await ctx.db.find(runs, { ownerId: f.ownerId })).filter((r) => runIds.includes(parse<{ runId: string }>(r.cause).runId));
+    const runRecs = (await Promise.all(runIds.map(async (runId) => (await ctx.db.find(runs, { runId }))[0]))).filter(Boolean);
     return {
       finding: { id: f.id, status: f.status, change: f.change, qualification: f.qualification, summary: f.summary, score: f.score, confidence: f.confidence, firstDetectedAt: f.firstDetectedAt, lastChangedAt: f.lastChangedAt, lastEvaluatedAt: f.lastEvaluatedAt, acknowledgedAt: f.acknowledgedAt ?? null, dismissedAt: f.dismissedAt ?? null, dismissReason: f.dismissReason ?? null, synthetic: f.synthetic, criteriaVersion: f.criteriaVersion },
       criteria: { id: f.criteriaId, name: c?.name ?? "(removed)", activeVersion: c?.activeVersion ?? null, enabled: c?.enabled ?? false, definition: v ? parse(v.definition) : null },

@@ -19,7 +19,9 @@ test('proposals come from a fixed vocabulary and are reviewable; unknown columns
 	const by = Object.fromEntries(proposals.map((p) => [p.source, p]));
 	assert.equal(by.parcel_no.attribute, 'parcelId'); assert.equal(by.parcel_no.role, 'id');
 	assert.equal(by.assessed_total.type, 'money');
-	assert.equal(by.owner_name.attribute, 'ownerName'); assert.match(by.owner_name.basis, /own name/);
+	assert.equal(by.owner_name.include, false, 'owner data is proposed, not included'); assert.match(by.owner_name.basis, /personal data/);
+	assert.ok(!mapping.fields.some((f) => f.source === 'owner_name'));
+	assert.ok(mapping.fields.some((f) => f.source === 'yr_built'), 'other unknown columns are kept under their own name');
 	assert.deepEqual(validateMapping(mapping, parcels), []);
 	assert.equal(profileFields(parcels).find((f) => f.name === 'assessed_total')!.type, 'number', 'currency formatting is understood');
 });

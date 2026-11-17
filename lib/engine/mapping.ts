@@ -91,7 +91,10 @@ const SYNONYMS: Array<{ attribute: string; type: FieldType; role?: Role; names: 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 const camel = (s: string) => s.replace(/[^A-Za-z0-9]+(.)?/g, (_m, c: string | undefined) => (c ? c.toUpperCase() : '')).replace(/^[A-Z]/, (c) => c.toLowerCase()) || 'field';
 
-export interface MappingProposal extends FieldMapping { basis: string }
+export interface MappingProposal extends FieldMapping { basis: string; include?: boolean }
+
+/** Columns that look like personal data (owners, contact details) are proposed but not included unless a person opts in. */
+const PERSONAL = /(^|[^a-z])(owner|owners|taxpayer|mailing|mail|email|phone|ssn|grantee|grantor|buyer|seller_?name|occupant)([^a-z]|$)/i;
 
 /** Propose a mapping: vocabulary matches first, then every remaining column under its own name and profiled type. */
 export function proposeMapping(ds: ParsedDataset, entityType: string, profiles: FieldProfile[] = profileFields(ds)): { mapping: SourceMapping; proposals: MappingProposal[]; skipped: Array<{ column: string; reason: string }> } {
@@ -109,9 +112,10 @@ export function proposeMapping(ds: ParsedDataset, entityType: string, profiles: 
 		const attribute = camel(p.name);
 		try { assertPermittedAttribute(attribute, 'mapping'); assertPermittedAttribute(p.name, 'mapping'); } catch (e) { skipped.push({ column: p.name, reason: (e as Error).message }); continue; }
 		if (proposals.some((x) => x.attribute === attribute)) { skipped.push({ column: p.name, reason: `attribute ${attribute} already mapped` }); continue; }
-		proposals.push({ source: p.name, attribute, type: p.type, basis: `kept under its own name (${p.type}, ${p.present} of ${p.of} rows)` });
+		const personal = PERSONAL.test(p.name.replace(/([a-z])([A-Z])/g, '$1_$2'));
+		proposals.push({ source: p.name, attribute, type: p.type, basis: personal ? 'looks like personal data (owner or contact details): not included unless you choose to' : `kept under its own name (${p.type}, ${p.present} of ${p.of} rows)`, ...(personal ? { include: false } : {}) });
 	}
-	return { mapping: { version: 1, entityType, fields: proposals.map(({ basis: _b, ...f }) => f) }, proposals, skipped };
+	return { mapping: { version: 1, entityType, fields: proposals.filter((x) => x.include !== false).map(({ basis: _b, include: _i, ...f }) => f) }, proposals, skipped };
 }
 
 export function validateMapping(m: SourceMapping, ds?: ParsedDataset): string[] {

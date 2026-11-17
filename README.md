@@ -1,39 +1,50 @@
 # Signal
 
-**Observe. Interpret. Evaluate. Act.** Signal makes accessible information observable, interpretable, actionable and continuously relevant to the person or application that cares about it.
+**Given everything I can see, everything I have connected, and everything I care about — what is important right now?** Signal keeps answering that question as the information changes.
 
-Give Signal an authorized source, a set of declarative criteria, and who should hear about it. Signal deterministically:
-1. observes the source and preserves the exact bytes it saw;
-2. interprets them: builds a site-agnostic representation of the page (entities, attributes, relationships, collections, each with evidence), extracts fields, and decodes embedded signals, including Ghostpost's invisible-Unicode payloads;
-3. evaluates the criteria and records *why* with a full trace;
-4. produces a durable, deduplicated event;
-5. notifies people through AppPort Notifications and systems through AppPort Webhooks;
-6. shows it in context with an in-page overlay.
+You connect sources. Signal keeps each source's records separate and versioned, works out which records describe the same thing (and says how sure it is), and continuously evaluates them against criteria you define. What qualifies becomes a **finding** with a priority, a confidence, an explanation down to each source value, and a history of how it appeared, changed and resolved.
 
-No LLM runs anywhere in that path.
+No language model runs anywhere in this path. Evaluation is deterministic: the same evidence and criteria give the same result.
 
-Signal is a **FeltKit application** (`npm create feltkit@latest signal`). FeltKit and the Boundry platform supply durable state (FeltDB), authorization, AppPort capabilities, evidence storage (Files) and delivery. Signal supplies the capability.
+![Findings with the evidence trail behind one of them](docs/screenshots/finding-detail.png)
+
+## The model
 
 ```
-feltkit/          the application: collections, roles, ownership rule, functions
-  app.ts            roles, authorize hook, signal_* collections
-  sources.ts        sources:register|list
-  criteria.ts       criteria:define|get          (immutable signal.criteria/v1 versions)
-  monitors.ts       monitors:create|observe|push|record|history
-  events.ts         events:list|forPage|evidence|acknowledge|inbox
-  pages.ts          pages:inspect|push|get|list    (signal.page/v1, no criteria needed)
-lib/              Signal's capability: pure, framework-free
-  codecs/           ghostpost-unicode/v1 (WASM), invisible-unicode/v1
-  interpret/        normalization (preserves invisible signals), extraction
-  page/             universal page intelligence: signal.page/v1, extraction, typing, entity criteria
-  core/             deterministic criteria evaluator, the pure cycle decision
-  sources/          HTTP observation: robots.txt, conditional GET, SSRF guard
-  overlay/          in-page overlay (host transport, closed shadow root)
-  contracts/        record shapes (signal.*/v1)
-codecs/ghostpost-unicode/   Rust codec extracted from rkendel1/ghostpost (wire-identical) + built WASM
-examples/         documented use cases, each executed by the tests
-tests/            feltkit test suite (library, application, use cases, browser overlay)
+Source ──refresh──▶ Ingestion ──(only if content changed)──▶ Observation vN   (v1…vN-1 kept, retractions kept)
+                                                               │
+                                     identity resolution ──▶ Link  exact · probable · ambiguous · conflict · unmatched · manual
+                                                               │
+                                                             Entity  (what several sources describe)
+                                                               │
+             Criteria vK (yours, immutable versions) ──▶ Evaluation  true · false · unknown(missing | stale | conflict | …)
+                                                               │
+                                                             Finding  new · changed · persistent · resolved · superseded · invalid · reopened
+                                                               └── history (each event names its cause), evaluation runs, notification
 ```
+
+Separate events, never conflated: a **refresh** (an ingestion) is not **new information** (a new observation version); new information is not a **meaningful change** (a finding event, governed by your change thresholds); a meaningful change is not a **qualifying finding**; and a finding is not an **action** (acknowledging or dismissing is yours; detection never acts).
+
+| Concept | What it is | Where |
+|---|---|---|
+| **Source** | Something Signal can see, with kind, origin (native/user), status, refresh mode, freshness rule, mapping (versioned) | `feltkit/sources.ts` |
+| **Observation** | One source record's statement at a version: original value, normalized value, unit, transform; observed-at, as-of, last-confirmed | `lib/engine/mapping.ts`, `feltkit/_store.ts` |
+| **Identity** | Tiered and evidence-based: shared identifier → address (+coordinates) → containment → coordinates. Ambiguous and conflicting records are never merged; a person decides | `lib/engine/identity.ts` |
+| **Criteria** | `signal.criteria/v2`: required, disqualifying and preferred conditions; all/any groups; derived values across sources; freshness; source restriction and trust; change thresholds; notifications | `lib/engine/criteria.ts` |
+| **Evaluation** | One three-valued evaluator. Missing ≠ negative; stale evidence does not count; disagreeing sources make a condition unknown unless trust decides | `lib/engine/evaluate.ts` |
+| **Finding** | Lifecycle, dedup by meaningful change, priority = score × confidence + recency, explained | `lib/engine/lifecycle.ts`, `feltkit/findings.ts` |
+
+### Sources supported
+
+| Kind | Origin | How it changes | Verified with |
+|---|---|---|---|
+| **File** — CSV, GeoJSON, JSON | user | Snapshot: each upload is compared with the last; missing records are withdrawn | tests, browser |
+| **HTTP JSON API** | user | Fetched on request (`Refresh now`, `sources:refresh`), conditional GET, SSRF guard. *Not scheduled* (see limits) | tests (local HTTP server) |
+| **Push** | user | A system calls the `signal.sources.push` capability; evaluated in the same transaction | tests |
+| **Manual records** | native | Entered in Signal | — (same path as push) |
+| **Browser capture** | native | Pages captured in your own browser with the extension; partial by nature (absence is not removal) | e2e with real Chromium + extension |
+
+Credentialed APIs and databases are not supported yet; nothing pretends otherwise.
 
 ## Run
 
@@ -42,117 +53,82 @@ npm install
 ```
 
 ```bash
+npm run dev
+```
+
+Open the printed URL, sign in as a development user, and either **Connect a source** or **Load a synthetic example** (two invented sources and one criteria, labelled synthetic everywhere).
+
+```bash
 npm test
 ```
 
 ```bash
-npm run test:codec
+npm run test:e2e
 ```
 
 ```bash
-npm run bench
+npm run measure
 ```
 
-```bash
-node scripts/bench-pages.ts
-```
+- `npm test` runs `feltkit test`: the pure engine, page extraction quality on 16 real pages, and the end-to-end product scenario against a real FeltDB instance and a real HTTP server.
+- `npm run test:e2e` runs the browser tests: the extension end to end (a real `feltkit dev` server, real Chromium with the extension loaded) and the capture-reduction check on real pages. Stop `npm run dev` first (one dev server per project).
+- `npm run measure` prints timings at several data sizes (synthetic data). Results are in `docs/measurements.json`.
 
-```bash
-npm run dev
-```
-
-- `npm test` runs `feltkit test`: 91 tests against real FeltDB, AppPort services and headless Chromium.
-- `npm run test:e2e` runs both browser tests: the extension end to end, and the snapshot reduction on the real pages.
-- `npm run test:extension` builds the browser extension and runs it end to end. It uses a real `feltkit dev` server with isolated state and real Chromium with the extension loaded.
-- `npm run test:codec` runs the Rust codec tests (12).
-- `npm run bench` and `node scripts/bench-pages.ts` print the measurements behind ACCEPTANCE_REPORT.md.
-- `npm run dev` starts FeltKit dev with Studio. Sign in as `ada`.
-
-## Browser extension
-
-![Signal side panel after capturing a page twice and running discovery](docs/extension-panel.png)
-
-The extension is a FeltKit **extension host** (`@feltdb/feltkit` docs/EXTENSION-HOSTS.md). It is the same Signal app, reached from a Chrome side panel with the app's own client and a bearer session. Use it to:
-- capture the page you are viewing (its rendered DOM, in your own browser session);
-- find candidates on captured pages for an intent;
-- re-capture a page to see what changed;
-- show Signal's alerts on the page.
+### Browser extension
 
 ```bash
 npm run build:extension
 ```
 
-Then in Chrome:
-1. Open `chrome://extensions` and turn on Developer mode.
-2. Choose **Load unpacked** and select `extension/dist`.
-3. Click the Signal toolbar button.
-4. Enter your instance URL and sign in.
+Load `extension/dist` unpacked in Chrome (`chrome://extensions` → Developer mode). In the side panel: connect to your instance, sign in, choose or create a **capture source** (which item types it keeps, e.g. `RealEstateListing`), and press **Capture this page**. The panel reports what was new or changed and which of your findings the page's items are part of. Signal never fetches these pages itself.
 
-**Building an intent.** You don't write JSON. After a capture, the panel lists what the page contains:
-- the item types, as chips;
-- for each attribute that varies: a range slider (price, size, year), value checkboxes (availability), a yes/no choice, or a "has …" toggle;
-- for each filter, a switch for whether items that don't show the value are "not a match" or stay "possible".
+### For systems: push and read
 
-Results update as you change filters. The generated intent is shown under "Intent as JSON", which can also be edited by hand for derived metrics.
-
-**Alerts.** **Alert me when this matches** saves the current filters as the page's alert criteria. It publishes them as a criteria version with a `discover` condition and creates a monitor, so alerts use Signal's normal pipeline: events, de-duplication, AppPort notifications, inbox and overlay.
-
-- **Scope.** By default the alert covers the *search*: the site and path, ignoring the query. Listing sites keep map coordinates and filters in the address, so the alert keeps applying as you pan. "Exactly this address" is the alternative.
-- **When.** Each capture of a covered page is checked, including automatic checks when you open a watched page while the panel is open.
-- **What alerts.** A new alert is recorded when the set of definite matches or their values changes. "Possible" items (missing information) never alert.
-- **Where.**
-  - On the page: an "N alerts" badge, and the matching items outlined.
-  - A Chrome notification.
-  - Your Signal inbox.
-- **What you see.** The panel and the overlay state exactly what is watched ("Price $199,000–$349,000 · Bedrooms 3–4"), which address it covers, and who is notified.
-
-**Captures keep the structure, not the page.** Before sending, the extension strips script content (except JSON-LD), styles, SVG drawing data, comments and similar payload. On all 16 real evaluation pages this gives identical facts (`tests/e2e/snapshot.e2e.ts`). Signal stores the extracted structure and the content hash, not the page.
-
-**Permissions:**
-- `sidePanel`, `storage`, `tabs`.
-- `activeTab` + `scripting`: a page is read only when you press **Capture this page** or **Show alerts on page**.
-- Optional host access, requested per origin: your Signal instance, and a page's origin only if `activeTab` does not already cover it.
-
-**What runs where:**
-
-| Context | Session | Role |
-|---|---|---|
-| Side panel | **Only holder** of the bearer session (in memory, written through to `chrome.storage.local`, locked to trusted contexts) | Calls the instance |
-| Service worker | None | Locks storage and opens the panel |
-| In-page overlay (content script) | None | Asks the panel for three allowed operations. Alerts show only while the panel is open |
-
-A minimal session (as a member):
+Push records into a push source (AppPort capability `signal.sources.push`, or the FeltKit client):
 
 ```ts
-const sourceId  = await client.mutation(api.sources.register, { type: "http_page", locator: "https://example.com/widget", strategy: "manual" });
-await client.mutation(api.criteria.define, { definition: JSON.stringify({
-  id: "widget-drop", name: "Widget under $100", severity: "warning",
-  extract: [{ field: "price", from: "text", pattern: "Price:\\s*\\$([0-9.,]+)", type: "number" }],
-  condition: { field: "price", op: "lt", value: 100 } }) });
-const monitorId = await client.mutation(api.monitors.create, { sourceId, criteriaId: "widget-drop", criteriaVersion: 1 });
-await client.action(api.monitors.observe, { monitorId });   // → { outcome: "event_recorded" | "no_match" | "suppressed_duplicate" | … }
+await client.mutation(api.sources.push, { sourceId, records: JSON.stringify([{ listing_id: "A1", price: 289000 }]) });
+// → { added, changed, unchanged, newInformation, run: { entities, created, changed, closed, reopened, durationMs } }
+```
+
+Read findings in priority order (capability `signal.findings.list`), each with why it was surfaced and whether its evidence is conflicting, stale or missing.
+
+## Layout
+
+```
+feltkit/            the FeltKit application
+  app.ts              collections, roles, ownership rule
+  _store.ts           the one pipeline: ingest → change detection → identity → evaluation → findings
+  sources.ts          connect, inspect, upload, push, capture, refresh (action), mapping versions, pause, remove, coverage
+  criteria.ts         save (versioned), preview, attributes catalog, enable/remove
+  findings.ts         prioritized list, full evidence trail, acknowledge/dismiss, timeline
+  entities.ts         side-by-side evidence, identity decisions (assign / separate)
+  engine.ts           freshness sweep (a schedulable mutation), activity, summary
+  workspace.ts        the synthetic example
+lib/
+  engine/             pure, framework-free: types, mapping, identity, criteria, evaluate, lifecycle, coverage, policy
+  sources/            records (CSV/GeoJSON/JSON), HTTP JSON (guarded), page capture → observations, network guard
+  page/               page intelligence: signal.page/v1 extraction (retained, measured)
+src/                the web app (vanilla TypeScript on the FeltKit client; live via the change stream)
+extension/          the browser capture client
+tests/              engine, page quality, the product scenario; e2e/ for browser tests
 ```
 
 ## Documents
 
 | Document | What it answers |
 |---|---|
-| [EXTRACTION_AUDIT.md](EXTRACTION_AUDIT.md) | What Ghostpost actually contains, what works, what is a placeholder (with evidence) |
-| [CAPABILITY_ARCHITECTURE.md](CAPABILITY_ARCHITECTURE.md) | Boundaries, data flow, trust model, Boundry mapping, relation to `web-monitor` |
-| [CAPABILITY_CONTRACTS.md](CAPABILITY_CONTRACTS.md) | Records, criteria language, operations, codec wire format |
-| [PAGE_INTELLIGENCE.md](PAGE_INTELLIGENCE.md) | M5 (corrected in M7): the page representation, extraction pipeline, type rules, identity, entity criteria, limits |
-| [PAGE_QUALITY.md](PAGE_QUALITY.md) | M7: measured quality on 16 real pages (per category and per method), the held-out first run, identity scenarios, the storage-size decision |
-| [DISCOVERY_MODEL.md](DISCOVERY_MODEL.md) | M7: intent, context, scope, candidates, tri-state evaluation, coverage, scan plan; the real-estate scenario |
-| [EXTRACTION_PLAN.md](EXTRACTION_PLAN.md) | Preserve / refactor / replace / retire; milestones |
-| [GAP_REGISTER.md](GAP_REGISTER.md) | What is missing, platform vs product |
-| [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md) | Commands run, results, measurements, security findings |
+| [ASSESSMENT.md](ASSESSMENT.md) | What existed, what was kept, replaced and removed, and why |
+| [GAP_REGISTER.md](GAP_REGISTER.md) | What is missing or limited: product, platform, operational — with evidence |
+| [FAIR_HOUSING_REVIEW.md](FAIR_HOUSING_REVIEW.md) | What the real-estate scenario uses, the guard that exists, and the policy questions still open |
+| [PAGE_INTELLIGENCE.md](PAGE_INTELLIGENCE.md), [PAGE_QUALITY.md](PAGE_QUALITY.md) | The page extractor behind browser capture, measured on real pages |
+| `docs/measurements.json` | Measured timings (synthetic data) |
 
-## Known limits
+## Known limits (details in GAP_REGISTER)
 
-These are stated plainly; details are in GAP_REGISTER.
-- **No scheduled polling yet.** FeltKit jobs run mutations, and mutations may not fetch.
-- **The browser extension is loaded unpacked** (no store packaging). Its permission prompts and the side panel itself are checked by hand, not by automation (G-EXT-1/2). OAuth sign-in does not return into it (G-EXT-3).
-- **Single tenant.**
-- **Webhook delivery is staged but not exercised** in tests.
-- **Page intelligence** is measured on 16 real pages in 10 categories (PAGE_QUALITY.md). It is not proven universal: there are measured failures on cross-row records and sidebars, and the held-out set is now consumed. Dynamic pages need a rendered snapshot. English-leaning vocabulary. See GAP_REGISTER G-PAGE-*.
-- **Discovery** evaluates and plans but executes nothing. Intents are not persisted. It is validated on synthetic real-estate fixtures only (G-DISC-*).
+- **No scheduled outbound fetch.** FeltKit jobs run mutations and mutations may not fetch, so HTTP sources refresh on request, not on a timer. Push sources and captures are evaluated the moment they arrive. The freshness sweep is a mutation and can be scheduled.
+- **Everything has been validated on synthetic data** (and 16 real pages for extraction). No real county parcel file or real listing feed has been run end to end.
+- **One transaction per ingestion.** Measured up to 2,000 records per source; bulk imports and full re-evaluations take seconds to tens of seconds at that size (`docs/measurements.json`).
+- **No credentials for sources, no database sources.**
+- **No natural-language criteria drafting.** Criteria are written in the structured editor or as JSON.
+- **Single tenant**, owner-scoped records.

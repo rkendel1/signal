@@ -4,16 +4,16 @@
 
 ## 1. What the real-estate scenario uses today
 
-Verified from the code (`lib/datasets/dataset.ts` vocabulary, `lib/discovery/discover.ts`, the panel).
+Verified from the code (`lib/engine/mapping.ts` vocabulary, `lib/example.ts` criteria, the web app's criteria editor). Updated for the rebuild.
 
 | Used for | Attributes |
 |---|---|
 | Deciding a match (criteria, metrics) in the scenarios and tests | price, bedrooms, bathrooms, floor size, year built, HOA fee, price reduction, assessed value, annual property tax, estimated monthly rent, derived yields and ratios |
-| Scoping | the map viewport / bounding box (a geographic area chosen by the person or read from the page) |
+| Scoping | none built in: the map is a display of findings, not a filter. A user could still write criteria on any location attribute a source provides |
 | Joining records (not shown as criteria) | parcel ID, street address, latitude/longitude, parcel geometry |
-| Proposed by the mapping vocabulary | parcelId, address, latitude, longitude, assessedValue, annualPropertyTax, floorSize, yearBuilt, numberOfBedrooms, lotSize, estimatedMonthlyRent, zoning |
+| Proposed by the mapping vocabulary | parcelId, listingId, address, latitude, longitude, name, asOf, price, status, assessedValue, annualPropertyTax, floorSize, yearBuilt, numberOfBedrooms, lotSize, estimatedMonthlyRent, zoning, floodZone. Other columns are proposed under their own names; columns that look like personal data are proposed but not included |
 
-The M9 validation must use only property and financial attributes from this list as criteria. No protected characteristic or proxy is used as a criterion in any validation run.
+The example criteria and every test use only property and financial attributes from this list. No protected characteristic or proxy is used as a criterion in any validation run.
 
 ## 2. Where risk can enter
 
@@ -50,4 +50,10 @@ A deny-list on its own (C) should not be presented as protection. The allow-list
 
 ## 5. What is and is not decided
 
-Decided: nothing. Implemented: nothing. The validation milestone only avoids the issue by construction (criteria limited to §1's property and financial attributes). That is a property of the test, not of the product.
+**Decided: nothing at the policy level.** The questions in §4 are still open and need an owner.
+
+**Implemented in the rebuild (2026-11), because its brief requires criteria to stay within legal boundaries:**
+- **A deny-list (option C)** in `lib/engine/policy.ts`: attribute and column names naming a federally protected class, common state additions (source of income, marital status, sexual orientation, age) or demographic composition are refused in mappings, criteria conditions and derived values, with a message pointing here. Page attributes with such names are not observed.
+- **Default exclusion of personal data (part of E, with D's review step):** columns that look like owner or contact details are proposed but unticked; a person must choose to include them.
+
+As §3 says, a deny-list is easy to evade by renaming and **is not protection**; it only stops the obvious cases and makes the policy visible. Proxies (geography, free text, owner names a person chooses to include) are not addressed. Signal still does not know who the user is (§2.6).
