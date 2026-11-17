@@ -2,7 +2,6 @@
  * Deterministic value typing. Every function is pure: same input → same output.
  * Nothing here fetches, evaluates or executes anything taken from a page.
  */
-import { parseNumber } from '../interpret/extract.ts';
 import type { AttributeValue, DataType, Money, MoneyRange, PageAttribute, ValueProvenance } from './types.ts';
 
 export interface Typed {
@@ -196,4 +195,17 @@ export function parseQuantities(text: string, units: Array<{ re: RegExp; attribu
 		if (u) out.push({ attribute: u.attribute, value: Number(m[1].replace(/,/g, '')), unit: u.unit, raw: part.trim() });
 	}
 	return out;
+}
+
+/** A localized number in text: "1,234.5", "1.234,5" (European decimal comma), "$12". */
+export function parseNumber(raw: string): number | null {
+	const cleaned = raw.replace(/[^\d.,\-]/g, '');
+	if (!cleaned) return null;
+	let n: string;
+	const lastComma = cleaned.lastIndexOf(',');
+	const lastDot = cleaned.lastIndexOf('.');
+	if (lastComma > lastDot && cleaned.length - lastComma - 1 !== 3) n = cleaned.replace(/\./g, '').replace(',', '.');
+	else n = cleaned.replace(/,/g, '');
+	const v = Number(n);
+	return Number.isFinite(v) ? v : null;
 }

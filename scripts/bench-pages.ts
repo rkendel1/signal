@@ -4,18 +4,15 @@
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import { extractPage } from '../lib/page/extract.ts';
-import { evaluateEntityCondition } from '../lib/page/query.ts';
-import { GhostpostUnicodeDecoder } from '../lib/codecs/ghostpost-unicode.ts';
 
 const dir = new URL('../tests/fixtures/pages/', import.meta.url);
-const decoders = [new GhostpostUnicodeDecoder()];
 const stats = (xs: number[]) => { const s = [...xs].sort((a, b) => a - b); const q = (p: number) => +s[Math.min(s.length - 1, Math.floor(p * s.length))].toFixed(2); return { p50: q(0.5), p95: q(0.95) }; };
 const measure = (html: string, n: number) => {
 	const times: number[] = [];
 	let rep;
 	for (let i = 0; i < n; i++) {
 		const t = performance.now();
-		rep = extractPage({ html, locator: 'https://bench.example/p', baseUrl: 'https://bench.example/p', observationId: 'o', contentHash: 'h', contentType: 'text/html', observedAt: '2026-11-17T12:00:00Z', decoders });
+		rep = extractPage({ html, locator: 'https://bench.example/p', baseUrl: 'https://bench.example/p', observationId: 'o', contentHash: 'h', contentType: 'text/html', observedAt: '2026-11-17T12:00:00Z' });
 		times.push(performance.now() - t);
 	}
 	const json = JSON.stringify(rep!);
@@ -34,10 +31,7 @@ const card = (i: number) => `<div class="card"><img src="/i/${i}.jpg" alt="item 
 for (const n of [100, 500, 1000]) {
 	const html = `<!doctype html><html lang="en"><head><title>Catalog</title></head><body><h1>Catalog</h1><div class="grid">${Array.from({ length: n }, (_, i) => card(i)).join('')}</div></body></html>`;
 	const m = measure(html, 5);
-	const t = performance.now();
-	const r = evaluateEntityCondition({ type: 'Product', where: [{ attr: 'price', op: 'lt', value: 50 }, { attr: 'availability', op: 'eq', value: 'InStock' }], related: [{ rel: 'seller', entity: { where: [{ attr: 'name', op: 'eq', value: 'Seller 3' }] } }] }, m.rep, m.rep);
-	const evalMs = performance.now() - t;
 	const { rep: _r, ...rest } = m;
-	out[`synthetic_${n}_products`] = { ...rest, entityCriteriaMs: +evalMs.toFixed(2), matches: r.matches.length };
+	out[`synthetic_${n}_products`] = rest;
 }
 console.log(JSON.stringify(out, null, 2));

@@ -16,7 +16,7 @@
  */
 import { load, type CheerioAPI } from 'cheerio';
 import type { AnyNode, Element } from 'domhandler';
-import type { SignalDecoder } from '../contracts/types.ts';
+import type { SignalDecoder } from './types.ts';
 import { canonicalJson, sha256 } from '../core/canonical.ts';
 import {
 	DEFAULT_PAGE_LIMITS, EXTRACTOR_VERSION, PAGE_SCHEMA,

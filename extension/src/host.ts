@@ -8,7 +8,8 @@
  *    only when the person captures that page (activeTab covers the tab the toolbar button opened on).
  *
  * Everything here runs because the person did something: capturing reads the rendered DOM of the
- * current tab once, in their own browser session. Nothing is crawled, scheduled or fetched by Signal.
+ * current tab once, in their own browser session, and sends it to one of their browser-capture sources.
+ * Nothing is crawled, scheduled or fetched by Signal.
  */
 import { createClient, FeltKitClientError, type FeltKitClient, type SessionInfo, type TokenStore } from '@feltdb/feltkit/client';
 import { api } from '../../feltkit/_generated/api.ts';
@@ -16,7 +17,7 @@ import { redactUrlString } from '../../lib/page/values.ts';
 import { snapshotPage, type Snapshot } from './snapshot.ts';
 export type { Snapshot };
 
-const K = { instance: 'signal.instance', token: 'signal.session', set: 'signal.workingSet', intent: 'signal.intentDraft' } as const;
+const K = { instance: 'signal.instance', token: 'signal.session', source: 'signal.captureSource' } as const;
 /** FeltKit accepts request bodies up to 2 MiB; leave room for the JSON envelope and escaping. */
 export const MAX_SNAPSHOT_BYTES = 1_800_000;
 
@@ -40,7 +41,7 @@ export function instanceOrigin(input: string): string {
 	return u.origin;
 }
 
-/** Does the session grant a permission? Grants may be wildcards: `signal.datasets.*`, `signal.*`, `*`. */
+/** Does the session grant a permission? Grants may be wildcards: `signal.*`, `*`. */
 export function can(permissions: readonly string[] | undefined, needed: string): boolean {
 	return (permissions ?? []).some((g) => g === '*' || g === needed || (g.endsWith('.*') && needed.startsWith(g.slice(0, -1))));
 }
@@ -77,7 +78,7 @@ export async function savedInstance(): Promise<string | null> {
 
 export async function forgetInstance(client?: FeltKitClient): Promise<void> {
 	if (client) await client.signOut().catch(() => undefined);
-	await chrome.storage.local.remove([K.instance, K.token, K.set]);
+	await chrome.storage.local.remove([K.instance, K.token, K.source]);
 }
 
 // ------------------------------------------------------------------ capture
@@ -129,250 +130,43 @@ export function parentLocator(url: string): string {
 	return u.toString();
 }
 
-export interface Captured { url: string; title: string; pageId: string; previousPageId?: string; capturedAt: string; entities: number; revision: string | null; unchanged: boolean }
+export interface CaptureSource { id: string; name: string; status: string; records: number; pageTypes: string[] }
+export interface Captured { url: string; title: string | null; received: number; added: number; changed: number; unchanged: number; newInformation: boolean; recordKeys: string[]; run: { entities: number; created: number; changed: number; closed: number; reopened: number; durationMs: number } | null }
+export interface Affected { id: string; recordKey: string; entityLabel: string | null; criteriaName: string; qualification: string; change: string; summary: string; sourceCount: number; lastChangedAt: string }
 
-async function domSource(client: FeltKitClient, locator: string): Promise<string> {
-	const mine = (await client.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>;
-	const found = mine.find((s) => s.type === 'dom' && s.locator === locator);
-	return found ? found.id : (await client.mutation(api.sources.register, { type: 'dom', locator, strategy: 'manual' })) as string;
+/** The person's browser-capture sources (kind page_capture). */
+export async function captureSources(client: FeltKitClient): Promise<CaptureSource[]> {
+	const list = (await client.query(api.sources.list, {})) as Array<{ id: string; name: string; kind: string; status: string; records: number }>;
+	const out: CaptureSource[] = [];
+	for (const s of list.filter((x) => x.kind === 'page_capture')) {
+		const d = (await client.query(api.sources.get, { sourceId: s.id })) as { mapping: { pageTypes?: string[] } };
+		out.push({ id: s.id, name: s.name, status: s.status, records: s.records, pageTypes: d.mapping.pageTypes ?? [] });
+	}
+	return out;
 }
 
-export interface Alerted { eventId: string; title: string; body: string }
-
-/**
- * Record a snapshot as a dom observation of its page and add it to the working set. When the page is
- * watched, the capture goes through the watch's monitor, so the alert criteria are evaluated and an
- * alert is recorded (and notified) when the matching set changes.
- */
-export async function capture(client: FeltKitClient, snap: Snapshot): Promise<Captured & { alert?: Alerted; truncated?: boolean }> {
-	const locator = pageLocator(snap.url);
-	const found = await findWatch(client, snap.url);
-	const w = found?.watch;
-	const sourceId = w ? found!.sourceId : await domSource(client, locator);
-	let r: { pageId: string; outcome: string; revision: string | null; entities: number; truncated?: boolean };
-	let alert: Alerted | undefined;
-	if (w) {
-		const m = (await client.mutation(api.monitors.push, { monitorId: w.monitorId, content: snap.html!, baseUrl: locator })) as { outcome: string; eventId: string | null; pageId?: string | null };
-		if (!m.pageId) throw new Error(`Not represented: ${m.outcome}`);
-		const pg = (await client.query(api.pages.list, { sourceId })) as Array<{ pageId: string; revision: string; entities: number; truncated: boolean }>;
-		const rec = pg.find((x) => x.pageId === m.pageId);
-		r = { pageId: m.pageId, outcome: 'represented', revision: rec?.revision ?? null, entities: rec?.entities ?? 0, truncated: rec?.truncated };
-		if (m.eventId) {
-			const [ev] = ((await client.query(api.events.forPage, { sourceLocator: found!.locator })) as Array<{ id: string; criteriaName: string; excerpts: Array<{ text: string }> }>).filter((e) => e.id === m.eventId);
-			alert = { eventId: m.eventId, title: ev?.criteriaName ?? w.name, body: (ev?.excerpts ?? []).map((x) => x.text).slice(0, 4).join('\n') || 'Matches changed' };
-		}
-	} else {
-		r = (await client.mutation(api.pages.push, { sourceId, html: snap.html!, baseUrl: locator })) as { pageId: string; outcome: string; revision: string | null; entities: number; truncated?: boolean };
-		if (r.outcome !== 'represented' && r.outcome !== 'already_recorded') throw new Error(`Not represented: ${r.outcome}`);
-	}
-	const set = await workingSet();
-	const prev = set.find((p) => p.url === locator);
-	const entry: Captured = {
-		url: locator, title: snap.title.slice(0, 200), pageId: r.pageId, capturedAt: new Date().toISOString(), entities: r.entities, revision: r.revision,
-		unchanged: !!prev && prev.revision === r.revision,
-		...(prev ? { previousPageId: prev.pageId } : {})
-	};
-	await saveWorkingSet([...set.filter((p) => p.url !== locator), entry]);
-	return { ...entry, ...(alert ? { alert } : {}), ...(r.truncated ? { truncated: true } : {}) };
-}
-
-// ------------------------------------------------------------------ watches: an intent that alerts (a monitor whose criteria is a discover condition)
-
-export interface Watch { monitorId: string; criteriaId: string; version: number; name: string; criteria: string[]; notify: string[] }
-const watchId = (sourceId: string) => `watch.${sourceId.replace(/[^A-Za-z0-9_.-]/g, '_')}`.slice(0, 120);
-
-/** The enabled watches on a page, read from the server (the authority), with their criteria in words. */
-export async function watchesFor(client: FeltKitClient, locator: string, sourceId?: string): Promise<Watch[]> {
-	const sid = sourceId ?? ((await client.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>).find((x) => x.type === 'dom' && x.locator === locator)?.id;
-	if (!sid) return [];
-	const ms = ((await client.query(api.monitors.list, {})) as Array<{ id: string; sourceId: string; criteriaId: string; criteriaVersion: number; enabled: boolean; notify: string[] }>)
-		.filter((m) => m.sourceId === sid && m.enabled && m.criteriaId === watchId(sid));
-	const out: Watch[] = [];
-	for (const m of ms) {
-		const c = (await client.query(api.criteria.get, { criteriaId: m.criteriaId, version: m.criteriaVersion })) as { name: string; condition: { discover?: { criteria: Array<{ label: string }> } } } | null;
-		if (!c?.condition?.discover) continue;
-		out.push({ monitorId: m.id, criteriaId: m.criteriaId, version: m.criteriaVersion, name: c.name, criteria: c.condition.discover.criteria.map((x) => x.label), notify: m.notify });
-	}
-	return out.sort((a, b) => b.version - a.version);
+export async function createCaptureSource(client: FeltKitClient, name: string, entityType: string, pageTypes: string[]): Promise<string> {
+	return (await client.mutation(api.sources.create, { name, kind: 'page_capture', entityType, mapping: JSON.stringify({ entityType, pageTypes }) })) as string;
 }
 
 /**
- * Watch a page for an intent: publish the intent as a new immutable criteria version
- * ({ discover: intent }), create its monitor, and turn off the page's previous watch.
+ * Send what the person sees to a capture source. Signal extracts the page's items, versions what changed,
+ * matches them with the person's other sources and re-evaluates affected findings — in one transaction.
  */
-export async function setWatch(client: FeltKitClient, locator: string, intent: DiscoveryIntent, name: string): Promise<Watch> {
-	const sourceId = await domSource(client, locator);
-	const id = watchId(sourceId);
-	const previous = await watchesFor(client, locator, sourceId);
-	let version = Math.max(0, ...previous.map((w) => w.version)) + 1;
-	for (let tries = 0; ; tries++) {
-		try {
-			await client.mutation(api.criteria.define, { definition: JSON.stringify({ schema: 'signal.criteria/v1', id, version, name, severity: 'info', notify: 'on_change', condition: { discover: { ...intent, id, version } } }) });
-			break;
-		} catch (e) {
-			if (tries < 20 && e instanceof FeltKitClientError && e.code === 'FAILED_PRECONDITION') { version++; continue; } // an earlier version exists without a monitor
-			throw e;
-		}
-	}
-	const monitorId = (await client.mutation(api.monitors.create, { sourceId, criteriaId: id, criteriaVersion: version })) as string;
-	for (const w of previous) await client.mutation(api.monitors.setEnabled, { monitorId: w.monitorId, enabled: false });
-	return (await watchesFor(client, locator, sourceId)).find((w) => w.monitorId === monitorId)!;
+export async function capture(client: FeltKitClient, sourceId: string, snap: Snapshot): Promise<Captured> {
+	const url = pageLocator(snap.url);
+	const r = (await client.mutation(api.sources.capture, { sourceId, html: snap.html!, url })) as Omit<Captured, 'url'>;
+	return { ...r, url };
 }
 
-/** Locators of every page with an enabled watch (for the automatic check when such a page is opened). */
-export async function watchedPages(client: FeltKitClient): Promise<Set<string>> {
-	const srcs = new Map(((await client.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>).filter((x) => x.type === 'dom').map((x) => [x.id, x.locator]));
-	const ms = (await client.query(api.monitors.list, {})) as Array<{ sourceId: string; criteriaId: string; enabled: boolean }>;
-	return new Set(ms.filter((m) => m.enabled && m.criteriaId === watchId(m.sourceId) && srcs.has(m.sourceId)).map((m) => srcs.get(m.sourceId)!));
-}
-
-/** Locators of every page the person chose to monitor: any enabled monitor's source (watches and server monitors). */
-export async function monitoredPages(client: FeltKitClient): Promise<Set<string>> {
-	const srcs = new Map(((await client.query(api.sources.list, {})) as Array<{ id: string; locator: string }>).map((x) => [x.id, x.locator]));
-	const ms = (await client.query(api.monitors.list, {})) as Array<{ sourceId: string; enabled: boolean }>;
-	return new Set(ms.filter((m) => m.enabled && srcs.has(m.sourceId)).map((m) => srcs.get(m.sourceId)!));
-}
-
-/** Whether the overlay belongs on this page: it is monitored (exactly, or as part of a search), or has alerts. */
-export async function isMonitored(client: FeltKitClient, url: string): Promise<boolean> {
-	const set = await monitoredPages(client);
-	if (set.has(pageLocator(url)) || set.has(parentLocator(url))) return true;
-	for (const loc of [pageLocator(url), parentLocator(url)]) if (((await client.query(api.events.forPage, { sourceLocator: loc })) as unknown[]).length) return true;
-	return false;
-}
-
-/** The watch that applies to a page: one on its parent (any query) first, else one on its exact address. */
-export async function findWatch(client: FeltKitClient, url: string): Promise<{ watch: Watch; locator: string; sourceId: string; scope: 'parent' | 'exact' } | null> {
-	const srcs = ((await client.query(api.sources.list, {})) as Array<{ id: string; type: string; locator: string }>).filter((x) => x.type === 'dom');
-	for (const [scope, locator] of [['parent', parentLocator(url)], ['exact', pageLocator(url)]] as const) {
-		const src = srcs.find((x) => x.locator === locator);
-		if (!src) continue;
-		const [watch] = await watchesFor(client, locator, src.id);
-		if (watch) return { watch, locator, sourceId: src.id, scope };
-	}
-	return null;
-}
-
-/** Stop whichever watch applies to this page. */
-export async function stopWatch(client: FeltKitClient, url: string): Promise<void> {
-	const f = await findWatch(client, url);
-	if (f) for (const w of await watchesFor(client, f.locator, f.sourceId)) await client.mutation(api.monitors.setEnabled, { monitorId: w.monitorId, enabled: false });
-}
-
-/** Turn off any other watch covering this page (the other scope), so one page never alerts twice. */
-export async function clearOtherScope(client: FeltKitClient, url: string, keep: string): Promise<void> {
-	for (const locator of [parentLocator(url), pageLocator(url)]) if (locator !== keep) for (const w of await watchesFor(client, locator)) await client.mutation(api.monitors.setEnabled, { monitorId: w.monitorId, enabled: false });
-}
-
-/** A browser notification for an alert this capture recorded. */
-export async function notify(a: Alerted): Promise<void> {
-	await chrome.notifications.create(`signal:${a.eventId}`, { type: 'basic', iconUrl: chrome.runtime.getURL('icons/icon128.png'), title: `Signal: ${a.title}`.slice(0, 120), message: a.body.slice(0, 400), priority: 1 }).catch(() => undefined);
-}
-
-// ------------------------------------------------------------------ working set and intent (per-browser selections, not authority)
-
-export async function workingSet(): Promise<Captured[]> { return (await chrome.storage.local.get(K.set))[K.set] ?? []; }
-export async function saveWorkingSet(s: Captured[]): Promise<void> { await chrome.storage.local.set({ [K.set]: s }); }
-export async function intentDraft(): Promise<string | null> { return (await chrome.storage.local.get(K.intent))[K.intent] ?? null; }
-export async function saveIntentDraft(t: string): Promise<void> { await chrome.storage.local.set({ [K.intent]: t }); }
-
-// ------------------------------------------------------------------ discovery
-
-export type { Facets, Facet } from '../../lib/discovery/discover.ts';
-import type { DiscoveryIntent, Facets } from '../../lib/discovery/discover.ts';
-
-/** What the captured pages offer to filter on (types, ranges, categories), for the intent controls. */
-export async function loadFacets(client: FeltKitClient, set: Captured[], types?: string[]): Promise<Facets> {
-	return (await client.query(api.discovery.facetsOf, { pageIds: set.map((p) => p.pageId), ...(types !== undefined ? { types } : {}) })) as unknown as Facets; // [] means "nothing selected", not "no choice"
-}
-
-export interface DiscoveryView {
-	candidates: Array<{ key: string; name: string | null; type: string; metrics?: Record<string, { value: number | null; possibleValues?: number[]; inputs: Array<{ attr: string; provenance: string; source?: string }> }>; status: 'match' | 'possible' | 'non_match' | 'out_of_scope'; missing: string[]; locators: string[]; changed?: { fields: string[] }; criteria: Array<{ id: string; label: string; result: 'true' | 'false' | 'unknown'; reason?: string }> }>;
-	coverage: { declaredTotal: number | null; listed: number; discovered: number; notYetExamined: number | null; exhaustive: boolean; exhaustiveBasis: string; unavailable: Array<{ what: string; why: string }> };
-	plan: Array<{ kind: string; target: string; reason: string; executesIn: 'browser-session' | 'background' | 'user'; priority: number }>;
-	context: Record<string, { value: unknown; source: string; basis: string }>;
-	resultDigest: string;
-	/** Present only when datasets took part: how each property was matched and every value they added. */
-	augmentation?: import('./datasets.ts').Augmentation;
-}
-
-/** Evaluate the intent over the working set; pages captured again are compared with their previous capture. */
-export async function discover(client: FeltKitClient, intent: string, set: Captured[], datasetIds: string[] = []): Promise<DiscoveryView> {
-	if (!set.length) throw new Error('Capture at least one page first.');
-	try { JSON.parse(intent); } catch { throw new Error('The intent is not valid JSON.'); }
-	const pageIds = set.map((p) => p.pageId);
-	const withPrev = set.some((p) => p.previousPageId);
-	const args = { pageIds, intent, ...(withPrev ? { previousPageIds: set.map((p) => p.previousPageId ?? p.pageId) } : {}), ...(datasetIds.length ? { datasetIds } : {}) };
-	return (await client.query(api.discovery.evaluate, args)) as unknown as DiscoveryView;
-}
-
-/** A plan step the person may take in this browser: only http(s) navigation, never anything else. */
-export function navigableTarget(target: string): string | null {
-	try { const u = new URL(target); return u.protocol === 'http:' || u.protocol === 'https:' ? u.toString() : null; } catch { return null; }
-}
-
-// ------------------------------------------------------------------ overlay relay
-
-const OVERLAY_OPS = new Set(['events:forPage', 'events:evidence', 'events:acknowledge', 'watch:forPage']);
-
-/**
- * Relay for the in-page overlay. The overlay (our content script, isolated world) cannot hold a session;
- * it asks the panel. Only three read/acknowledge operations are allowed; for `events:forPage` the
- * locator is the sender tab's own URL, whatever the message says. Ownership is enforced by the server.
- */
-export async function relayOverlay(client: FeltKitClient, msg: { op?: string; args?: Record<string, unknown> }, sender: chrome.runtime.MessageSender): Promise<unknown> {
-	if (sender.id !== chrome.runtime.id || !sender.tab?.url) throw new Error('refused: not from this extension\'s overlay');
-	if (!msg.op || !OVERLAY_OPS.has(msg.op)) throw new Error(`refused: ${String(msg.op)}`);
-	const id = typeof msg.args?.eventId === 'string' ? msg.args.eventId : '';
-	switch (msg.op) {
-		case 'events:forPage': {
-			// Alerts recorded for this exact address and for its parent (a watch that ignores map position).
-			const seen = new Set<string>();
-			const all = [...(await client.query(api.events.forPage, { sourceLocator: pageLocator(sender.tab.url) })) as Array<{ id: string; occurredAt: string }>, ...(await client.query(api.events.forPage, { sourceLocator: parentLocator(sender.tab.url) })) as Array<{ id: string; occurredAt: string }>];
-			return all.filter((e) => !seen.has(e.id) && seen.add(e.id)).sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
-		}
-		case 'events:evidence': return client.query(api.events.evidence, { eventId: id });
-		case 'watch:forPage': {
-			const f = await findWatch(client, sender.tab.url);
-			return f ? [{ name: f.watch.name, criteria: f.watch.criteria, notify: f.watch.notify, scope: f.scope === 'parent' ? `${f.locator} (any map position or filters in the address)` : f.locator }] : [];
-		}
-		default: return client.mutation(api.events.acknowledge, { eventId: id });
-	}
-}
-
-/** Show the overlay on a tab (or refresh it if it is there). Its transport messages the panel; it holds no credentials. */
-export async function showOverlay(tabId: number): Promise<void> {
-	const [present] = await chrome.scripting.executeScript({ target: { tabId }, func: () => { const o = (window as unknown as { __signalOverlay?: { refresh: () => unknown } }).__signalOverlay; if (o) void o.refresh(); return !!o; } });
-	if (present?.result) return;
-	await chrome.scripting.executeScript({
-		target: { tabId },
-		func: (codecBase: string) => {
-			(window as unknown as { SignalOverlayConfig: unknown }).SignalOverlayConfig = {
-				codecBase,
-				transport: async (op: string, args: unknown) => {
-					const r = await chrome.runtime.sendMessage<{ ok: boolean; value?: unknown; error?: string }>({ type: 'signal.overlay', op, args });
-					if (!r?.ok) throw new Error(r?.error ?? 'Signal panel is closed');
-					return r.value;
-				}
-			};
-		},
-		args: [chrome.runtime.getURL('codec')]
-	});
-	await chrome.scripting.executeScript({ target: { tabId }, files: ['overlay.js'] });
-}
-
-/** Scroll to an item on the tab and frame it, with why it matched. False when it is not on the page right now. */
-export async function showOnPage(tabId: number, item: { key: string; name: string | null; locators: string[]; criteria: string[]; others?: Array<{ key: string; name: string | null }> }): Promise<boolean> {
-	await showOverlay(tabId);
-	const [r] = await chrome.scripting.executeScript({
-		target: { tabId },
-		func: (x: typeof item) => (window as unknown as { __signalOverlay?: { show: (v: unknown) => boolean } }).__signalOverlay?.show(x) ?? false,
-		args: [item]
-	});
-	return r?.result === true;
+export async function affected(client: FeltKitClient, sourceId: string, recordKeys: string[]): Promise<Affected[]> {
+	return recordKeys.length ? ((await client.query(api.findings.forRecords, { sourceId, recordKeys: recordKeys.slice(0, 2000) })) as Affected[]) : [];
 }
 
 export function errorText(e: unknown): string {
 	if (e instanceof FeltKitClientError) return `${e.message}${e.code ? ` (${e.code})` : ''}`;
 	return e instanceof Error ? e.message : String(e);
 }
+
+export async function chosenSource(): Promise<string | null> { return (await chrome.storage.local.get(K.source))[K.source] ?? null; }
+export async function chooseSource(id: string | null): Promise<void> { if (id) await chrome.storage.local.set({ [K.source]: id }); else await chrome.storage.local.remove(K.source); }

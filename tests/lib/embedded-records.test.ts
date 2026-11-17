@@ -7,9 +7,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { extractPage } from '../../lib/page/extract.ts';
-import { applyMapping, inspectDataset, parseCsv } from '../../lib/datasets/dataset.ts';
-import { discoverAugmented, type DatasetSource } from '../../lib/datasets/resolve.ts';
-import type { DiscoveryIntent } from '../../lib/discovery/discover.ts';
+import { parseCsv } from '../../lib/sources/records.ts';
+import { applyMapping, proposeMapping } from '../../lib/engine/mapping.ts';
+import { EntityIndex, keysFrom, resolveIdentity } from '../../lib/engine/identity.ts';
+import { pageToDrafts } from '../../lib/sources/page.ts';
 
 const html = readFileSync(new URL('../fixtures/pages/embedded-cards.html', import.meta.url), 'utf8');
 const url = 'https://listings.example/homes/';
@@ -58,11 +59,10 @@ test('virtualized placeholders are not listings, and the page says how many exis
 test('end to end: coordinates read from the card match a parcel with no address in common to normalize', () => {
 	const csv = 'parcel_no,site_addr,assessed_total,tax_annual,lat,lon\n77-001,"12 EXAMPLE ROAD",$281000,$3400,41.70012,-71.50011\n77-002,"34 SAMPLE AVENUE",$392000,$4800,41.71021,-71.51021\n77-003,"56 PLACEHOLDER LANE",$241000,$2900,41.75,-71.6\n';
 	const parsed = parseCsv(csv);
-	const ds: DatasetSource = { id: 'd', name: 'parcels', versionId: 'v', mappingVersion: 1, freshness: 'static', dataAsOf: null, retrievedAt: '', records: applyMapping(parsed, inspectDataset(parsed).proposed).records };
-	const intent: DiscoveryIntent = { schema: 'signal.intent/v1', id: 'i', version: 1, name: 'i', target: { type: ['RealEstateListing'] }, criteria: [] };
-	const { result, augmentation } = discoverAugmented({ intent, pages: [page], datasets: [ds] });
-	assert.equal(result.candidates.length, 3, 'discovery now sees the three cards');
-	const by = Object.fromEntries(augmentation.resolutions[0].resolutions.map((r) => [r.candidateKey.split('/').filter(Boolean).pop()!, r]));
-	const status = Object.values(by).map((r) => `${r.status}:${r.basis ?? ''}`).sort();
-	assert.deepEqual(status, ['conflict:', 'matched:address+coordinates', 'matched:address+coordinates'], 'two confirmed by address and location; the third has the address but its parcel is ~6 km away: a conflict, not a match');
+	const parcels = applyMapping(parsed, proposeMapping(parsed, 'property').mapping).drafts;
+	const ix = new EntityIndex(parcels.map((d) => ({ entityId: d.recordKey, type: 'property', label: d.identity.address, keys: keysFrom([{ identity: d.identity, sourceId: 'parcels' }]) })));
+	const cards = pageToDrafts(page, { entityType: 'property', pageTypes: ['RealEstateListing'] }).drafts;
+	assert.equal(cards.length, 3, 'the three cards become three observations');
+	const status = cards.map((d) => { const r = resolveIdentity(d, 'capture', ix); return `${r.status}:${r.basis}`; }).sort();
+	assert.deepEqual(status, ['conflict:none', 'probable:address+coordinates', 'probable:address+coordinates'], 'two confirmed by address and location; the third has the address but its parcel is ~6 km away: a conflict, not a match');
 });
