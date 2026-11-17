@@ -1,0 +1,226 @@
+{
+ "id": "heldout-pyevents",
+ "category": "event_listing",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Dates are a <time datetime> with split visible text; location is a class-named span with no label."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "Wagtail Space 2026"
+   },
+   "acceptTypes": [
+    "Event",
+    "Unknown",
+    "Article",
+    "ListItem"
+   ],
+   "attributes": {
+    "startDate": {
+     "paths": [
+      "startDate",
+      "date"
+     ],
+     "value": "2026-11-18",
+     "compare": "date"
+    },
+    "location": {
+     "paths": [
+      "location"
+     ],
+     "value": "Online",
+     "compare": "text"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "/events/python-events/2205/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "PyCon Wroclaw 2026"
+   },
+   "acceptTypes": [
+    "Event",
+    "Unknown",
+    "Article",
+    "ListItem"
+   ],
+   "attributes": {
+    "startDate": {
+     "paths": [
+      "startDate",
+      "date"
+     ],
+     "value": "2026-11-20",
+     "compare": "date"
+    },
+    "location": {
+     "paths": [
+      "location"
+     ],
+     "value": "Wroclaw, Poland",
+     "compare": "text"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "/events/python-events/2199/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "PyCon Ireland 2026"
+   },
+   "acceptTypes": [
+    "Event",
+    "Unknown",
+    "Article",
+    "ListItem"
+   ],
+   "attributes": {
+    "startDate": {
+     "paths": [
+      "startDate",
+      "date"
+     ],
+     "value": "2026-11-21",
+     "compare": "date"
+    },
+    "location": {
+     "paths": [
+      "location"
+     ],
+     "value": "Dublin, Ireland",
+     "compare": "text"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "/events/python-events/2206/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Python E-Commerce Forum"
+   },
+   "acceptTypes": [
+    "Event",
+    "Unknown",
+    "Article",
+    "ListItem"
+   ],
+   "attributes": {
+    "startDate": {
+     "paths": [
+      "startDate",
+      "date"
+     ],
+     "value": "2026-11-26",
+     "compare": "date"
+    },
+    "location": {
+     "paths": [
+      "location"
+     ],
+     "value": "Edinburgh, United Kingdom",
+     "compare": "text"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "/events/python-events/2184/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "SciPy India 2026"
+   },
+   "acceptTypes": [
+    "Event",
+    "Unknown",
+    "Article",
+    "ListItem"
+   ],
+   "attributes": {
+    "startDate": {
+     "paths": [
+      "startDate",
+      "date"
+     ],
+     "value": "2026-12-19",
+     "compare": "date"
+    },
+    "location": {
+     "paths": [
+      "location"
+     ],
+     "value": "Chennai, Tamil Nadu, India",
+     "compare": "text"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "/events/python-events/2200/",
+     "compare": "contains"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "PyCon CI 2027"
+   },
+   "acceptTypes": [
+    "Event",
+    "Unknown",
+    "Article",
+    "ListItem"
+   ],
+   "attributes": {
+    "startDate": {
+     "paths": [
+      "startDate",
+      "date"
+     ],
+     "value": "2027-01-22",
+     "compare": "date"
+    },
+    "location": {
+     "paths": [
+      "location"
+     ],
+     "value": "Abidjan, Côte d'Ivoire",
+     "compare": "text"
+    },
+    "url": {
+     "paths": [
+      "url"
+     ],
+     "value": "/events/python-events/2252/",
+     "compare": "contains"
+    }
+   }
+  }
+ ]
+}

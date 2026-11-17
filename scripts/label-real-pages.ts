@@ -191,3 +191,97 @@ const AVAIL = ['availability', 'offers.availability'];
 	});
 	save('usagov-agencies', 'directory', ents, ['Each agency is an accordion button + a panel with hidden="until-found" (collapsed but findable and expandable by the user — accessible information).', 'Fields are "Label:" paragraphs (Website, Phone number, Contact).']);
 }
+
+// ================================================================== HELD-OUT pages (labelled before any evaluation)
+
+// 11. scrapethissite countries (250 cards)
+{
+	const $ = html('heldout-countries');
+	const ents: Ent[] = $('.country').toArray().map((el) => ({
+		match: { attr: 'name', value: t($(el).find('.country-name').text()) }, acceptTypes: ['Country', 'Place', 'Unknown', 'Organization'],
+		attributes: {
+			capital: { paths: ['capital'], value: t($(el).find('.country-capital').text()), compare: 'text' },
+			population: { paths: ['population'], value: Number(t($(el).find('.country-population').text())), compare: 'number' },
+			area: { paths: ['area', 'area_km2', 'area_km'], value: Number(t($(el).find('.country-area').text())), compare: 'number' }
+		}
+	}));
+	save('heldout-countries', 'directory', ents, ['Fields are <strong>Label:</strong> followed by a span value.', 'No type cue exists on the page beyond the heading; Unknown is an acceptable type.']);
+}
+
+// 12. scrapethissite hockey table (class-named cells, empty <th> header)
+{
+	const $ = html('heldout-hockey');
+	const ents: Ent[] = $('tr.team').toArray().map((tr) => ({
+		match: { attr: 'name', value: t($(tr).find('.name').text()) }, acceptTypes: ['TableRow', 'SportsTeam', 'Unknown'],
+		attributes: {
+			year: { paths: ['year'], value: Number(t($(tr).find('.year').text())), compare: 'number' },
+			wins: { paths: ['wins'], value: Number(t($(tr).find('.wins').text())), compare: 'number' },
+			losses: { paths: ['losses'], value: Number(t($(tr).find('.losses').text())), compare: 'number' }
+		}
+	}));
+	save('heldout-hockey', 'data_table', ents, ['Header cells are present but their text is in nested links/whitespace; cells carry class names (name, year, wins).', 'Team names repeat (one row per season).']);
+}
+
+// 13. webscraper.io tables (two Bootstrap tables)
+{
+	const $ = html('heldout-wstables');
+	const ents: Ent[] = [];
+	$('table').each((_, tb) => {
+		const heads = $(tb).find('thead th').toArray().map((x) => t($(x).text()));
+		$(tb).find('tbody tr').each((__, tr) => {
+			const c = $(tr).children('td').toArray().map((x) => t($(x).text()));
+			const iu = heads.indexOf('Username'), fi = heads.indexOf('First Name'), li = heads.indexOf('Last Name');
+			if (iu < 0 || !c[iu]) return;
+			ents.push({ match: { attr: 'username', value: c[iu] }, acceptTypes: ['TableRow', 'Person', 'Unknown'], attributes: {
+				first_name: { paths: ['first_name', 'givenName'], value: c[fi], compare: 'text' },
+				last_name: { paths: ['last_name', 'familyName'], value: c[li], compare: 'text' }
+			} });
+		});
+	});
+	save('heldout-wstables', 'data_table', ents, ['Usernames repeat across the two tables.']);
+}
+
+// 14. python.org events
+{
+	const $ = html('heldout-pyevents');
+	const ents: Ent[] = $('.list-recent-events li').toArray().map((li) => ({
+		match: { attr: 'name', value: t($(li).find('.event-title a').text()) }, acceptTypes: ['Event', 'Unknown', 'Article', 'ListItem'],
+		attributes: {
+			startDate: { paths: ['startDate', 'date'], value: ($(li).find('time').attr('datetime') ?? '').slice(0, 10), compare: 'date' },
+			location: { paths: ['location'], value: t($(li).find('.event-location').text()), compare: 'text' },
+			url: { paths: ['url'], value: $(li).find('.event-title a').attr('href'), compare: 'contains' }
+		}
+	}));
+	save('heldout-pyevents', 'event_listing', ents, ['Dates are a <time datetime> with split visible text; location is a class-named span with no label.']);
+}
+
+// 15. PyPI project page
+{
+	const $ = html('heldout-pypi');
+	const title = t($('h1').first().text());
+	const [pkg, version] = title.split(' ');
+	const author = t($('strong:contains("Author:")').parent().find('a').first().text());
+	save('heldout-pypi', 'product_detail', [{
+		match: { attr: 'name', value: title, compare: 'contains' }, acceptTypes: ['SoftwareApplication', 'Product', 'Article', 'WebPage', 'Unknown'],
+		attributes: { released: { paths: ['date', 'datePublished', 'released'], value: ($('strong:contains("Released:")').parent().find('time').attr('datetime') ?? '').slice(0, 10), compare: 'date' } },
+		relationships: [{ types: ['author'], to: { attr: 'name', value: author } }]
+	}], [`Package ${pkg} version ${version}.`, 'Author is a mailto link after an <strong>Author:</strong> label.']);
+}
+
+// 16. Wikipedia tallest buildings: the main 98-row table (two-row header: Height m | ft)
+{
+	const $ = html('heldout-tallest');
+	const table = $('table.wikitable').toArray().find((tb) => /Name/.test($(tb).find('tr').first().text()) && /Height/.test($(tb).find('tr').first().text()))!;
+	const ents: Ent[] = [];
+	$(table).find('tr').slice(2).each((_, tr) => {
+		const c = $(tr).children('td,th').toArray().map((x) => t($(x).text()).replace(/\[[^\]]*\]/g, '').trim());
+		if (c.length < 9) return;
+		// columns: rank | name | m | ft | floors | image | city | country | year | comments | ref
+		ents.push({ match: { attr: 'name', value: c[1] }, acceptTypes: ['TableRow', 'Place', 'LandmarksOrHistoricalBuildings', 'Unknown'], attributes: {
+			city: { paths: ['city'], value: c[6], compare: 'text' },
+			country: { paths: ['country'], value: c[7], compare: 'text' },
+			year: { paths: ['year'], value: Number(c[8]), compare: 'number' }
+		} });
+	});
+	save('heldout-tallest', 'data_table', ents, ['Two-row header (Height: m | ft) shifts column positions; same buildings appear in several tables on the page.']);
+}

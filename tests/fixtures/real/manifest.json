@@ -1,16 +1,131 @@
 {
-  "note": "Real, publicly accessible pages used to evaluate signal.page/v1. Fetched with Signal's HttpSource (robots.txt respected). Expected results live in labels/ and were written before the extractor was run on these pages.",
+  "note": "Real, publicly accessible pages used to evaluate signal.page/v1. Fetched with Signal's HttpSource (robots.txt respected). Expected results live in labels/ and were written before the extractor was run on these pages. Split 'tuning': pages inspected while improving generic rules (scores are optimistic). Split 'heldout': labelled and committed before a single, untuned evaluation.",
   "pages": [
-    { "id": "books-catalog", "category": "product_listing", "url": "https://books.toscrape.com/", "terms": "toscrape.com is a sandbox built for scraping practice" },
-    { "id": "books-detail", "category": "product_detail", "url": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html", "terms": "toscrape.com is a sandbox built for scraping practice" },
-    { "id": "webscraper-laptops", "category": "product_listing", "url": "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops", "terms": "webscraper.io test sites are published for scraping practice; robots.txt allows" },
-    { "id": "fake-jobs", "category": "job_listing", "url": "https://realpython.github.io/fake-jobs/", "terms": "Real Python practice site for scraping tutorials" },
-    { "id": "quotes", "category": "posts_with_authors", "url": "https://quotes.toscrape.com/", "terms": "toscrape.com is a sandbox built for scraping practice" },
-    { "id": "wiki-night-train", "category": "article", "url": "https://en.wikipedia.org/wiki/Night_train", "terms": "Wikipedia text CC BY-SA 4.0; attribution: Wikipedia contributors, 'Night train'" },
-    { "id": "wiki-population", "category": "data_table", "url": "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population", "terms": "Wikipedia text CC BY-SA 4.0; attribution: Wikipedia contributors" },
-    { "id": "arxiv-abs", "category": "research_publication", "url": "https://arxiv.org/abs/1706.03762", "terms": "arXiv abstract page; robots.txt allows /abs; metadata only retained in labels" },
-    { "id": "hn-item", "category": "discussion", "url": "https://news.ycombinator.com/item?id=1", "terms": "Public page; robots.txt allows. User names and comment text sanitized before retention" },
-    { "id": "usagov-agencies", "category": "directory", "url": "https://www.usa.gov/agency-index", "terms": "U.S. Government work (public domain)" },
-    { "id": "discourse-meta", "category": "discussion", "url": "https://meta.discourse.org/t/what-is-discourse/18", "terms": "Expected refusal: kept to show refusals are recorded, not bypassed" }
+    {
+      "id": "books-catalog",
+      "category": "product_listing",
+      "url": "https://books.toscrape.com/",
+      "terms": "toscrape.com is a sandbox built for scraping practice",
+      "split": "tuning"
+    },
+    {
+      "id": "books-detail",
+      "category": "product_detail",
+      "url": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+      "terms": "toscrape.com is a sandbox built for scraping practice",
+      "split": "tuning"
+    },
+    {
+      "id": "webscraper-laptops",
+      "category": "product_listing",
+      "url": "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops",
+      "terms": "webscraper.io test sites are published for scraping practice; robots.txt allows",
+      "split": "tuning"
+    },
+    {
+      "id": "fake-jobs",
+      "category": "job_listing",
+      "url": "https://realpython.github.io/fake-jobs/",
+      "terms": "Real Python practice site for scraping tutorials",
+      "split": "tuning"
+    },
+    {
+      "id": "quotes",
+      "category": "posts_with_authors",
+      "url": "https://quotes.toscrape.com/",
+      "terms": "toscrape.com is a sandbox built for scraping practice",
+      "split": "tuning"
+    },
+    {
+      "id": "wiki-night-train",
+      "category": "article",
+      "url": "https://en.wikipedia.org/wiki/Night_train",
+      "terms": "Wikipedia text CC BY-SA 4.0; attribution: Wikipedia contributors, 'Night train'",
+      "split": "tuning"
+    },
+    {
+      "id": "wiki-population",
+      "category": "data_table",
+      "url": "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population",
+      "terms": "Wikipedia text CC BY-SA 4.0; attribution: Wikipedia contributors",
+      "split": "tuning"
+    },
+    {
+      "id": "arxiv-abs",
+      "category": "research_publication",
+      "url": "https://arxiv.org/abs/1706.03762",
+      "terms": "arXiv abstract page; robots.txt allows /abs; metadata only retained in labels",
+      "split": "tuning"
+    },
+    {
+      "id": "hn-item",
+      "category": "discussion",
+      "url": "https://news.ycombinator.com/item?id=1",
+      "terms": "Public page; robots.txt allows. User names and comment text sanitized before retention",
+      "split": "tuning"
+    },
+    {
+      "id": "usagov-agencies",
+      "category": "directory",
+      "url": "https://www.usa.gov/agency-index",
+      "terms": "U.S. Government work (public domain)",
+      "split": "tuning"
+    },
+    {
+      "id": "discourse-meta",
+      "category": "discussion",
+      "url": "https://meta.discourse.org/t/what-is-discourse/18",
+      "terms": "Expected refusal: kept to show refusals are recorded, not bypassed",
+      "split": "tuning"
+    },
+    {
+      "id": "heldout-countries",
+      "category": "directory",
+      "split": "heldout",
+      "url": "https://www.scrapethissite.com/pages/simple/",
+      "terms": "scrapethissite.com is built for scraping practice"
+    },
+    {
+      "id": "heldout-hockey",
+      "category": "data_table",
+      "split": "heldout",
+      "url": "https://www.scrapethissite.com/pages/forms/",
+      "terms": "scrapethissite.com is built for scraping practice"
+    },
+    {
+      "id": "heldout-wstables",
+      "category": "data_table",
+      "split": "heldout",
+      "url": "https://webscraper.io/test-sites/tables",
+      "terms": "webscraper.io test sites are published for scraping practice"
+    },
+    {
+      "id": "heldout-pyevents",
+      "category": "event_listing",
+      "split": "heldout",
+      "url": "https://www.python.org/events/python-events/",
+      "terms": "python.org; robots.txt allows; event listings are factual"
+    },
+    {
+      "id": "heldout-pypi",
+      "category": "product_detail",
+      "split": "heldout",
+      "url": "https://pypi.org/project/requests/",
+      "terms": "PyPI project page; robots.txt allows"
+    },
+    {
+      "id": "heldout-tallest",
+      "category": "data_table",
+      "split": "heldout",
+      "url": "https://en.wikipedia.org/wiki/List_of_tallest_buildings",
+      "terms": "Wikipedia text CC BY-SA 4.0; attribution: Wikipedia contributors"
+    },
+    {
+      "id": "gutenberg-1342",
+      "category": "product_detail",
+      "split": "refused",
+      "url": "https://www.gutenberg.org/ebooks/1342",
+      "terms": "Expected refusal: robots.txt unreachable \u21d2 disallow (RFC 9309)"
+    }
   ]
 }

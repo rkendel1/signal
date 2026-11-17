@@ -1,0 +1,19 @@
+{
+  "id": "heldout-hockey",
+  "split": "heldout",
+  "url": "https://www.scrapethissite.com/pages/forms/",
+  "category": "data_table",
+  "terms": "scrapethissite.com is built for scraping practice",
+  "fetchedAt": "2026-11-17T16:33:18.857Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://www.scrapethissite.com/pages/forms/",
+  "contentType": "text/html; charset=utf-8",
+  "byteLength": 50806,
+  "sha256": "d293eea6ee9227c5bfdf81d58b98d3333c733eb6db19d8b156a2a3338789b4cf",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

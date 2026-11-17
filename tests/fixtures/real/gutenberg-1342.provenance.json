@@ -1,0 +1,18 @@
+{
+  "id": "gutenberg-1342",
+  "split": "refused",
+  "url": "https://www.gutenberg.org/ebooks/1342",
+  "category": "product_detail",
+  "terms": "Expected refusal: robots.txt unreachable ⇒ disallow (RFC 9309)",
+  "fetchedAt": "2026-11-17T16:33:27.609Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "unavailable",
+  "finalUrl": null,
+  "status": "denied",
+  "error": {
+    "code": "ROBOTS_UNREACHABLE",
+    "message": "robots.txt unreachable; automated polling is not permitted until it is"
+  },
+  "sanitized": false
+}

@@ -1,0 +1,184 @@
+{
+ "id": "heldout-wstables",
+ "category": "data_table",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Usernames repeat across the two tables."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "username",
+    "value": "@mdo"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Person",
+    "Unknown"
+   ],
+   "attributes": {
+    "first_name": {
+     "paths": [
+      "first_name",
+      "givenName"
+     ],
+     "value": "Mark",
+     "compare": "text"
+    },
+    "last_name": {
+     "paths": [
+      "last_name",
+      "familyName"
+     ],
+     "value": "Otto",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "username",
+    "value": "@fat"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Person",
+    "Unknown"
+   ],
+   "attributes": {
+    "first_name": {
+     "paths": [
+      "first_name",
+      "givenName"
+     ],
+     "value": "Jacob",
+     "compare": "text"
+    },
+    "last_name": {
+     "paths": [
+      "last_name",
+      "familyName"
+     ],
+     "value": "Thornton",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "username",
+    "value": "@twitter"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Person",
+    "Unknown"
+   ],
+   "attributes": {
+    "first_name": {
+     "paths": [
+      "first_name",
+      "givenName"
+     ],
+     "value": "Larry",
+     "compare": "text"
+    },
+    "last_name": {
+     "paths": [
+      "last_name",
+      "familyName"
+     ],
+     "value": "the Bird",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "username",
+    "value": "@hp"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Person",
+    "Unknown"
+   ],
+   "attributes": {
+    "first_name": {
+     "paths": [
+      "first_name",
+      "givenName"
+     ],
+     "value": "Harry",
+     "compare": "text"
+    },
+    "last_name": {
+     "paths": [
+      "last_name",
+      "familyName"
+     ],
+     "value": "Potter",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "username",
+    "value": "@dunno"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Person",
+    "Unknown"
+   ],
+   "attributes": {
+    "first_name": {
+     "paths": [
+      "first_name",
+      "givenName"
+     ],
+     "value": "John",
+     "compare": "text"
+    },
+    "last_name": {
+     "paths": [
+      "last_name",
+      "familyName"
+     ],
+     "value": "Snow",
+     "compare": "text"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "username",
+    "value": "@timbean"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Person",
+    "Unknown"
+   ],
+   "attributes": {
+    "first_name": {
+     "paths": [
+      "first_name",
+      "givenName"
+     ],
+     "value": "Tim",
+     "compare": "text"
+    },
+    "last_name": {
+     "paths": [
+      "last_name",
+      "familyName"
+     ],
+     "value": "Bean",
+     "compare": "text"
+    }
+   }
+  }
+ ]
+}

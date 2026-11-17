@@ -1,0 +1,19 @@
+{
+  "id": "heldout-tallest",
+  "split": "heldout",
+  "url": "https://en.wikipedia.org/wiki/List_of_tallest_buildings",
+  "category": "data_table",
+  "terms": "Wikipedia text CC BY-SA 4.0; attribution: Wikipedia contributors",
+  "fetchedAt": "2026-11-17T16:33:25.909Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://en.wikipedia.org/wiki/List_of_tallest_buildings",
+  "contentType": "text/html; charset=UTF-8",
+  "byteLength": 1349020,
+  "sha256": "02ad79899eeeff54207299301094cd30eaefa796586531de12cfaaa51a7d321a",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

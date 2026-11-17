@@ -1,0 +1,19 @@
+{
+  "id": "heldout-pyevents",
+  "split": "heldout",
+  "url": "https://www.python.org/events/python-events/",
+  "category": "event_listing",
+  "terms": "python.org; robots.txt allows; event listings are factual",
+  "fetchedAt": "2026-11-17T16:33:22.442Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://www.python.org/events/python-events/",
+  "contentType": "text/html; charset=utf-8",
+  "byteLength": 39223,
+  "sha256": "691ba72ef8b3c6add7c8f76d4183cbfe440b0fa1f95eaba04c1d84a88c25ce34",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

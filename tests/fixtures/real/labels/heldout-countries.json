@@ -1,0 +1,9261 @@
+{
+ "id": "heldout-countries",
+ "category": "directory",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Fields are <strong>Label:</strong> followed by a span value.",
+  "No type cue exists on the page beyond the heading; Unknown is an acceptable type."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "Andorra"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Andorra la Vella",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 84000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 468,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "United Arab Emirates"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Abu Dhabi",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4975593,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 82880,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Afghanistan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kabul",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 29121286,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 647500,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Antigua and Barbuda"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "St. John's",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 86754,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 443,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Anguilla"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "The Valley",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 13254,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 102,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Albania"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tirana",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2986952,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 28748,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Armenia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Yerevan",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2968000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 29800,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Angola"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Luanda",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 13068161,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1246700,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Antarctica"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "None",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 14000000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Argentina"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Buenos Aires",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 41343201,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2766890,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "American Samoa"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Pago Pago",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 57881,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 199,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Austria"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Vienna",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 8205000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 83858,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Australia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Canberra",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 21515754,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 7686850,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Aruba"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Oranjestad",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 71566,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 193,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Åland"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Mariehamn",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 26711,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1580,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Azerbaijan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Baku",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 8303512,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 86600,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bosnia and Herzegovina"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Sarajevo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4590000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 51129,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Barbados"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bridgetown",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 285653,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 431,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bangladesh"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Dhaka",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 156118464,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 144000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Belgium"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Brussels",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10403000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 30510,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Burkina Faso"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Ouagadougou",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 16241811,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 274200,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bulgaria"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Sofia",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7148785,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 110910,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bahrain"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Manama",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 738004,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 665,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Burundi"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bujumbura",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9863117,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 27830,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Benin"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Porto-Novo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9056010,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 112620,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Barthélemy"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Gustavia",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 8450,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 21,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bermuda"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Hamilton",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 65365,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 53,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Brunei"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bandar Seri Begawan",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 395027,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 5770,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bolivia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Sucre",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9947418,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1098580,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bonaire"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kralendijk",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 18012,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 328,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Brazil"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Brasília",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 201103330,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 8511965,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bahamas"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Nassau",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 301790,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 13940,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bhutan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Thimphu",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 699847,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 47000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bouvet Island"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "None",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 49,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Botswana"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Gaborone",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2029307,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 600370,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Belarus"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Minsk",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9685000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 207600,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Belize"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Belmopan",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 314522,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 22966,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Canada"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Ottawa",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 33679000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 9984670,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cocos [Keeling] Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "West Island",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 628,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 14,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Democratic Republic of the Congo"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kinshasa",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 70916439,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2345410,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Central African Republic"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bangui",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4844927,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 622984,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Republic of the Congo"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Brazzaville",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3039126,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 342000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Switzerland"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bern",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7581000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 41290,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ivory Coast"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Yamoussoukro",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 21058798,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 322460,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cook Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Avarua",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 21388,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 240,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Chile"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Santiago",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 16746491,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 756950,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cameroon"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Yaoundé",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 19294149,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 475440,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "China"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Beijing",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1330044000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 9596960,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Colombia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bogotá",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 47790000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1138910,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Costa Rica"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "San José",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4516220,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 51100,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cuba"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Havana",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11423000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 110860,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cape Verde"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Praia",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 508659,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 4033,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Curacao"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Willemstad",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 141766,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 444,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Christmas Island"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Flying Fish Cove",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1500,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 135,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cyprus"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Nicosia",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1102677,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 9250,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Czech Republic"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Prague",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10476000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 78866,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Germany"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Berlin",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 81802257,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 357021,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Djibouti"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Djibouti",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 740528,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 23000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Denmark"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Copenhagen",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5484000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 43094,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dominica"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Roseau",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 72813,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 754,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dominican Republic"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Santo Domingo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9823821,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 48730,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Algeria"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Algiers",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 34586184,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2381740,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ecuador"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Quito",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 14790608,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 283560,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Estonia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tallinn",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1291170,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 45226,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Egypt"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Cairo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 80471869,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1001450,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Western Sahara"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Laâyoune / El Aaiún",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 273008,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 266000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Eritrea"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Asmara",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5792984,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 121320,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Spain"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Madrid",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 46505963,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 504782,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ethiopia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Addis Ababa",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 88013491,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1127127,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Finland"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Helsinki",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5244000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 337030,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Fiji"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Suva",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 875983,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 18270,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Falkland Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Stanley",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2638,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 12173,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Micronesia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Palikir",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 107708,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 702,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Faroe Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tórshavn",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 48228,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1399,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "France"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Paris",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 64768389,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 547030,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Gabon"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Libreville",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1545255,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 267667,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "United Kingdom"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "London",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 62348447,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 244820,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Grenada"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "St. George's",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 107818,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 344,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Georgia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tbilisi",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4630000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 69700,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "French Guiana"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Cayenne",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 195506,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 91000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guernsey"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "St Peter Port",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 65228,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 78,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ghana"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Accra",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 24339838,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 239460,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Gibraltar"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Gibraltar",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 27884,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 6.5,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Greenland"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Nuuk",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 56375,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2166086,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Gambia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bathurst",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1593256,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 11300,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guinea"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Conakry",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10324025,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 245857,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guadeloupe"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Basse-Terre",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 443000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1780,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Equatorial Guinea"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Malabo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1014999,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 28051,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Greece"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Athens",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11000000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 131940,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "South Georgia and the South Sandwich Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Grytviken",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 30,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 3903,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guatemala"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Guatemala City",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 13550440,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 108890,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guam"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Hagåtña",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 159358,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 549,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guinea-Bissau"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bissau",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1565126,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 36120,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guyana"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Georgetown",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 748486,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 214970,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hong Kong"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Hong Kong",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6898686,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1092,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Heard Island and McDonald Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "None",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 412,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Honduras"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tegucigalpa",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7989415,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 112090,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Croatia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Zagreb",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4491000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 56542,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Haiti"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Port-au-Prince",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9648924,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 27750,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hungary"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Budapest",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9982000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 93030,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Indonesia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Jakarta",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 242968342,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1919440,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ireland"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Dublin",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4622917,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 70280,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Israel"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "None",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7353985,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 20770,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Isle of Man"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Douglas",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 75049,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 572,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "India"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "New Delhi",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1173108018,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 3287590,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "British Indian Ocean Territory"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "None",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 60,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Iraq"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Baghdad",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 29671605,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 437072,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Iran"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tehran",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 76923300,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1648000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Iceland"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Reykjavik",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 308910,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 103000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Italy"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Rome",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 60340328,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 301230,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Jersey"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Saint Helier",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 90812,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 116,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Jamaica"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kingston",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2847232,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 10991,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Jordan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Amman",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6407085,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 92300,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Japan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tokyo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 127288000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 377835,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kenya"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Nairobi",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 40046566,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 582650,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kyrgyzstan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bishkek",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5776500,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 198500,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cambodia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Phnom Penh",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 14453680,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 181040,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kiribati"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tarawa",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 92533,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 811,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Comoros"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Moroni",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 773407,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2170,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Kitts and Nevis"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Basseterre",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 51134,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 261,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "North Korea"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Pyongyang",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 22912177,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 120540,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "South Korea"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Seoul",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 48422644,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 98480,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kuwait"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kuwait City",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2789132,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 17820,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Cayman Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "George Town",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 44270,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 262,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kazakhstan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Astana",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 15340000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2717300,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Laos"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Vientiane",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6368162,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 236800,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lebanon"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Beirut",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4125247,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 10400,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Lucia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Castries",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 160922,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 616,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Liechtenstein"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Vaduz",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 35000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 160,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sri Lanka"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Colombo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 21513990,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 65610,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Liberia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Monrovia",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3685076,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 111370,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lesotho"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Maseru",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1919552,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 30355,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lithuania"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Vilnius",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2944459,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 65200,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Luxembourg"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Luxembourg",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 497538,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2586,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Latvia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Riga",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2217969,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 64589,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Libya"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tripoli",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6461454,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1759540,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Morocco"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Rabat",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 31627428,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 446550,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Monaco"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Monaco",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 32965,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1.95,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Moldova"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Chişinău",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4324000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 33843,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Montenegro"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Podgorica",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 666730,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 14026,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Martin"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Marigot",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 35925,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 53,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Madagascar"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Antananarivo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 21281844,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 587040,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Marshall Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Majuro",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 65859,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 181.3,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Macedonia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Skopje",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2062294,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 25333,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mali"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bamako",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 13796354,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1240000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Myanmar [Burma]"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Naypyitaw",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 53414374,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 678500,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mongolia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Ulan Bator",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3086918,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1565000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Macao"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Macao",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 449198,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 254,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Northern Mariana Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Saipan",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 53883,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 477,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Martinique"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Fort-de-France",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 432900,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1100,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mauritania"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Nouakchott",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3205060,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1030700,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Montserrat"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Plymouth",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9341,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 102,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Malta"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Valletta",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 403000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 316,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mauritius"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Port Louis",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1294104,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2040,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Maldives"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Malé",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 395650,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 300,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Malawi"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Lilongwe",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 15447500,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 118480,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mexico"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Mexico City",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 112468855,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1972550,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Malaysia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kuala Lumpur",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 28274729,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 329750,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mozambique"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Maputo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 22061451,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 801590,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Namibia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Windhoek",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2128471,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 825418,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "New Caledonia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Noumea",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 216494,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 19060,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Niger"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Niamey",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 15878271,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1267000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Norfolk Island"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kingston",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1828,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 34.6,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nigeria"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Abuja",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 154000000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 923768,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nicaragua"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Managua",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5995928,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 129494,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Netherlands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Amsterdam",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 16645000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 41526,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Norway"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Oslo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5009150,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 324220,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nepal"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kathmandu",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 28951852,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 140800,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nauru"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Yaren",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10065,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 21,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Niue"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Alofi",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2166,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 260,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "New Zealand"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Wellington",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4252277,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 268680,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Oman"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Muscat",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2967717,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 212460,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Panama"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Panama City",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3410676,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 78200,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Peru"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Lima",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 29907003,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1285220,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "French Polynesia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Papeete",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 270485,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 4167,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Papua New Guinea"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Port Moresby",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6064515,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 462840,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Philippines"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Manila",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 99900177,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 300000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Pakistan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Islamabad",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 184404791,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 803940,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Poland"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Warsaw",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 38500000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 312685,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Pierre and Miquelon"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Saint-Pierre",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7012,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 242,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Pitcairn Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Adamstown",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 46,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 47,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Puerto Rico"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "San Juan",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3916632,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 9104,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Palestine"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "None",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3800000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 5970,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Portugal"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Lisbon",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10676000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 92391,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Palau"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Melekeok",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 19907,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 458,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Paraguay"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Asunción",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6375830,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 406750,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Qatar"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Doha",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 840926,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 11437,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Réunion"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Saint-Denis",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 776948,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2517,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Romania"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bucharest",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 21959278,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 237500,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Serbia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Belgrade",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7344847,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 88361,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Russia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Moscow",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 140702000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 17100000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Rwanda"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kigali",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11055976,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 26338,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saudi Arabia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Riyadh",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 25731776,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1960582,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Solomon Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Honiara",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 559198,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 28450,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Seychelles"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Victoria",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 88340,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 455,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sudan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Khartoum",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 35000000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1861484,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sweden"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Stockholm",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 9828655,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 449964,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Singapore"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Singapore",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4701069,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 692.7,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Helena"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Jamestown",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7460,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 410,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Slovenia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Ljubljana",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2007000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 20273,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Svalbard and Jan Mayen"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Longyearbyen",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 2550,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 62049,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Slovakia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bratislava",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5455000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 48845,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sierra Leone"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Freetown",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 5245695,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 71740,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "San Marino"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "San Marino",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 31477,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 61.2,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Senegal"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Dakar",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 12323252,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 196190,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Somalia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Mogadishu",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10112453,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 637657,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Suriname"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Paramaribo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 492829,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 163270,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "South Sudan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Juba",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 8260490,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 644329,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "São Tomé and Príncipe"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "São Tomé",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 175808,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1001,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "El Salvador"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "San Salvador",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6052064,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 21040,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Sint Maarten"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Philipsburg",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 37429,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 21,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Syria"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Damascus",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 22198110,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 185180,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Swaziland"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Mbabane",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1354051,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 17363,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Turks and Caicos Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Cockburn Town",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 20556,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 430,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Chad"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "N'Djamena",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10543464,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1284000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "French Southern Territories"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Port-aux-Français",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 140,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 7829,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Togo"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Lomé",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 6587239,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 56785,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Thailand"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Bangkok",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 67089500,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 514000,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tajikistan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Dushanbe",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 7487489,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 143100,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tokelau"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "None",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1466,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 10,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "East Timor"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Dili",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1154625,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 15007,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Turkmenistan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Ashgabat",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 4940916,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 488100,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tunisia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tunis",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10589025,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 163610,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tonga"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Nuku'alofa",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 122580,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 748,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Turkey"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Ankara",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 77804122,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 780580,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Trinidad and Tobago"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Port of Spain",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1228691,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 5128,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tuvalu"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Funafuti",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 10472,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 26,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Taiwan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Taipei",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 22894384,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 35980,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Tanzania"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Dodoma",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 41892895,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 945087,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ukraine"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kiev",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 45415596,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 603700,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Uganda"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kampala",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 33398682,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 236040,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "U.S. Minor Outlying Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "None",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 0,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "United States"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Washington",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 310232863,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 9629091,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Uruguay"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Montevideo",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 3477000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 176220,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Uzbekistan"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Tashkent",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 27865738,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 447400,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Vatican City"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Vatican City",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 921,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 0.44,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Saint Vincent and the Grenadines"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Kingstown",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 104217,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 389,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Venezuela"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Caracas",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 27223228,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 912050,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "British Virgin Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Road Town",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 21730,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 153,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "U.S. Virgin Islands"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Charlotte Amalie",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 108708,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 352,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Vietnam"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Hanoi",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 89571130,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 329560,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Vanuatu"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Port Vila",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 221552,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 12200,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Wallis and Futuna"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Mata-Utu",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 16025,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 274,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Samoa"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Apia",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 192001,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 2944,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kosovo"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Pristina",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 1800000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 10908,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Yemen"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Sanaa",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 23495361,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 527970,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mayotte"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Mamoudzou",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 159042,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 374,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "South Africa"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Pretoria",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 49000000,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 1219912,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Zambia"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Lusaka",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 13460305,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 752614,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Zimbabwe"
+   },
+   "acceptTypes": [
+    "Country",
+    "Place",
+    "Unknown",
+    "Organization"
+   ],
+   "attributes": {
+    "capital": {
+     "paths": [
+      "capital"
+     ],
+     "value": "Harare",
+     "compare": "text"
+    },
+    "population": {
+     "paths": [
+      "population"
+     ],
+     "value": 11651858,
+     "compare": "number"
+    },
+    "area": {
+     "paths": [
+      "area",
+      "area_km2",
+      "area_km"
+     ],
+     "value": 390580,
+     "compare": "number"
+    }
+   }
+  }
+ ]
+}

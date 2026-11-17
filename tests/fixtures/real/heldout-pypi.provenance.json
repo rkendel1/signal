@@ -1,0 +1,19 @@
+{
+  "id": "heldout-pypi",
+  "split": "heldout",
+  "url": "https://pypi.org/project/requests/",
+  "category": "product_detail",
+  "terms": "PyPI project page; robots.txt allows",
+  "fetchedAt": "2026-11-17T16:33:24.344Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://pypi.org/project/requests/",
+  "contentType": "text/html; charset=UTF-8",
+  "byteLength": 334197,
+  "sha256": "26d142fb03bdb7be68c7bcf529fd05eecbaf3ac3046266d2fbf53cadd74c895b",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

@@ -1,0 +1,3055 @@
+{
+ "id": "heldout-tallest",
+ "category": "data_table",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Two-row header (Height: m | ft) shifts column positions; same buildings appear in several tables on the page."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "Burj Khalifa"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2010,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Merdeka Maybank Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Kuala Lumpur",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Malaysia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2024,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Shanghai Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shanghai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2015,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Mecca Royal Clock Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Mecca",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Saudi Arabia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2012,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ping An Finance Centre"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenzhen",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2017,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lotte World Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Seoul",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "South Korea",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2017,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "One World Trade Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New York City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2014,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guangzhou CTF Finance Centre"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Guangzhou",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2016,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "CITIC Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Beijing",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2018",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": null,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Taipei 101"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Taipei",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Taiwan",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2004,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Shanghai World Financial Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shanghai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2008,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "International Commerce Centre"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Hong Kong",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2010",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": null,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Wuhan Greenland Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Wuhan",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2023",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": null,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Central Park Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New York City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2021,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Lakhta Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Saint Petersburg",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Russia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2019,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Landmark 81"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Ho Chi Minh City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Vietnam",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2018,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "International Land-Sea Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Chongqing",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2024,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "The Exchange 106"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Kuala Lumpur",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Malaysia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2019,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Changsha IFS T1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Changsha",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2018,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Petronas Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Kuala Lumpur",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Malaysia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1998,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Zifeng Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Nanjing",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2010,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Wuhan Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Wuhan",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2019",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Willis Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Chicago",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1974,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "KK100"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenzhen",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2011,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guangzhou International Finance Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Guangzhou",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2010",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "111 West 57th Street"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New York City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2021,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Shandong International Financial Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Jinan",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2025,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "One Vanderbilt"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New York City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2020,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "432 Park Avenue"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New York City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2015",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Marina 101"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2017,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Trump International Hotel and Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Chicago",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2009,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "270 Park Avenue"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New York City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2025",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Minying International Trade Center T2"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dongguan",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2021,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Jin Mao Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shanghai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "1999",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Nanjing Financial City Phase II Plot C Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Nanjing",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2025",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Princess Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2012,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Al Hamra Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Kuwait City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Kuwait",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2011,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "International Finance Centre"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Hong Kong",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2003,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Haeundae LCT The Sharp Landmark Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Busan",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "South Korea",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2019,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ningbo Central Plaza"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Ningbo",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2024,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guangxi China Resources Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Nanning",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2020",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": null,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guiyang International Financial Center T1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Guiyang",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2020",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": null,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Iconic Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New Administrative Capital",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Egypt",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2023,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "China Merchants Bank Global Headquarters Main Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenzhen",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2025,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "China Resources Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "2018",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "23 Marina"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2012,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "CITIC Plaza"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Guangzhou",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1996,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Citymark Centre"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenzhen",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2022",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Shum Yip Upperhills Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "2020",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "30 Hudson Yards"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New York City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2019,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Public Investment Fund Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Riyadh",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Saudi Arabia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2021,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Shun Hing Square"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenzhen",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1996,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Eton Place Dalian Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dalian",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2016",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": null,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Autograph Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Jakarta",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Indonesia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2022,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Logan Century Center 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Nanning",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2018,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Burj Mohammed bin Rashid"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Abu Dhabi",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2014,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Empire State Building"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New York City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1931,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Elite Residence"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2012,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Ciel Dubai Marina"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2025",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": null,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Riverview Plaza"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Wuhan",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2021,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Guangdong Business Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Guangzhou",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2025",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dabaihui Plaza"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenzhen",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2021",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Central Plaza"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Hong Kong",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "1992",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": null,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Federation Tower (East Tower)"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Moscow",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Russia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2016,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hengfeng Guiyang Center Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Guiyang",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2025,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Dalian International Trade Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dalian",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2019",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Shanghai International Trade Center Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shanghai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2025",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Haitian Center Tower 2"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Qingdao",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2021,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Golden Eagle Tiandi Tower A"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Nanjing",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2019",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bank of China Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Hong Kong",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "1990",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Bank of America Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "New York City",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2009,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "St. Regis Chicago"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Chicago",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United States",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2020,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Almas Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2008,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Huiyun Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenzhen",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2023",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hanking Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "2018",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Greenland Group Suzhou Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Suzhou",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2025",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Gevora Hotel"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "2017",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Galaxy World Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenzhen",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2023,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "JW Marriott Marquis Dubai Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "2012",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Emirates Office Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "2000",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Raffles City Chongqing T3N"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Chongqing",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2019,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "OKO – South Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Moscow",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Russia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2015,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "CBRT Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Istanbul",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Turkey",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2024,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "SkyTower at Pinnacle One Yonge"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Toronto",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Canada",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2026,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Forum 66 Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenyang",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2015,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "The Pinnacle"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Guangzhou",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2012",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 0,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Xi'an Glory International Financial Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Xi'an",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "2021",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": null,
+     "compare": "number"
+    }
+   }
+  }
+ ]
+}

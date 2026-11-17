@@ -1,0 +1,19 @@
+{
+  "id": "heldout-countries",
+  "split": "heldout",
+  "url": "https://www.scrapethissite.com/pages/simple/",
+  "category": "directory",
+  "terms": "scrapethissite.com is built for scraping practice",
+  "fetchedAt": "2026-11-17T16:33:16.723Z",
+  "method": "http-page@1",
+  "userAgent": "BoundrySignal/0.1 (+https://boundry.dev/signal)",
+  "robots": "allowed",
+  "httpStatus": 200,
+  "finalUrl": "https://www.scrapethissite.com/pages/simple/",
+  "contentType": "text/html; charset=utf-8",
+  "byteLength": 203728,
+  "sha256": "3482c4dbe722e85a54da24c016b49cc2a19a550382097bfc96cb60a89a02e80e",
+  "status": "ok",
+  "error": null,
+  "sanitized": false
+}

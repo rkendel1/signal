@@ -1,0 +1,47 @@
+{
+ "id": "heldout-pypi",
+ "category": "product_detail",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Package requests version 2.34.2.",
+  "Author is a mailto link after an <strong>Author:</strong> label."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "requests 2.34.2",
+    "compare": "contains"
+   },
+   "acceptTypes": [
+    "SoftwareApplication",
+    "Product",
+    "Article",
+    "WebPage",
+    "Unknown"
+   ],
+   "attributes": {
+    "released": {
+     "paths": [
+      "date",
+      "datePublished",
+      "released"
+     ],
+     "value": "2026-05-14",
+     "compare": "date"
+    }
+   },
+   "relationships": [
+    {
+     "types": [
+      "author"
+     ],
+     "to": {
+      "attr": "name",
+      "value": "Kenneth Reitz"
+     }
+    }
+   ]
+  }
+ ]
+}

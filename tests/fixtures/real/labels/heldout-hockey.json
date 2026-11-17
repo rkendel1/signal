@@ -1,0 +1,861 @@
+{
+ "id": "heldout-hockey",
+ "category": "data_table",
+ "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
+ "notes": [
+  "Header cells are present but their text is in nested links/whitespace; cells carry class names (name, year, wins).",
+  "Team names repeat (one row per season)."
+ ],
+ "entities": [
+  {
+   "match": {
+    "attr": "name",
+    "value": "Boston Bruins"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 44,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 24,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Buffalo Sabres"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 31,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 30,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Calgary Flames"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 46,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 26,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Chicago Blackhawks"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 49,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 23,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Detroit Red Wings"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 34,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 38,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Edmonton Oilers"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 37,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 37,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Hartford Whalers"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 31,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 38,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Los Angeles Kings"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 46,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 24,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Minnesota North Stars"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 27,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 39,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Montreal Canadiens"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 39,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 30,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "New Jersey Devils"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 32,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 33,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "New York Islanders"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 25,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 45,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "New York Rangers"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 36,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 31,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Philadelphia Flyers"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 33,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 37,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Pittsburgh Penguins"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 41,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 33,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Quebec Nordiques"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 16,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 50,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "St. Louis Blues"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 47,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 22,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Toronto Maple Leafs"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 23,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 46,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Vancouver Canucks"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 28,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 43,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Washington Capitals"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 37,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 36,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Winnipeg Jets"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1990,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 26,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 43,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Boston Bruins"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1991,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 36,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 32,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Buffalo Sabres"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1991,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 31,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 37,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Calgary Flames"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1991,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 31,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 37,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Chicago Blackhawks"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "SportsTeam",
+    "Unknown"
+   ],
+   "attributes": {
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1991,
+     "compare": "number"
+    },
+    "wins": {
+     "paths": [
+      "wins"
+     ],
+     "value": 36,
+     "compare": "number"
+    },
+    "losses": {
+     "paths": [
+      "losses"
+     ],
+     "value": 29,
+     "compare": "number"
+    }
+   }
+  }
+ ]
+}

@@ -11,10 +11,11 @@ import { safeUrl } from '../lib/page/values.ts';
 const dir = new URL('../tests/fixtures/real/', import.meta.url);
 const manifest = JSON.parse(readFileSync(new URL('manifest.json', dir), 'utf8')) as { pages: Array<{ id: string; url: string; category: string; terms: string }> };
 const http = new HttpSource('http_page', {});
-for (const p of manifest.pages) {
+const only = process.argv.slice(2);
+for (const p of manifest.pages.filter((x) => !only.length || only.includes(x.id))) {
 	const r = await http.observe({ source: { schema: 'signal.source/v1', id: p.id, tenantId: 'eval', ownerId: 'eval', type: 'http_page', locator: p.url, access: { authorization: 'public' }, observation: { strategy: 'poll' }, createdAt: '' }, requestedAt: new Date().toISOString() });
 	const o = r.observation;
-	const prov = { id: p.id, url: safeUrl(p.url, null), category: p.category, terms: p.terms, fetchedAt: o.observedAt, method: o.provenance.adapter, userAgent: USER_AGENT, robots: o.provenance.robots, httpStatus: o.provenance.httpStatus, finalUrl: o.provenance.finalUrl ? safeUrl(o.provenance.finalUrl, null) : null, contentType: o.contentType, byteLength: o.byteLength, sha256: o.contentHash, status: o.status, error: o.error ?? null, sanitized: false };
+	const prov = { id: p.id, split: (p as { split?: string }).split ?? 'tuning', url: safeUrl(p.url, null), category: p.category, terms: p.terms, fetchedAt: o.observedAt, method: o.provenance.adapter, userAgent: USER_AGENT, robots: o.provenance.robots, httpStatus: o.provenance.httpStatus, finalUrl: o.provenance.finalUrl ? safeUrl(o.provenance.finalUrl, null) : null, contentType: o.contentType, byteLength: o.byteLength, sha256: o.contentHash, status: o.status, error: o.error ?? null, sanitized: false };
 	if (o.status === 'ok' && r.body) writeFileSync(new URL(`${p.id}.html`, dir), r.body);
 	writeFileSync(new URL(`${p.id}.provenance.json`, dir), JSON.stringify(prov, null, 2) + '\n');
 	console.log(o.status, o.provenance.robots, o.provenance.httpStatus, o.byteLength, p.id);
