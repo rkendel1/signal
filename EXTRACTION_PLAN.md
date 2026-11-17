@@ -47,7 +47,7 @@ Ghostpost remains the working reference implementation. Nothing in `rkendel1/gho
 
 ## Milestones (prioritized)
 
-The milestones were renumbered when M5 was redefined as Universal Page Intelligence. The previous M5–M7 are now M6, M8 and M9.
+The milestones were renumbered when M5 was redefined as Universal Page Intelligence (the previous M5–M7 became M6, M8 and M9). They were renumbered again in M7, when M8 became Interactive Discovery: Codec v2 is now M9 and Reference resolution is M10.
 
 | # | Milestone | Outcome | Depends on |
 |---|---|---|---|
@@ -57,6 +57,7 @@ The milestones were renumbered when M5 was redefined as Universal Page Intellige
 | M4 | **Converge with `web-monitor`** | One product. Port web-monitor's five conditions to `signal.criteria/v1` (a mechanical mapping). Reuse its Chrome extension as the overlay host (G-OVL-1) and its local WebLLM compiler to *draft* criteria (G-CRIT-1). Retire its separate condition engine and notification wiring | M2 |
 | M5 | **Universal Page Intelligence** | **Done**: `signal.page/v1`; deterministic, site-agnostic extraction (JSON-LD, microdata/RDFa, metadata, semantic HTML/ARIA, repeated structures, typed values); entities, relationships, collections, signals; evidence and provenance for every value; `entity` criteria in the existing evaluator; `pages:inspect/push/get/list`; 27 new tests across 8 unrelated page types (see PAGE_INTELLIGENCE.md) | M2 |
 | M6 | **Hardening** | Tenancy (G-TEN-1), DNS pinning (G-SEC-2), attested observations (G-SEC-1), webhook end-to-end (G-DEL-1), credentialed sources (G-SRC-2) | M2 |
-| M7 | **Page intelligence quality** | Labelled corpus of real pages with a measured scorecard (G-PAGE-4), more languages (G-PAGE-3), size decision (G-PAGE-2), mapping proposals with explicit acceptance (G-PAGE-5) | M5 |
-| M8 | **Codec v2** | Integrity and versioning (G-CODEC-1/2) | M1 |
-| M9 | **Reference resolution** | Authorized, guarded resolver (G-REF-1) | M6 |
+| M7 | **Page Quality and Discovery Readiness** | **Done** (PAGE_QUALITY.md, DISCOVERY_MODEL.md).<br>• Real-page evaluation: 16 pages, 10 categories, independent labels, a preserved untuned held-out run, per-category/per-method metrics, regression floor. Resolved G-PAGE-4.<br>• Size decision: gzip (resolved G-PAGE-2).<br>• Identity strength, digests and `factsRevision`.<br>• The discovery model with `discovery:evaluate`, validated on a synthetic real-estate scenario.<br>• Not done: languages (G-PAGE-3) and mapping proposals (G-PAGE-5) | M5 |
+| M8 | **Interactive Discovery** | Persisted, versioned intents. Refinement in the user's session. Plan execution: `browser-session` proposals via the overlay host (G-OVL-1), `background` via observation (G-PLAT-1). Coverage of failed observations (G-DISC-1/2/4). A fresh held-out set (G-PAGE-9) | M7, M4 (extension host) |
+| M9 | **Codec v2** | Integrity and versioning (G-CODEC-1/2) | M1 |
+| M10 | **Reference resolution** | Authorized, guarded resolver (G-REF-1) | M6 |

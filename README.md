@@ -85,7 +85,9 @@ await client.action(api.monitors.observe, { monitorId });   // → { outcome: "e
 | [EXTRACTION_AUDIT.md](EXTRACTION_AUDIT.md) | What Ghostpost actually contains, what works, what is a placeholder (with evidence) |
 | [CAPABILITY_ARCHITECTURE.md](CAPABILITY_ARCHITECTURE.md) | Boundaries, data flow, trust model, Boundry mapping, relation to `web-monitor` |
 | [CAPABILITY_CONTRACTS.md](CAPABILITY_CONTRACTS.md) | Records, criteria language, operations, codec wire format |
-| [PAGE_INTELLIGENCE.md](PAGE_INTELLIGENCE.md) | M5: the page representation, extraction pipeline, type rules, entity criteria, limits |
+| [PAGE_INTELLIGENCE.md](PAGE_INTELLIGENCE.md) | M5 (corrected in M7): the page representation, extraction pipeline, type rules, identity, entity criteria, limits |
+| [PAGE_QUALITY.md](PAGE_QUALITY.md) | M7: measured quality on 16 real pages (per category and per method), the held-out first run, identity scenarios, the storage-size decision |
+| [DISCOVERY_MODEL.md](DISCOVERY_MODEL.md) | M7: intent, context, scope, candidates, tri-state evaluation, coverage, scan plan; the real-estate scenario |
 | [EXTRACTION_PLAN.md](EXTRACTION_PLAN.md) | Preserve / refactor / replace / retire; milestones |
 | [GAP_REGISTER.md](GAP_REGISTER.md) | What is missing, platform vs product |
 | [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md) | Commands run, results, measurements, security findings |
@@ -97,4 +99,5 @@ These are stated plainly; details are in GAP_REGISTER.
 - **The overlay needs an extension host** to run on third-party pages.
 - **Single tenant.**
 - **Webhook delivery is staged but not exercised** in tests.
-- **Page intelligence** is demonstrated on 8 unrelated fixtures, not proven universal. Dynamic pages need a rendered snapshot. Representations are large. See GAP_REGISTER G-PAGE-*.
+- **Page intelligence** is measured on 16 real pages in 10 categories (PAGE_QUALITY.md). It is not proven universal: there are measured failures on cross-row records and sidebars, and the held-out set is now consumed. Dynamic pages need a rendered snapshot. English-leaning vocabulary. See GAP_REGISTER G-PAGE-*.
+- **Discovery** evaluates and plans but executes nothing. Intents are not persisted. It is validated on synthetic real-estate fixtures only (G-DISC-*).

@@ -23,8 +23,8 @@ import {
 	type AttributeValue, type Classification, type DataType, type ExtractionMethod, type PageAttribute, type PageCollection,
 	type PageEntity, type PageEvidence, type PageLimits, type PageRelationship, type PageRepresentation, type PageSignal
 } from './types.ts';
-import { ENTITY_PROPERTIES, LABELS, META, PROPERTY_TYPES, SECRET_META } from './vocab.ts';
-import { inferText, parseAvailability, parseDate, parseMoney, parseMoneyRange, parseRating, redactUrlString, safeUrl, type Typed } from './values.ts';
+import { ENTITY_PROPERTIES, LABELS, META, PREFIX_LABELS, PROPERTY_TYPES, SECRET_META, UNITS } from './vocab.ts';
+import { inferText, parseAvailability, parseDate, parseMoney, parseMoneyRange, parseQuantities, parseRating, redactUrlString, safeUrl, type Typed } from './values.ts';
 
 export interface PageInput {
 	html: string;
@@ -45,7 +45,8 @@ const visibleText = (s: string) => collapse(s.replace(INVISIBLE, ''));
 const isEl = (n: AnyNode | null | undefined): n is Element => !!n && (n.type === 'tag' || n.type === 'script' || n.type === 'style');
 const CLASS_RANK: Record<Classification, number> = { declared: 3, semantic: 2, inferred: 1, unknown: 0 };
 const EVIDENCE_ATTRS = ['id', 'class', 'href', 'src', 'alt', 'datetime', 'itemprop', 'itemtype', 'itemscope', 'typeof', 'property', 'role', 'aria-label', 'title', 'content', 'name', 'lang', 'type', 'rel'];
-const SKIP_CONTAINERS = new Set(['nav', 'header', 'footer', 'form', 'select', 'button', 'svg', 'math']);
+// Not 'form': real pages wrap result lists (or the whole page) in forms. Form values are never read anyway.
+const SKIP_CONTAINERS = new Set(['nav', 'header', 'footer', 'select', 'button', 'svg', 'math']);
 const BLOCK = new Set(['p', 'div', 'li', 'td', 'th', 'article', 'section', 'blockquote', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'figcaption', 'main', 'aside', 'body', 'tr', 'span']);
 
 interface Field {
@@ -72,6 +73,15 @@ class Builder {
 	private locators = new Map<Element, string>();
 	elementsVisited = 0;
 	truncated = false;
+	/** Tables already represented (header tables, property tables); others are scanned as layout. */
+	readonly handledTables = new Set<Element>();
+	/** Key/value tables, attached to their record after records exist. */
+	readonly propertyTables: Element[] = [];
+	/** Records created from ARIA disclosures (accordions). */
+	readonly disclosed = new Set<Element>();
+	mainRecordEl: Element | null = null;
+	/** Entities with the same weak identity on one page, linked once all evidence exists. */
+	readonly pendingPossiblySame: Array<[string, string]> = [];
 
 	constructor($: CheerioAPI, input: PageInput) {
 		this.$ = $;
@@ -133,15 +143,25 @@ class Builder {
 
 	entity(args: {
 		type: string; classification: Classification; method: ExtractionMethod; rule: string;
-		identity: PageEntity['identity']; el?: Element; evidenceRefs: string[]; unique?: boolean;
+		identity: { key: string; basis: PageEntity['identity']['basis'] }; el?: Element; evidenceRefs: string[]; unique?: boolean;
 	}): string | null {
 		let id = `ent_${h({ type: args.type, key: args.identity.key })}`;
 		const existing = this.entities.get(id);
-		if (existing && args.unique && args.el && this.entityEl.get(id) !== args.el) {
-			// Same type and identity key, different element (e.g. two cards with the same name): keep both.
+		const strength: PageEntity['identity']['strength'] = ['@id', 'url', 'sku', 'page'].includes(args.identity.basis) ? 'strong' : args.identity.basis === 'locator' ? 'positional' : 'weak';
+		if (existing && args.unique && args.el && this.entityEl.get(id) !== args.el && strength === 'strong') {
+			// A source identifier seen again (two cards/links for one item): the same entity, another occurrence.
+			existing.identity.occurrences++;
+			for (const r of args.evidenceRefs) if (!existing.evidenceRefs.includes(r)) existing.evidenceRefs.push(r);
+			this.elEntity.set(args.el, id);
+			return id;
+		} else if (existing && args.unique && args.el && this.entityEl.get(id) !== args.el) {
+			// Same type and weak key, different element (two items named alike): keep both, mark continuity uncertain.
 			let n = 2;
 			while (this.entities.has(`${id}_${n}`)) n++;
+			existing.identity.ambiguous = true;
+			const first = id;
 			id = `${id}_${n}`;
+			this.pendingPossiblySame.push([first, id]);
 		} else if (existing) {
 			for (const r of args.evidenceRefs) if (!existing.evidenceRefs.includes(r)) existing.evidenceRefs.push(r);
 			if (CLASS_RANK[args.classification] > CLASS_RANK[existing.classification]) {
@@ -154,7 +174,8 @@ class Builder {
 		if (this.entities.size >= this.limits.maxEntities) { this.truncated = true; return null; }
 		this.entities.set(id, {
 			id, type: args.type, classification: args.classification, typeBasis: { method: args.method, rule: args.rule },
-			identity: args.identity, attributes: [], evidenceRefs: [...args.evidenceRefs]
+			identity: { key: args.identity.key, basis: args.identity.basis, strength, occurrences: 1, ...(id.match(/_\d+$/) ? { ambiguous: true as const } : {}) },
+			attributes: [], evidenceRefs: [...args.evidenceRefs], digest: ''
 		});
 		if (args.el) { this.entityEl.set(id, args.el); if (!this.elEntity.has(args.el)) this.elEntity.set(args.el, id); }
 		return id;
@@ -224,7 +245,8 @@ function itemValue(b: Builder, el: Element): string {
 
 function isHidden(el: Element): boolean {
 	const a = el.attribs ?? {};
-	return a.hidden !== undefined || a['aria-hidden'] === 'true' || /display\s*:\s*none|visibility\s*:\s*hidden/i.test(a.style ?? '');
+	// hidden="until-found" is collapsed but findable/expandable by the user: accessible content.
+	return (a.hidden !== undefined && a.hidden !== 'until-found') || a['aria-hidden'] === 'true' || /display\s*:\s*none|visibility\s*:\s*hidden/i.test(a.style ?? '');
 }
 
 // ------------------------------------------------------------------ stage 1: JSON-LD
@@ -243,7 +265,7 @@ function jsonLd(b: Builder, pageId: string | null): void {
 		const url = typeof obj.url === 'string' ? safeUrl(obj.url, input.baseUrl) : null;
 		const sku = typeof obj.sku === 'string' ? obj.sku : typeof obj.gtin13 === 'string' ? obj.gtin13 : null;
 		const name = typeof obj.name === 'string' ? collapse(obj.name) : typeof obj.headline === 'string' ? collapse(obj.headline) : null;
-		const identity: PageEntity['identity'] = atId ? { key: atId, basis: '@id' } : url ? { key: url, basis: 'url' } : sku ? { key: sku, basis: 'sku' } : name ? { key: name.toLowerCase(), basis: 'name' } : { key: `${b.locator(script)}#${pointer}`, basis: 'locator' };
+		const identity: { key: string; basis: PageEntity['identity']['basis'] } = atId ? { key: atId, basis: '@id' } : url ? { key: url, basis: 'url' } : sku ? { key: sku, basis: 'sku' } : name ? { key: name.toLowerCase(), basis: 'name' } : { key: `${b.locator(script)}#${pointer}`, basis: 'locator' };
 		const id = b.entity({ type, classification: obj['@type'] ? 'declared' : 'unknown', method: 'json-ld', rule: obj['@type'] ? 'json-ld @type' : 'json-ld object without @type', identity, evidenceRefs: [ev] });
 		if (!id) return null;
 		if (atId) byAtId.set(atId, id);
@@ -275,6 +297,7 @@ function jsonLd(b: Builder, pageId: string | null): void {
 					typed = { ...typed, value: { ...(typed.value as { amount: number }), currency: obj.priceCurrency } as AttributeValue };
 				}
 				b.attr(id, { name: key, value: typed.value, raw, dataType: typed.dataType, provenance: typed.provenance === 'observed' ? 'observed' : typed.provenance, method: 'json-ld', confidence: 1, evidenceRefs: [vev], ...(typed.ambiguity ? { ambiguity: typed.ambiguity } : {}) });
+				if (typeof typed.value === 'string') partyFromText(b, id, key, typed.value, 'json-ld', vev);
 			});
 		}
 		// MonetaryAmount / QuantitativeValue → a single comparable `amount` (deterministic projection).
@@ -345,10 +368,10 @@ function scoped(b: Builder, scopeSel: string, propAttr: string, typeAttr: string
 		const props = ($(scope).find(`[${propAttr}]`).toArray() as Element[]).filter((p) => nearestScope(p) === scope);
 		const nameEl = props.find((p) => (p.attribs[propAttr] ?? '').split(/\s+/).includes('name'));
 		const urlEl = props.find((p) => (p.attribs[propAttr] ?? '').split(/\s+/).includes('url'));
-		const name = nameEl ? collapse(itemValue(b, nameEl)) : null;
+		const name = nameEl ? collapse(['a', 'link', 'area'].includes(nameEl.tagName) ? linkText(b, nameEl) : linkText(b, nameEl, itemValue(b, nameEl))) : null;
 		const url = urlEl ? safeUrl(itemValue(b, urlEl), b.input.baseUrl) : null;
 		const itemid = scope.attribs.itemid ?? scope.attribs.resource;
-		const identity: PageEntity['identity'] = itemid ? { key: itemid, basis: '@id' } : url ? { key: url, basis: 'url' } : name ? { key: name.toLowerCase(), basis: 'name' } : { key: b.locator(scope), basis: 'locator' };
+		const identity: { key: string; basis: PageEntity['identity']['basis'] } = itemid ? { key: itemid, basis: '@id' } : url ? { key: url, basis: 'url' } : name ? { key: name.toLowerCase(), basis: 'name' } : { key: b.locator(scope), basis: 'locator' };
 		ids.set(scope, b.entity({ type, classification: scope.attribs[typeAttr] ? 'declared' : 'unknown', method, rule: `${method} ${typeAttr}`, identity, el: scope, evidenceRefs: [ev], unique: true }));
 	}
 	for (const scope of scopes) {
@@ -365,16 +388,48 @@ function scoped(b: Builder, scopeSel: string, propAttr: string, typeAttr: string
 					b.rel(id, ids.get(p) ?? null, name, method, 'declared', 1, [pev]);
 					continue;
 				}
-				const raw = itemValue(b, p);
+				let raw = itemValue(b, p);
+				let linkAmbiguity: PageAttribute['ambiguity'] | undefined;
+				if (TEXT_PROPS.has(name) && ['a', 'link', 'area'].includes(p.tagName) && p.attribs.href) {
+					// The microdata/RDFa value of a link is its href, but a text property (name, author, …)
+					// on a link is a common authoring error. Use the link's text/title; keep the href as a candidate.
+					linkAmbiguity = { reason: 'format', candidates: [{ value: safeUrl(p.attribs.href, b.input.baseUrl), source: `${method} link value (href)` }] };
+					raw = linkText(b, p);
+				} else if (TEXT_PROPS.has(name)) raw = linkText(b, p, raw);
 				let typed = typeByHint(PROPERTY_TYPES[name], raw, b.input.observedAt, b.input.baseUrl);
+				if (linkAmbiguity) typed = { ...typed, ambiguity: linkAmbiguity };
 				if (name === 'image' && p.tagName === 'img') typed = { value: { url: safeUrl(p.attribs.src, b.input.baseUrl), alt: p.attribs.alt ?? null }, dataType: 'image', provenance: 'normalized' };
 				if (name === 'price' && typed.dataType === 'money' && typed.value && currency) {
 					typed = { ...typed, value: { ...(typed.value as { amount: number }), currency: itemValue(b, currency) || (typed.value as { currency: string | null }).currency } as AttributeValue };
 				}
 				b.attr(id, { name, value: typed.value, raw, dataType: typed.dataType, provenance: typed.provenance, method, confidence: 1, evidenceRefs: [pev], ...(typed.ambiguity ? { ambiguity: typed.ambiguity } : {}) });
+				if (typeof typed.value === 'string') partyFromText(b, id, name, typed.value, method, pev);
 			}
 		}
 	}
+}
+
+/** Text properties: their value is text even when authored on a link. */
+const TEXT_PROPS = new Set(['name', 'headline', 'alternateName', 'description', 'author', 'creator', 'publisher', 'brand', 'seller', 'manufacturer', 'jobTitle', 'title', 'text', 'keywords', 'hiringOrganization', 'provider', 'organizer', 'performer']);
+
+/** Visible text of a link/element; when visibly truncated ("…"), its title attribute if that extends it. */
+function linkText(b: Builder, el: Element, fallback?: string): string {
+	const text = b.text(el) || fallback || '';
+	const title = el.attribs?.title ? collapse(el.attribs.title) : '';
+	const stem = text.replace(/\s*(\.\.\.|…)$/, '');
+	if (title && (stem !== text || !text) && title.toLowerCase().startsWith(stem.toLowerCase())) return title;
+	return text;
+}
+
+/** Declared properties naming a party as plain text become related entities (type from the property). */
+const PARTY_TYPES: Record<string, string> = { author: 'Person', creator: 'Person', performer: 'Person', publisher: 'Organization', seller: 'Organization', manufacturer: 'Organization', hiringOrganization: 'Organization', provider: 'Organization', organizer: 'Organization', brand: 'Brand' };
+function partyFromText(b: Builder, from: string | null, prop: string, text: string, method: ExtractionMethod, ev: string): void {
+	const type = PARTY_TYPES[prop];
+	const name = collapse(text);
+	if (!type || !from || !name || name.length > 200 || /^https?:/i.test(name)) return;
+	const id = b.entity({ type, classification: 'inferred', method, rule: `declared ${prop} given as text; type from the property`, identity: { key: name.toLowerCase(), basis: 'name' }, evidenceRefs: [ev] });
+	b.attr(id, { name: 'name', value: name, raw: text, dataType: 'text', provenance: 'observed', method, confidence: 1, evidenceRefs: [ev] });
+	b.rel(from, id, prop, method, 'declared', 1, [ev]);
 }
 
 // ------------------------------------------------------------------ stage 3: metadata → WebPage
@@ -389,6 +444,19 @@ function pageEntity(b: Builder): string | null {
 	if (title) b.attr(id, { name: 'title', value: b.text(title), raw: b.text(title), dataType: 'text', provenance: 'observed', method: 'meta', confidence: 1, evidenceRefs: [b.ev(title, 'meta')] });
 	const lang = html?.attribs?.lang;
 	if (lang) b.attr(id, { name: 'inLanguage', value: lang, raw: lang, dataType: 'text', provenance: 'observed', method: 'meta', confidence: 1, evidenceRefs: [b.ev(html!, 'meta')] });
+	for (const rel of ['next', 'prev']) {
+		const l = $(`link[rel="${rel}"], a[rel~="${rel}"]`).get(0) as Element | undefined;
+		if (l?.attribs.href) b.attr(id, { name: rel === 'next' ? 'nextPage' : 'previousPage', value: safeUrl(l.attribs.href, input.baseUrl), raw: l.attribs.href, dataType: 'url', provenance: 'normalized', method: 'html', confidence: 1, evidenceRefs: [b.ev(l, 'html')] });
+	}
+	// A map/viewport that states its bounds (data-north/south/east/west or data-bounds="s,w,n,e").
+	const vp = ($('[data-north][data-south][data-east][data-west], [data-bounds]').toArray() as Element[])[0];
+	if (vp) {
+		const a = vp.attribs;
+		const [south, west, north, east] = a['data-bounds'] ? a['data-bounds'].split(',').map(Number) : [a['data-south'], a['data-west'], a['data-north'], a['data-east']].map(Number);
+		if ([south, west, north, east].every(Number.isFinite)) b.attr(id, { name: 'viewportBounds', value: canonicalJson({ south, west, north, east }), raw: a['data-bounds'] ?? `${south},${west},${north},${east}`, dataType: 'text', provenance: 'observed', method: 'html', confidence: 1, evidenceRefs: [b.ev(vp, 'html')] });
+		const markers = $(vp).find('[data-lat],[data-latitude]').length;
+		if (markers) b.attr(id, { name: 'viewportMarkers', value: markers, raw: String(markers), dataType: 'number', provenance: 'observed', method: 'html', confidence: 1, evidenceRefs: [b.ev(vp, 'html')] });
+	}
 	const canonical = $('link[rel="canonical"]').get(0) as Element | undefined;
 	if (canonical) b.attr(id, { name: 'canonicalUrl', value: safeUrl(canonical.attribs.href, input.baseUrl), raw: canonical.attribs.href ?? null, dataType: 'url', provenance: 'normalized', method: 'meta', confidence: 1, evidenceRefs: [b.ev(canonical, 'meta')] });
 	$('meta').each((_, m) => {
@@ -454,7 +522,8 @@ function recordFields(b: Builder, root: Element, opts: { excludeNested?: Set<Ele
 		if (name === 'availability') { const a = parseAvailability(raw); return a ? { value: a, dataType: 'availability', provenance: 'normalized' } : { value: raw, dataType: 'text', provenance: 'observed' }; }
 		if (name === 'date') return parseDate(raw, input.observedAt) ?? { value: raw, dataType: 'text', provenance: 'observed' };
 		if (name === 'rating') { const r = parseRating(raw); return r ? { value: r, dataType: 'rating', provenance: 'normalized' } : inferText(raw, input.observedAt); }
-		if (['author', 'seller', 'hiringOrganization', 'brand', 'location', 'name', 'description', 'requirements', 'employmentType', 'sku'].includes(name)) return { value: raw, dataType: 'text', provenance: 'observed' };
+		if (['author', 'seller', 'hiringOrganization', 'brand', 'location', 'name', 'description', 'requirements', 'employmentType', 'sku', 'telephone'].includes(name)) return { value: raw, dataType: 'text', provenance: 'observed' };
+		if (name === 'reviewCount') { const n = Number(raw.replace(/[^\d]/g, '')); return raw.match(/\d/) ? { value: n, dataType: 'number', provenance: 'normalized' } : inferText(raw, input.observedAt); }
 		return inferText(raw, input.observedAt);
 	};
 
@@ -479,11 +548,62 @@ function recordFields(b: Builder, root: Element, opts: { excludeNested?: Set<Ele
 		add({ name, typed: typedFor(name, raw), raw, el: dd, method: 'label', confidence: 0.9, relate: lab?.relate });
 		consumed.add(dt); consumed.add(dd);
 	}
-	const leafish = all.filter((e) => !consumed.has(e) && !['dt', 'dd'].includes(e.tagName) && (e.children ?? []).every((c) => !isEl(c) || ['b', 'strong', 'em', 'i', 'span', 'a', 'small', 'time', 'abbr', 'br', 'sup', 'sub', 'data'].includes(c.tagName)));
+	// Leaves are read deepest-first; an inline container then contributes only the text its consumed
+	// children did not explain. Modifiers (sup/sub/abbr/small/br) stay part of their parent's text.
+	const order = new Map(all.map((e, i) => [e, i]));
+	const depth = (e: Element) => { let d = 0; let p: AnyNode | null = e.parent; while (isEl(p) && p !== root) { d++; p = p.parent; } return d; };
+	const leafish = all.filter((e) => !consumed.has(e) && !['dt', 'dd', 'sup', 'sub', 'abbr', 'small', 'br'].includes(e.tagName) && (e.children ?? []).every((c) => !isEl(c) || ['b', 'strong', 'em', 'i', 'span', 'a', 'small', 'time', 'abbr', 'br', 'sup', 'sub', 'data'].includes(c.tagName)))
+		.sort((x, y) => depth(y) - depth(x) || order.get(x)! - order.get(y)!);
+	const remainingText = (el: Element): string => {
+		const out: string[] = [];
+		const walk = (n: AnyNode) => {
+			if (n.type === 'text') { out.push((n as unknown as { data: string }).data); return; }
+			if (!isEl(n) || consumed.has(n) || ['script', 'style', 'template'].includes(n.tagName)) return;
+			for (const c of n.children ?? []) walk(c);
+		};
+		for (const c of el.children ?? []) walk(c);
+		return visibleText(out.join(' ')).slice(0, b.limits.maxTextLength);
+	};
+	const hasConsumedChild = (el: Element): boolean => (el.children ?? []).some((c) => isEl(c) && (consumed.has(c) || hasConsumedChild(c)));
 	for (const el of leafish) {
-		if ([...consumed].some((c) => c !== el && $(c).find(el as never).length > 0)) continue;
-		const text = b.text(el);
+		// Skip leaves inside an already-consumed element (ancestor walk: O(depth), not O(n)).
+		let anc: AnyNode | null = el.parent, inside = false;
+		while (isEl(anc) && anc !== root) { if (consumed.has(anc)) { inside = true; break; } anc = anc.parent; }
+		if (inside) continue;
+		const text = hasConsumedChild(el) ? remainingText(el) : b.text(el);
+		if (!/[\p{L}\p{N}]/u.test(text)) { if (hasConsumedChild(el)) consumed.add(el); continue; }
 		if (!text || text.length > 400) continue;
+		const only = /^([A-Za-z][A-Za-z0-9 /&()-]{1,30})\s*[:：]$/.exec(text);
+		if (only) {
+			let v: AnyNode | null = el.next;
+			while (v && !isEl(v)) v = v.next;
+			if (isEl(v) && b.text(v)) {
+				const lab = labelFor(only[1]);
+				const name = lab?.attribute ?? slug(only[1]);
+				const a = v.tagName === 'a' ? v : ($(v).find('a[href]').length === 1 ? ($(v).find('a[href]').get(0) as Element) : null);
+				const typed: Typed = name === 'website' && a ? { value: safeUrl(a.attribs.href, input.baseUrl), dataType: 'url', provenance: 'normalized' } : typedFor(name, b.text(v));
+				add({ name, typed, raw: name === 'website' && a ? a.attribs.href : b.text(v), el: v, method: 'label', confidence: lab ? 0.9 : 0.6, relate: lab?.relate });
+				consumed.add(el); consumed.add(v);
+				continue;
+			}
+		}
+		const qty = text.length <= 80 ? parseQuantities(text, UNITS) : [];
+		if (qty.length) {
+			for (const q of qty) add({ name: q.attribute, typed: { value: q.value, dataType: 'number', provenance: 'normalized' }, raw: q.raw, el, method: 'text', confidence: 0.9 });
+			consumed.add(el);
+			continue;
+		}
+		const pre = text.length <= 80 ? PREFIX_LABELS.map((x) => ({ x, m: x.re.exec(text) })).find((y) => y.m) : undefined;
+		if (pre) {
+			const { x, m } = pre;
+			const typed: Typed = x.kind === 'year' ? { value: Number(m![1]), dataType: 'number', provenance: 'normalized' }
+				: x.kind === 'zero' ? { value: { amount: 0, currency: null }, dataType: 'money', provenance: 'normalized' }
+				: x.kind === 'money' ? (parseMoney(m![1]) ? { value: parseMoney(m![1]), dataType: 'money', provenance: 'normalized' } : { value: m![1], dataType: 'text', provenance: 'observed' })
+				: { value: m![1], dataType: 'text', provenance: 'observed' };
+			add({ name: x.attribute, typed, raw: text, el, method: 'label', confidence: 0.9 });
+			consumed.add(el);
+			continue;
+		}
 		const lv = /^([A-Za-z][A-Za-z /&-]{1,30})\s*[:：]\s*(.+)$/.exec(text) ?? /^(sold by|posted by|written by|by)\s+(.{2,80})$/i.exec(text);
 		if (lv) {
 			const lab = labelFor(lv[1]);
@@ -515,8 +635,35 @@ function recordFields(b: Builder, root: Element, opts: { excludeNested?: Set<Ele
 			consumed.add(el);
 		}
 	}
-	// links and media
-	const link = all.find((e) => e.tagName === 'a' && e.attribs.href && safeUrl(e.attribs.href, input.baseUrl));
+	// Coordinates and selection state exposed as attributes on the record element (data-lat/lng, aria-selected).
+	for (const el of [root, ...all.slice(0, 50)]) {
+		const a = el.attribs ?? {};
+		const lat = a['data-lat'] ?? a['data-latitude'], lng = a['data-lng'] ?? a['data-lon'] ?? a['data-longitude'];
+		if (lat !== undefined && lng !== undefined && !fields.some((f) => f.name === 'latitude') && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng))) {
+			add({ name: 'latitude', typed: { value: Number(lat), dataType: 'number', provenance: 'observed' }, raw: lat, el, method: 'html', confidence: 1 });
+			add({ name: 'longitude', typed: { value: Number(lng), dataType: 'number', provenance: 'observed' }, raw: lng, el, method: 'html', confidence: 1 });
+		}
+	}
+	if (root.attribs?.['aria-selected'] === 'true' || root.attribs?.['aria-current'] === 'true') add({ name: 'selected', typed: { value: true, dataType: 'boolean', provenance: 'observed' }, raw: 'true', el: root, method: 'aria', confidence: 1 });
+	// Profile links name the author (a deterministic URL convention: /user/, /users/, /profile/, ?user=…).
+	if (!fields.some((f) => f.name === 'author')) {
+		const prof = all.find((e) => e.tagName === 'a' && PROFILE_RE.test(e.attribs.href ?? '') && b.text(e).length >= 2 && b.text(e).length <= 60);
+		if (prof) { add({ name: 'author', typed: { value: b.text(prof), dataType: 'text', provenance: 'observed' }, raw: b.text(prof), el: prof, method: 'structure', confidence: 0.6, relate: { type: 'Person', rel: 'author' } }); consumed.add(prof); }
+	}
+	// links and media: rank the record's links instead of taking the first one.
+	const nameText = (fields.find((f) => f.name === 'name')?.typed.value as string | undefined)?.toLowerCase();
+	const base = input.baseUrl ? (() => { try { return new URL(input.baseUrl!).origin; } catch { return null; } })() : null;
+	const ranked = all.filter((e) => e.tagName === 'a' && e.attribs.href && safeUrl(e.attribs.href, input.baseUrl) && !PROFILE_RE.test(e.attribs.href)).map((e, i) => {
+		const u = new URL(safeUrl(e.attribs.href, input.baseUrl)!);
+		let score = 0;
+		if (/^h[1-6]$/.test(e.parent && isEl(e.parent) ? e.parent.tagName : '') || $(e).find('h1,h2,h3,h4,h5,h6').length) score += 4;
+		if (nameText && (collapse(e.attribs.title ?? '').toLowerCase() === nameText || b.text(e).toLowerCase() === nameText)) score += 3;
+		if (/\b(apply|details?|view|more|read|open|listing)\b/i.test(b.text(e))) score += 2;
+		if (base && u.origin === base) score += 1;
+		if (u.pathname === '/' || u.pathname === '') score -= 3;
+		return { e, score, i };
+	}).sort((x, y) => y.score - x.score || x.i - y.i);
+	const link = ranked[0]?.e;
 	if (link) {
 		add({ name: 'url', typed: { value: safeUrl(link.attribs.href, input.baseUrl), dataType: 'url', provenance: 'normalized' }, raw: link.attribs.href, el: link, method: 'html', confidence: 0.9 });
 		if (!fields.some((f) => f.name === 'name') && b.text(link).length >= 3) add({ name: 'name', typed: { value: b.text(link), dataType: 'text', provenance: 'observed' }, raw: b.text(link), el: link, method: 'structure', confidence: 0.6 });
@@ -531,17 +678,21 @@ function recordFields(b: Builder, root: Element, opts: { excludeNested?: Set<Ele
 	return fields;
 }
 
+const PROFILE_RE = /\/(user|users|u|profile|profiles|member|members|people|author|authors)(\/|\?|=|$)|[?&](user|uid|author)=|(^|\/)user\?id=/i;
+
 /** Ordered, documented type rules for a record (first match wins). */
 function classifyRecord(fields: Field[], ctx: { element: string; nestedInRecord: boolean; inCollection: boolean; row: boolean }): { type: string; classification: Classification; rule: string } {
 	const has = (n: string) => fields.some((f) => f.name === n && f.typed.value !== null);
 	const hasType = (t: DataType) => fields.some((f) => f.typed.dataType === t);
 	if (has('compensation') || (has('hiringOrganization') && has('location'))) return { type: 'JobPosting', classification: 'inferred', rule: 'T1: compensation, or employer + location' };
+	if (has('price') && ['numberOfBedrooms', 'numberOfBathrooms', 'floorSize'].some(has)) return { type: 'RealEstateListing', classification: 'inferred', rule: 'T1b: a price plus accommodation quantities (bedrooms, bathrooms or floor size)' };
 	const productCue = fields.some((f) => f.typed.dataType === 'availability') || ['image', 'seller', 'brand', 'sku', 'rating'].some(has);
 	if (has('price') && hasType('money') && productCue) return { type: 'Product', classification: 'inferred', rule: 'T2: a price plus a product cue (availability, image, seller, brand, sku or rating)' };
 	if (has('author') && has('date')) {
 		if (ctx.nestedInRecord) return { type: 'Comment', classification: 'inferred', rule: 'T3a: author + date, nested in another record' };
 		return ctx.inCollection || ctx.element !== 'article' ? { type: 'SocialMediaPosting', classification: 'inferred', rule: 'T3b: author + date in a repeated structure' } : { type: 'Article', classification: 'inferred', rule: 'T3c: article element with author + date' };
 	}
+	if (has('name') && ['telephone', 'email', 'contactPoint'].some(has) && ['website', 'address'].some(has) && !has('price') && !has('date')) return { type: 'Organization', classification: 'inferred', rule: 'T7: a named contact entry (phone/email/contact + website/address), no price or date' };
 	if (ctx.element === 'article' && has('name')) return { type: 'Article', classification: 'semantic', rule: 'T4: <article> with a heading' };
 	if (ctx.row) return { type: 'TableRow', classification: 'semantic', rule: 'T5: table row' };
 	if (ctx.element === 'li') return { type: 'ListItem', classification: 'semantic', rule: 'T6: list item' };
@@ -551,13 +702,16 @@ function classifyRecord(fields: Field[], ctx: { element: string; nestedInRecord:
 function addRecord(b: Builder, el: Element, ctx: { nestedInRecord: boolean; inCollection: boolean; row?: boolean; fields?: Field[]; method: ExtractionMethod }): string | null {
 	const existing = b.elEntity.get(el);
 	if (existing && b.entities.get(existing)!.classification === 'declared') return existing; // structured data already describes it
+	// A wrapper around exactly one declared item (e.g. a grid cell around an itemscope card) is that item.
+	const declaredInside = (b.$(el).find('[itemscope]:not([itemprop]),[typeof]:not([property])').toArray() as Element[]).map((x) => b.elEntity.get(x)).filter((x): x is string => !!x && b.entities.get(x)!.classification === 'declared');
+	if (declaredInside.length === 1) { b.elEntity.set(el, declaredInside[0]); return declaredInside[0]; }
 	const fields = ctx.fields ?? recordFields(b, el);
 	if (fields.length === 0) return null;
 	const cls = classifyRecord(fields, { element: el.tagName, nestedInRecord: ctx.nestedInRecord, inCollection: ctx.inCollection, row: !!ctx.row });
 	const name = fields.find((f) => f.name === 'name')?.typed.value;
 	const url = fields.find((f) => f.name === 'url')?.typed.value;
 	const sku = fields.find((f) => f.name === 'sku')?.typed.value;
-	const identity: PageEntity['identity'] = typeof sku === 'string' ? { key: sku, basis: 'sku' } : typeof url === 'string' && cls.type !== 'TableRow' ? { key: url, basis: 'url' } : typeof name === 'string' ? { key: name.toLowerCase(), basis: 'name' } : { key: b.locator(el), basis: 'locator' };
+	const identity: { key: string; basis: PageEntity['identity']['basis'] } = typeof sku === 'string' ? { key: sku, basis: 'sku' } : typeof url === 'string' && cls.type !== 'TableRow' ? { key: url, basis: 'url' } : typeof name === 'string' ? { key: name.toLowerCase(), basis: 'name' } : { key: b.locator(el), basis: 'locator' };
 	const id = existing ?? b.entity({ type: cls.type, classification: cls.classification, method: ctx.method, rule: cls.rule, identity, el, evidenceRefs: [b.ev(el, ctx.method)], unique: true });
 	if (!id) return null;
 	for (const f of fields) {
@@ -586,31 +740,66 @@ function tables(b: Builder, pageId: string | null): void {
 		const table = t as Element;
 		if (isHidden(table) || inSkipped(table)) return;
 		const rows = $(table).find('tr').toArray() as Element[];
-		const headerRow = rows.find((r) => (r.children ?? []).filter(isEl).some((c) => c.tagName === 'th')) ?? null;
-		if (!headerRow || rows.length < 2) return;
-		const headers = (headerRow.children ?? []).filter(isEl).filter((c) => c.tagName === 'th' || c.tagName === 'td').map((c) => b.text(c));
+		const cellsOf = (r: Element) => (r.children ?? []).filter(isEl).filter((c) => c.tagName === 'td' || c.tagName === 'th');
+		// Key/value ("property") table: rows of [label, value], label usually a <th>. Not a list of records.
+		const kv = rows.filter((r) => { const c = cellsOf(r); return c.length === 2 && (c[0].tagName === 'th' || c[1].tagName === 'td') && b.text(c[0]).length <= 40; });
+		if (rows.length >= 2 && kv.length >= Math.ceil(rows.length * 0.8) && rows.every((r) => cellsOf(r).filter((c) => c.tagName === 'th').length <= 1)) {
+			b.handledTables.add(table);
+			b.propertyTables.push(table);
+			return;
+		}
+		// Expand the table into a cell grid honouring rowspan/colspan, so multi-row headers and spanned
+		// cells keep every value in its own column.
+		const own = rows.filter((r) => { let p: AnyNode | null = r.parent; while (isEl(p) && p.tagName !== 'table') p = p.parent; return p === table; });
+		const grid: Element[][] = [];
+		own.forEach((r, ri) => {
+			grid[ri] ??= [];
+			let ci = 0;
+			for (const c of cellsOf(r)) {
+				while (grid[ri][ci]) ci++;
+				const cs = Math.min(Math.max(1, Number(c.attribs.colspan) || 1), 50), rs = Math.min(Math.max(1, Number(c.attribs.rowspan) || 1), 500);
+				for (let dr = 0; dr < rs && ri + dr < own.length; dr++) for (let dc = 0; dc < cs; dc++) { (grid[ri + dr] ??= [])[ci + dc] = c; }
+				ci += cs;
+			}
+		});
+		const isHeaderRow = (ri: number) => { const r = own[ri]; const cells = cellsOf(r); return cells.length > 0 && (r.parent && isEl(r.parent) && r.parent.tagName === 'thead' || cells.every((c) => c.tagName === 'th' && c.attribs.scope !== 'row')); };
+		let headerRows = 0;
+		while (headerRows < Math.min(3, own.length - 1) && isHeaderRow(headerRows)) headerRows++;
+		if (!headerRows || own.length - headerRows < 1) return;
+		const width = Math.max(...grid.map((r) => r.length));
+		const headers = Array.from({ length: width }, (_, ci) => {
+			const parts: string[] = [];
+			for (let ri = 0; ri < headerRows; ri++) { const c = grid[ri]?.[ci]; const t = c ? b.text(c).replace(/\[[^\]]*\]/g, '').trim() : ''; if (t && parts[parts.length - 1] !== t) parts.push(t); }
+			return parts.join(' ');
+		});
 		const captionEl = $(table).find('caption').get(0) as Element | undefined;
 		const name = captionEl ? b.text(captionEl) : table.attribs['aria-label'] ?? null;
 		const members: string[] = [];
-		for (const row of rows) {
-			if (row === headerRow) continue;
-			const cells = (row.children ?? []).filter(isEl).filter((c) => c.tagName === 'td' || c.tagName === 'th');
-			if (!cells.length) continue;
-			const fields: Field[] = cells.map((c, i) => {
-				const header = headers[i] ?? `column_${i + 1}`;
+		for (let ri = headerRows; ri < own.length; ri++) {
+			const row = own[ri];
+			const seen = new Set<Element>();
+			const fields: Field[] = [];
+			(grid[ri] ?? []).forEach((c, i) => {
+				if (!c || seen.has(c)) return;
+				seen.add(c);
+				const header = headers[i] || `column_${i + 1}`;
 				const lab = labelFor(header);
 				const nm = lab?.attribute ?? slug(header);
-				const raw = b.text(c);
+				const raw = b.text(c).replace(/\[[^\]]*\]/g, '').trim(); // footnote markers are not part of the value
+				if (!raw) return;
 				const base = inferText(raw, b.input.observedAt);
 				const typed: Typed = nm === 'price' || nm === 'listPrice' ? (parseMoney(raw) ? { value: parseMoney(raw), dataType: 'money', provenance: 'normalized' } : base)
 					: nm === 'availability' ? { value: parseAvailability(raw) ?? raw, dataType: parseAvailability(raw) ? 'availability' : 'text', provenance: parseAvailability(raw) ? 'normalized' : 'observed' } : base;
-				return { name: nm, typed, raw, el: c, method: 'table' as const, confidence: 0.9, relate: lab?.relate };
-			}).filter((f) => f.raw !== '');
-			const first = fields[0];
-			if (first && !fields.some((f) => f.name === 'name') && first.typed.dataType === 'text') fields.unshift({ ...first, name: 'name' });
+				fields.push({ name: nm, typed, raw, el: c, method: 'table' as const, confidence: 0.9, relate: lab?.relate });
+			});
+			if (!fields.length) continue;
+			// The first text column names the row (a rank or number column before it is not a name).
+			const first = fields.find((f) => f.typed.dataType === 'text');
+			if (first && !fields.some((f) => f.name === 'name')) fields.unshift({ ...first, name: 'name' });
 			const id = addRecord(b, row, { nestedInRecord: false, inCollection: true, row: true, fields, method: 'table' });
 			if (id) members.push(id);
 		}
+		b.handledTables.add(table);
 		if (members.length) {
 			const types = new Set(members.map((m) => b.entities.get(m)!.type));
 			b.collections.push({ id: `col_${h({ k: 'table', l: b.locator(table) })}`, kind: 'table', name, itemType: types.size === 1 ? [...types][0] : null, members, method: 'table', evidenceRefs: [b.ev(table, 'table')] });
@@ -627,7 +816,7 @@ function repeated(b: Builder, pageId: string | null): void {
 	const groups: Array<{ parent: Element; sig: string; members: Element[] }> = [];
 	const visit = (el: Element, depth: number) => {
 		if (++b.elementsVisited > b.limits.maxElements) { b.truncated = true; return; }
-		if (depth > 64 || isHidden(el) || SKIP_CONTAINERS.has(el.tagName) || el.attribs?.role === 'navigation' || el.tagName === 'table') return;
+		if (depth > 64 || isHidden(el) || SKIP_CONTAINERS.has(el.tagName) || el.attribs?.role === 'navigation' || (el.tagName === 'table' && b.handledTables.has(el)) || b.disclosed.has(el)) return;
 		const kids = (el.children ?? []).filter(isEl).filter((k) => !isHidden(k) && !['script', 'style', 'template', 'noscript'].includes(k.tagName));
 		const bySig = new Map<string, Element[]>();
 		for (const k of kids) { const s = signature(k); bySig.set(s, [...(bySig.get(s) ?? []), k]); }
@@ -643,9 +832,18 @@ function repeated(b: Builder, pageId: string | null): void {
 	// (deterministic vocabulary, site-agnostic). Kept only if it yields a name plus a typed value.
 	const RECORD_TOKEN = /(^|[-_ ])(product|item|listing|offer|job|posting|vacancy|post|entry|card|result|event|review|comment)([-_ ]|$)/i;
 	const tokenEls = (($('[class], [id]').toArray() as Element[]).filter((e) => RECORD_TOKEN.test(`${e.attribs.class ?? ''} ${e.attribs.id ?? ''}`) && !['body', 'html', 'main', 'span', 'a', 'img', 'li', 'tr', 'td'].includes(e.tagName)));
-	const singles = [...new Set([...($('article, [role="article"]').toArray() as Element[]), ...tokenEls])]
-		.filter((a) => !isHidden(a) && !inSkipped(a) && !groups.some((g) => g.members.includes(a)))
-		.filter((a) => a.tagName === 'article' || a.attribs.role === 'article' || (() => { const f = recordFields(b, a); return f.some((x) => x.name === 'name') && f.some((x) => x.typed.dataType !== 'text'); })());
+	let singles = [...new Set([...($('article, [role="article"]').toArray() as Element[]), ...tokenEls])]
+		.filter((a) => !isHidden(a) && !inSkipped(a) && !groups.some((g) => g.members.includes(a)) && !b.disclosed.has(a))
+		// A link or image alone does not make a record: require a typed value beyond text/url/image.
+		.filter((a) => a.tagName === 'article' || a.attribs.role === 'article' || (() => { const f = recordFields(b, a); return f.some((x) => x.name === 'name') && f.some((x) => !['text', 'url', 'image'].includes(x.typed.dataType)); })());
+	// Main-record rule: the innermost singular record containing the page's <h1> is the page's subject;
+	// singular records enclosing it are layout, not separate entities.
+	const h1 = ($('h1').toArray() as Element[]).find((x) => !isHidden(x) && !inSkipped(x));
+	if (h1) {
+		const holders = singles.filter((sgl) => sgl === h1 || $(sgl).find(h1 as never).length > 0);
+		const main = holders.sort((x, y) => $(y).parents().length - $(x).parents().length)[0];
+		if (main) { b.mainRecordEl = main; singles = singles.filter((sgl) => sgl === main || !holders.includes(sgl)); }
+	}
 
 	// Record-like groups: members must yield at least two fields, including a name or a typed value.
 	const accepted: Array<{ parent: Element; sig: string; members: Element[]; fields: Field[][] }> = [];
@@ -664,19 +862,46 @@ function repeated(b: Builder, pageId: string | null): void {
 		while (isEl(p)) { const id = recordEls.get(p); if (id) return id; p = p.parent; }
 		return null;
 	};
+	// A repeated member that only wraps one singular record (li > article) *is* that record.
+	const singleSet = new Set(singles);
+	for (const g of accepted) {
+		g.members = g.members.map((m, i) => {
+			const kids = (m.children ?? []).filter(isEl);
+			if (kids.length === 1 && singleSet.has(kids[0])) { singleSet.delete(kids[0]); g.fields[i] = recordFields(b, kids[0]); return kids[0]; }
+			return m;
+		});
+	}
+	singles = singles.filter((x) => singleSet.has(x));
 	const allMembers = new Set(accepted.flatMap((g) => g.members).concat(singles));
+	// Explicit nesting levels among siblings (aria-level, data-depth/-level, indent), e.g. threads laid out as flat rows.
+	const levelOf = (m: Element): number | null => {
+		const el = [m, ...($(m).find('[aria-level],[data-depth],[data-level],[indent]').toArray() as Element[]).slice(0, 1)].find((x) => x.attribs && (x.attribs['aria-level'] ?? x.attribs['data-depth'] ?? x.attribs['data-level'] ?? x.attribs.indent) !== undefined);
+		if (!el) return null;
+		const n = Number(el.attribs['aria-level'] ?? el.attribs['data-depth'] ?? el.attribs['data-level'] ?? el.attribs.indent);
+		return Number.isFinite(n) ? n : null;
+	};
 	for (const g of accepted) {
 		const members: string[] = [];
+		const levels = g.members.map(levelOf);
+		const leveled = levels.filter((x) => x !== null).length >= 2 && new Set(levels).size > 1;
+		const levelParent = (i: number): number | null => {
+			if (!leveled || levels[i] === null) return null;
+			for (let j = i - 1; j >= 0; j--) if (levels[j] !== null && levels[j]! < levels[i]!) return j;
+			return null;
+		};
+		const ids: Array<string | null> = [];
 		g.members.forEach((m, i) => {
-			const nestedInRecord = nearestRecord(m) !== null || (m.tagName === 'article' && $(m).parents('article').length > 0);
-			// Exclude nested records' content from this record's fields.
-			const nested = new Set(($(m).find('*').toArray() as Element[]).filter((d) => allMembers.has(d)));
-			const fields = nested.size ? recordFields(b, m, { excludeNested: nested }) : g.fields[i];
+			const lp = levelParent(i);
+			const nestedInRecord = lp !== null || nearestRecord(m) !== null || (m.tagName === 'article' && $(m).parents('article').length > 0);
+			// Exclude nested records' content from this record's fields (ancestor check against all record elements).
+			const hasNested = g.fields[i].some((f) => { let a: AnyNode | null = f.el.parent; while (isEl(a) && a !== m) { if (allMembers.has(a)) return true; a = a.parent; } return false; });
+			const fields = hasNested ? recordFields(b, m, { excludeNested: allMembers }) : g.fields[i];
 			const id = addRecord(b, m, { nestedInRecord, inCollection: true, fields, method: 'structure' });
+			ids.push(id);
 			if (!id) return;
 			recordEls.set(m, id);
 			members.push(id);
-			const parentRec = nearestRecord(m);
+			const parentRec = lp !== null ? ids[lp] : nearestRecord(m);
 			if (parentRec) {
 				const t = b.entities.get(id)!.type;
 				b.rel(id, parentRec, t === 'Comment' ? 'inReplyTo' : 'isPartOf', 'structure', 'inferred', 0.6, [b.ev(m, 'structure')]);
@@ -690,8 +915,7 @@ function repeated(b: Builder, pageId: string | null): void {
 		}
 	}
 	for (const a of singles) {
-		const nested = new Set(($(a).find('*').toArray() as Element[]).filter((d) => allMembers.has(d)));
-		const id = addRecord(b, a, { nestedInRecord: $(a).parents('article').length > 0, inCollection: false, fields: recordFields(b, a, { excludeNested: nested }), method: 'html' });
+		const id = addRecord(b, a, { nestedInRecord: $(a).parents('article').length > 0, inCollection: false, fields: recordFields(b, a, { excludeNested: allMembers }), method: 'html' });
 		if (!id) continue;
 		recordEls.set(a, id);
 		const parentRec = nearestRecord(a);
@@ -718,10 +942,13 @@ function identities(b: Builder): void {
 		return a ? (a.value as string).toLowerCase() : null;
 	};
 	const comparable = (v: AttributeValue) => (v && typeof v === 'object' && 'amount' in v ? (v as { amount: number }).amount : v);
-	const list = [...b.entities.values()].filter((e) => e.type !== 'WebPage' && nameOf(e));
+	const list = [...b.entities.values()].filter((e) => e.type !== 'WebPage' && (nameOf(e) || e.identity.strength === 'strong'));
+	const urlKey = (e: PageEntity) => (e.identity.strength === 'strong' && /^https?:/.test(e.identity.key) ? e.identity.key : null);
 	for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
 		const x = list[i], y = list[j];
-		if (x.type !== y.type || nameOf(x) !== nameOf(y) || x.typeBasis.method === y.typeBasis.method) continue;
+		// Same thing described twice: same type + name from different methods, or the same source URL (any types).
+		const sameUrl = urlKey(x) !== null && urlKey(x) === urlKey(y);
+		if (!sameUrl && (x.type !== y.type || !nameOf(x) || nameOf(x) !== nameOf(y) || x.typeBasis.method === y.typeBasis.method)) continue;
 		const conflicts: NonNullable<PageRelationship['conflicts']> = [];
 		// Offer-level facts are compared through the `offers` relationship (schema.org puts price on the Offer).
 		const viaOffers = (e: PageEntity, attr: string) => e.attributes.find((a) => a.name === attr)
@@ -772,6 +999,131 @@ function interpreters(b: Builder, decoders: SignalDecoder[]): void {
 	});
 }
 
+// ------------------------------------------------------------------ ARIA disclosures (accordions): heading control + panel = one record
+
+function disclosures(b: Builder, pageId: string | null): void {
+	const { $ } = b;
+	const controls = ($('h1 [aria-controls], h2 [aria-controls], h3 [aria-controls], h4 [aria-controls], h2[aria-controls], h3[aria-controls]').toArray() as Element[]).filter((c) => !inSkipped(/^h[1-6]$/.test(c.tagName) ? c : (c.parent as Element)));
+	const byParent = new Map<AnyNode | null, Array<{ control: Element; heading: Element; panel: Element }>>();
+	for (const c of controls) {
+		const heading = /^h[1-6]$/.test(c.tagName) ? c : (c.parent as Element);
+		const panel = $(`[id="${(c.attribs['aria-controls'] ?? '').replace(/"/g, '')}"]`).get(0) as Element | undefined;
+		if (!panel || !isEl(panel)) continue;
+		const list = byParent.get(heading.parent) ?? [];
+		list.push({ control: c, heading, panel });
+		byParent.set(heading.parent, list);
+	}
+	for (const [parent, items] of byParent) {
+		if (items.length < 2 || !isEl(parent)) continue;
+		const members: string[] = [];
+		for (const it of items) {
+			const name = collapse(b.text(it.control));
+			if (!name) continue;
+			const fields: Field[] = [{ name: 'name', typed: { value: name, dataType: 'text', provenance: 'observed' }, raw: name, el: it.control, method: 'aria', confidence: 0.9 }, ...recordFields(b, it.panel).filter((f) => f.name !== 'name')];
+			const id = addRecord(b, it.panel, { nestedInRecord: false, inCollection: true, fields, method: 'aria' });
+			if (!id) continue;
+			b.disclosed.add(it.panel);
+			b.elEntity.set(it.heading, id);
+			members.push(id);
+			if (pageId) b.rel(pageId, id, 'hasPart', 'aria', 'semantic', 0.9, [b.ev(it.panel, 'aria')]);
+		}
+		if (members.length) {
+			const types = new Set(members.map((m) => b.entities.get(m)!.type));
+			b.collections.push({ id: `col_${h({ k: 'disclosure', l: b.locator(parent) })}`, kind: 'list', name: parent.attribs['aria-label'] ?? null, itemType: types.size === 1 ? [...types][0] : null, members, signature: 'aria-controls', method: 'aria', evidenceRefs: [b.ev(parent, 'aria')] });
+		}
+	}
+}
+
+// ------------------------------------------------------------------ scholarly metadata (Highwire citation_*, Dublin Core)
+
+function scholarlyMeta(b: Builder, pageId: string | null): void {
+	const { $ } = b;
+	const metas = ($('meta[name]').toArray() as Element[]).filter((m) => /^(citation_|dc\.|dcterms\.)/i.test(m.attribs.name) && m.attribs.content);
+	if (!metas.length) return;
+	const get = (...names: string[]) => metas.filter((m) => names.includes(m.attribs.name.toLowerCase()));
+	const title = get('citation_title', 'dc.title', 'dcterms.title')[0];
+	if (!title) return;
+	const name = collapse(title.attribs.content);
+	const idMeta = get('citation_doi', 'citation_arxiv_id', 'citation_isbn', 'dc.identifier')[0];
+	const id = b.entity({ type: 'ScholarlyArticle', classification: 'declared', method: 'meta', rule: 'citation_* / Dublin Core metadata', identity: idMeta ? { key: idMeta.attribs.content, basis: '@id' } : { key: name.toLowerCase(), basis: 'name' }, evidenceRefs: [b.ev(title, 'meta')] });
+	const add = (attr: string, el: Element | undefined, hint: DataType = 'text') => {
+		if (!el) return;
+		const typed = typeByHint(hint, el.attribs.content.replace(/^(\d{4})\/(\d{2})\/(\d{2})$/, '$1-$2-$3'), b.input.observedAt, b.input.baseUrl);
+		b.attr(id, { name: attr, value: typed.value, raw: el.attribs.content, dataType: typed.dataType, provenance: typed.provenance, method: 'meta', confidence: 1, evidenceRefs: [b.ev(el, 'meta')], ...(typed.ambiguity ? { ambiguity: typed.ambiguity } : {}) });
+	};
+	add('name', title);
+	add('datePublished', get('citation_publication_date', 'citation_date', 'dc.date', 'dcterms.issued')[0], 'date');
+	add('dateOnline', get('citation_online_date')[0], 'date');
+	add('identifier', idMeta);
+	add('pdfUrl', get('citation_pdf_url')[0], 'url');
+	add('isPartOf', get('citation_journal_title', 'citation_conference_title')[0]);
+	for (const a of get('citation_author', 'dc.creator', 'dcterms.creator')) partyFromText(b, id, 'author', a.attribs.content, 'meta', b.ev(a, 'meta'));
+	for (const p of get('citation_publisher', 'dc.publisher')) partyFromText(b, id, 'publisher', p.attribs.content, 'meta', b.ev(p, 'meta'));
+	if (pageId) b.rel(pageId, id, 'mainEntity', 'meta', 'declared', 1, [b.ev(title, 'meta')]);
+}
+
+// ------------------------------------------------------------------ property tables and description sections → their record
+
+function propertySections(b: Builder, pageId: string | null): void {
+	const { $, input } = b;
+	const ownerOf = (el: Element): string | null => {
+		let p: AnyNode | null = el.parent;
+		while (isEl(p)) { const id = b.elEntity.get(p); if (id && b.entities.get(id)!.type !== 'WebPage') return id; p = p.parent; }
+		return (b.mainRecordEl && b.elEntity.get(b.mainRecordEl)) ?? pageId;
+	};
+	for (const table of b.propertyTables) {
+		const owner = ownerOf(table);
+		if (!owner) continue;
+		for (const row of $(table).find('tr').toArray() as Element[]) {
+			const cells = (row.children ?? []).filter(isEl).filter((c) => c.tagName === 'td' || c.tagName === 'th');
+			if (cells.length !== 2) continue;
+			const label = b.text(cells[0]), raw = b.text(cells[1]);
+			if (!label || !raw) continue;
+			const lab = labelFor(label);
+			const name = lab?.attribute ?? slug(label);
+			const typed: Typed = name === 'price' || name === 'priceExcludingTax' ? (parseMoney(raw) ? { value: parseMoney(raw), dataType: 'money', provenance: 'normalized' } : inferText(raw, input.observedAt))
+				: name === 'availability' ? (parseAvailability(raw) ? { value: parseAvailability(raw), dataType: 'availability', provenance: 'normalized' } : { value: raw, dataType: 'text', provenance: 'observed' })
+				: name === 'sku' || name === 'telephone' ? { value: raw, dataType: 'text', provenance: 'observed' } : inferText(raw, input.observedAt);
+			b.attr(owner, { name, value: typed.value, raw, dataType: typed.dataType, provenance: typed.provenance, method: 'table', confidence: 0.9, evidenceRefs: [b.ev(cells[1], 'table')], ...(typed.ambiguity ? { ambiguity: typed.ambiguity } : {}) });
+		}
+	}
+	// Labelled facts outside every record ("<strong>Author:</strong> <a>…</a>") describe the page's subject.
+	for (const lab of ($('strong, b, dt, th, label, span').toArray() as Element[])) {
+		const m = /^([A-Za-z][A-Za-z0-9 /&()-]{1,30})\s*[:：]$/.exec(b.text(lab));
+		if (!m || inSkipped(lab)) continue;
+		let covered = false;
+		for (let p: AnyNode | null = lab; isEl(p); p = p.parent) if (b.elEntity.has(p) && b.entities.get(b.elEntity.get(p)!)!.type !== 'WebPage') { covered = true; break; }
+		if (covered) continue;
+		let v: AnyNode | null = lab.next;
+		while (v && !isEl(v) && !/\S/.test((v as unknown as { data?: string }).data ?? '')) v = v.next;
+		if (!isEl(v) || !b.text(v)) continue;
+		const owner = ownerOf(lab);
+		if (!owner) continue;
+		const known = labelFor(m[1]);
+		const name = known?.attribute ?? slug(m[1]);
+		const raw = b.text(v);
+		const typed: Typed = name === 'date' || /date|released|published|updated/i.test(m[1]) ? (parseDate(raw, input.observedAt) ?? inferText(raw, input.observedAt)) : known?.relate ? { value: raw, dataType: 'text', provenance: 'observed' } : inferText(raw, input.observedAt);
+		const ev = b.ev(v, 'label');
+		b.attr(owner, { name, value: typed.value, raw, dataType: typed.dataType, provenance: typed.provenance, method: 'label', confidence: 0.6, evidenceRefs: [ev], ...(typed.ambiguity ? { ambiguity: typed.ambiguity } : {}) });
+		if (known?.relate && typeof typed.value === 'string') {
+			const rid = b.entity({ type: known.relate.type, classification: 'inferred', method: 'label', rule: `named by label "${name}"`, identity: { key: typed.value.toLowerCase(), basis: 'name' }, evidenceRefs: [ev] });
+			b.attr(rid, { name: 'name', value: typed.value, raw, dataType: 'text', provenance: 'observed', method: 'label', confidence: 0.6, evidenceRefs: [ev] });
+			b.rel(owner, rid, known.relate.rel, 'label', 'inferred', 0.6, [ev]);
+		}
+	}
+	// A section headed "…description / overview / summary / about…" describes the record it belongs to.
+	for (const hd of ($('h2, h3, h4').toArray() as Element[]).filter((x) => /\b(description|overview|summary|about)\b/i.test(b.text(x)) && !inSkipped(x))) {
+		let p: AnyNode | null = hd.next;
+		while (p && !(isEl(p) && p.tagName === 'p')) { if (isEl(p) && /^h[1-6]$/.test(p.tagName)) { p = null; break; } p = p.next; }
+		if (!p) { const par = hd.parent; p = isEl(par) ? (($(par).nextAll('p').get(0) as AnyNode | undefined) ?? null) : null; }
+		if (!isEl(p) || b.text(p).length < 20) continue;
+		const owner = ownerOf(hd);
+		const e = owner ? b.entities.get(owner) : undefined;
+		if (!e || e.attributes.some((a) => a.name === 'description' && a.method !== 'meta')) continue;
+		b.attr(owner, { name: 'description', value: b.text(p), raw: b.text(p), dataType: 'text', provenance: 'observed', method: 'html', confidence: 0.6, evidenceRefs: [b.ev(p, 'html')] });
+	}
+}
+
 // ------------------------------------------------------------------ residual: nothing visible is silently dropped
 
 function residualText(b: Builder, pageId: string | null): void {
@@ -802,10 +1154,17 @@ export function extractPage(input: PageInput): PageRepresentation {
 	jsonLd(b, pageId);
 	scoped(b, '[itemscope]', 'itemprop', 'itemtype', 'microdata');
 	scoped(b, '[typeof]', 'property', 'typeof', 'rdfa');
+	scholarlyMeta(b, pageId);
 	tables(b, pageId);
+	disclosures(b, pageId);
 	repeated(b, pageId);
+	propertySections(b, pageId);
 	residualText(b, pageId);
 	identities(b);
+	for (const [a, c] of b.pendingPossiblySame) {
+		const id = `rel_${h({ from: a, to: c, type: 'possiblySameAs' })}`;
+		b.rels.set(id, { id, from: a, to: c, type: 'possiblySameAs', method: 'identity', classification: 'unknown', confidence: 0.3, evidenceRefs: [...new Set([...(b.entities.get(a)?.evidenceRefs.slice(0, 1) ?? []), ...(b.entities.get(c)?.evidenceRefs.slice(0, 1) ?? [])])] });
+	}
 	interpreters(b, input.decoders ?? []);
 
 	const entities = [...b.entities.values()];
@@ -816,17 +1175,23 @@ export function extractPage(input: PageInput): PageRepresentation {
 	const rep: PageRepresentation = {
 		schema: PAGE_SCHEMA, extractorVersion: EXTRACTOR_VERSION,
 		source: { locator: input.locator, baseUrl: input.baseUrl, observationId: input.observationId, contentHash: input.contentHash, contentType: input.contentType },
-		observedAt: input.observedAt, revision: '',
+		observedAt: input.observedAt, revision: '', factsRevision: '',
 		language: (langAttr?.value as string) ?? null, title: (titleAttr?.value as string) ?? null,
 		entities, relationships: [...b.rels.values()], collections: b.collections, signals: b.signals, evidence: [...b.evidence.values()],
 		stats: { elements, elementsVisited: b.elementsVisited, truncated: b.truncated, limits: b.limits, byClassification }
 	};
+	// Facts as a set: the order in which a page lists values (headings, list items) is layout, not fact.
+	for (const e of rep.entities) e.digest = sha256(canonicalJson({ t: e.type, a: e.attributes.map((a) => canonicalJson([a.name, a.value, a.raw])).sort() })).slice(0, 16);
+	rep.factsRevision = sha256(canonicalJson({
+		e: rep.entities.map((e) => [e.id, e.digest]).sort((x, y) => (x[0] < y[0] ? -1 : 1)),
+		r: rep.relationships.filter((r) => r.type !== 'hasPart').map((r) => [r.from, r.type, r.to]).sort()
+	}));
 	rep.revision = pageRevision(rep);
 	return rep;
 }
 
 /** Content revision: identical page content ⇒ identical revision, independent of which observation saw it. */
 export function pageRevision(rep: PageRepresentation): string {
-	const { revision: _r, observedAt: _o, source, ...rest } = rep;
+	const { revision: _r, observedAt: _o, source, ...rest } = rep as PageRepresentation & { factsRevision?: string };
 	return sha256(canonicalJson({ ...rest, source: { ...source, observationId: null } }));
 }

@@ -1,4 +1,11 @@
-# Page Intelligence (M5)
+# Page Intelligence (M5, corrected in M7)
+
+> **M7 corrections.**
+> - Real-page measurements are now in PAGE_QUALITY.md.
+> - The identity model gained a strength (§2 Identity) and per-entity `digest`; pages gained `factsRevision`.
+> - Representations are stored gzip-compressed (§4).
+> - New generic rules came from real pages (§2).
+> - §7 is updated with the measured state.
 
 > Signal should not need to know what a user is looking for before it can understand what a page contains.
 
@@ -23,8 +30,8 @@ Normative types: [`lib/page/types.ts`](lib/page/types.ts).
 | Part | Content |
 |---|---|
 | `source` | locator, base URL (used to resolve links, **never fetched**), observation id, content hash, content type |
-| `observedAt`, `revision` | `revision` = sha256 of the canonical representation **excluding** observation identity and time. Identical content ⇒ identical revision |
-| `entities[]` | `{id, type, classification, typeBasis{method, rule}, identity{key, basis}, attributes[], evidenceRefs[]}` |
+| `observedAt`, `revision`, `factsRevision` | `revision` = sha256 of the canonical representation **excluding** observation identity and time. Identical content ⇒ identical revision. `factsRevision` (M7) = sha256 of entity ids + digests + relationship triples only: **unchanged by reordering or layout-only changes** |
+| `entities[]` | `{id, type, classification, typeBasis{method, rule}, identity{key, basis, strength, ambiguous?, occurrences}, digest, attributes[], evidenceRefs[]}` |
 | `attributes[]` | `{name, value, raw, dataType, provenance, method, confidence, evidenceRefs[], ambiguity?}` |
 | `relationships[]` | `{from, to, type, method, classification, confidence, evidenceRefs[], conflicts?}`. Examples: `offers`, `seller`, `author`, `hiringOrganization`, `inReplyTo`, `isPartOf`, `hasPart`, `mainEntity`, `sameAs` |
 | `collections[]` | `{kind: list \| table \| repeated \| itemlist \| thread, name, itemType, members[], signature?}` |
@@ -65,8 +72,9 @@ The stages run in a fixed order. No site-specific code exists.
    - Tables: header cells name the attributes, and each body row is an entity in a `table` collection.
    - `<article>` / `role=article`.
    - `<time datetime>` and `<dl>` pairs.
-   - `nav`, `header`, `footer`, `form` and `role=navigation` are not content.
-   - `[hidden]`, `aria-hidden="true"` and inline `display:none` are not treated as visible.
+   - `nav`, `header`, `footer` and `role=navigation` are not content. (M7: `form` is no longer skipped; filter panels and search results often sit inside forms.)
+   - `[hidden]`, `aria-hidden="true"` and inline `display:none` are not treated as visible. `hidden="until-found"` **is** accessible content (M7).
+   - Tables (M7) have their grid expanded for `rowspan`/`colspan`, name attributes from multi-row headers, and strip footnote markers. Layout tables are scanned for records.
 5. **Repeated structures.**
    - Siblings sharing a signature (tag + classes, digits normalized) form a group. The minimum is 3 members, or 2 for `li`, `article`, `tr` or `role=feed/list`.
    - A group becomes a collection when ≥60% of members are record-like. Lists of `li` are always kept. Groups of ≥3 with ≥2 fields each are kept as `Unknown` records.
@@ -80,7 +88,7 @@ The stages run in a fixed order. No site-specific code exists.
    - remaining text, kept under its class name.
 
    Labels that name a party (seller, brand, employer, author) create the related `Organization` / `Brand` / `Person` entity and the relationship.
-7. **Identity across sources.** Entities of the same type and name from different methods get a `sameAs` link. Price, availability, dates, author and seller are compared, resolving through `offers`. Disagreements become `conflicts` plus `ambiguity` on both attributes. Nothing is merged or resolved silently.
+7. **Identity across sources.** Entities of the same type and name from different methods get a `sameAs` link. So do (M7) entities of **any** type that share a strong URL identity (a JSON-LD `SingleFamilyResidence` and the visible listing card for it). Price, availability, dates, author and seller are compared, resolving through `offers`. Disagreements become `conflicts` plus `ambiguity` on both attributes. Nothing is merged or resolved silently.
 8. **Specialized interpreters.** Injected `SignalDecoder`s (Ghostpost, invisible-Unicode) run per block that contains invisible characters, so each signal has an element locator. Password fields produce a `page-access/v1 login_form` signal. This logic is adapted from `rkendel1/web-monitor`'s `auth-detection.js`, narrowed to structural evidence.
 9. **Residual text.** Visible text blocks that no entity covers are kept on the `WebPage` entity (up to 100), so nothing visible is silently dropped.
 
@@ -89,12 +97,34 @@ The stages run in a fixed order. No site-specific code exists.
 | Rule | Condition | Type | Classification |
 |---|---|---|---|
 | T1 | compensation (money or range), or employer + location | `JobPosting` | inferred |
+| T1b (M7) | price + a real-estate quantity (bedrooms, baths, floor size) | `RealEstateListing` | inferred |
 | T2 | a price **plus** a product cue (normalized availability, image, seller, brand, sku, rating) | `Product` | inferred |
 | T3a/b/c | author + date: nested in a record / in a repeated structure / an `<article>` | `Comment` / `SocialMediaPosting` / `Article` | inferred |
 | T4 | `<article>` with a heading | `Article` | semantic |
 | T5 | table row | `TableRow` | semantic |
 | T6 | list item | `ListItem` | semantic |
+| T7 (M7) | contact facts only (telephone, email, website, contactPoint) | `Organization` | inferred |
 | – | otherwise | `Unknown` | unknown |
+
+**Known misfire (measured, G-PAGE-12):** a land-lot card (price + image, no bedrooms) is typed `Product` by T2.
+
+**Other M7 rules** (each from a real-page failure; see PAGE_QUALITY.md §3):
+- the main record (the innermost container of the single h1) receives page-level property tables and labelled facts;
+- `Label:` elements with a sibling value are paired;
+- an `<li>` wrapping a single record is promoted to that record;
+- records are processed deepest-first;
+- indent levels (`aria-level`, `data-depth`, `data-level`, indent classes) produce `inReplyTo`;
+- `citation_*` and Dublin Core meta map to scholarly attributes;
+- author/publisher/seller text becomes a party entity;
+- `data-lat`/`data-lng` become `latitude`/`longitude`;
+- `aria-selected` becomes `selected`;
+- `rel=next`/`prev` become `nextPage`/`previousPage`;
+- a map element's `data-south/west/north/east` becomes `viewportBounds`, and its markers become `viewportMarkers` (a count, not listings).
+
+Vocabulary additions (`vocab.ts`):
+- price incl./excl. tax, review count, telephone, website, email, contact point, upc/gtin/ean;
+- units (bedrooms, baths, sqft, m², acres, rooms, floors, km, mi);
+- prefix labels (`Built 1986` → `yearBuilt`, `No HOA` → `hoaFee` 0, `Price cut $10,000` → `priceReduction`).
 
 T2 originally fired on "name + price". The fuel-price table fixture showed that this overclaims, so a product cue is now required.
 
@@ -110,7 +140,20 @@ T2 originally fired on "name + price". The fuel-price table fixture showed that 
 | `name` | lower-cased name |
 | `locator` | element path |
 
-Name, URL and sku identities are stable across observations when content changes, which is what makes `changed`, `added` and `removed` meaningful. Locator identities move if the page structure moves. Two records with the same type and key on one page are kept apart with a `_2`, `_3` suffix in page order.
+Name, URL and sku identities are stable across observations when content changes, which is what makes `changed`, `added` and `removed` meaningful. Locator identities move if the page structure moves.
+
+**Strength (M7).** `identity.strength` is:
+- `strong` for `@id`, url or sku;
+- `weak` for a name;
+- `positional` for a locator.
+
+**Same key on one page:**
+- **Strong identity:** repeated occurrences are the **same** entity. They merge, and `occurrences` counts them (one product shown in two cards).
+- **Weak identity:** records sharing the key are kept apart with `_2`, `_3`, marked `ambiguous: true`, and linked by `possiblySameAs` (classification `unknown`). Change detection excludes ambiguous and positional entities and reports them as `uncertain`, never as added/removed/changed. Continuity is not invented.
+
+**Digest.** `digest` = sha256 of the entity's type and its attribute facts, order-insensitive and excluding evidence and layout.
+
+The scenarios are in `tests/lib/identity.test.ts` and are summarized in PAGE_QUALITY.md §5a.
 
 ## 3. Criteria over the representation
 
@@ -154,7 +197,7 @@ The `entity` condition (`lib/page/query.ts`) joins `all`, `any`, `not`, `field`,
 
 Storage uses only what FeltKit already provides:
 - the raw bytes in **Files** (unchanged);
-- the representation's canonical JSON in **Files** (`metadata.kind = signal.page`);
+- the representation's canonical JSON in **Files** (`metadata.kind = signal.page`). Since M7 it is **gzip-compressed** (`encoding: "gzip"`, about 10× smaller; the decision is in PAGE_QUALITY.md §6). Pre-M7 uncompressed files are still read;
 - an index row in `signal_pages`.
 
 The representation is a **derived projection**. The raw bytes remain the authority, and the representation can be rebuilt from them with any extractor version.
@@ -179,7 +222,7 @@ The representation is a **derived projection**. The raw bytes remain the authori
 
 ## 7. What is not claimed
 
-- **Coverage is not universal.** It is demonstrated on 8 unrelated fixtures, and is not universal on that basis. Real-site recall and precision have not been measured.
+- **Coverage is not universal.** M7 measured 16 real pages in 10 categories (PAGE_QUALITY.md). The first untuned held-out run failed attribute understanding on 3 of 6 pages. Generic fixes followed, so the current held-out scores are no longer unbiased. The measured remaining failures are: HN cross-row stories, PyPI sidebar facts, duplicate rows across tables, and a lot typed as `Product`.
 - **Heuristics lean on English.** Labels, availability phrases, class hints and relative dates are mostly English.
 - **Dynamic content needs a rendered snapshot pushed by a caller.** Signal does not run a headless browser (G-PAGE-1).
 - **AI-suggested mappings are not implemented.** The intended path is a reviewable, explicitly accepted addition to `vocab.ts` tables (G-PAGE-5).

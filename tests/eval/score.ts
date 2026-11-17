@@ -18,7 +18,7 @@ import type { PageEntity, PageRepresentation } from '../../lib/page/types.ts';
 export type Outcome = 'correct' | 'not_understood' | 'ambiguous' | 'missed' | 'not_accessible' | 'not_present';
 interface LabelAttr { paths: string[]; value: unknown; compare: string; accessible?: boolean }
 interface LabelEnt { match: { attr: string; value: string; compare?: string }; acceptTypes: string[]; attributes: Record<string, LabelAttr>; relationships?: Array<{ types: string[]; to: { attr: string; value: string } }> }
-export interface Label { id: string; category: string; entities: LabelEnt[] }
+export interface Label { id: string; category: string; entities: LabelEnt[]; precisionScope?: 'page' | 'matched-collections' }
 
 const norm = (s: unknown) => String(s ?? '').replace(/[​-‏﻿]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
 
@@ -65,7 +65,9 @@ export interface PageScore {
 export function scorePage(label: Label, rep: PageRepresentation, html: string): PageScore {
 	const $ = load(html);
 	const visibleSource = norm($('body').text());
-	const targetTypes = new Set(label.entities.flatMap((e) => e.acceptTypes).filter((t) => t !== 'WebPage'));
+	// Precision is about entities that *claim* a labelled type. 'Unknown' claims nothing, so it is never a
+	// false entity (metric correction made after the first held-out run; see PAGE_QUALITY.md).
+	const targetTypes = new Set(label.entities.flatMap((e) => e.acceptTypes).filter((t) => t !== 'WebPage' && t !== 'Unknown'));
 	const s: PageScore = {
 		id: label.id, category: label.category,
 		entities: { expected: label.entities.length, found: 0, foundWrongType: 0, missed: 0, duplicates: 0, falseEntities: 0, targetTypedExtracted: 0 },
@@ -138,8 +140,14 @@ export function scorePage(label: Label, rep: PageRepresentation, html: string): 
 			if (to && (le.relationships ?? []).some((lr) => lr.types.includes(r.type) && matchesKey(to, lr.to))) s.relationships.extractedCorrect++;
 		}
 	}
+	// precisionScope 'matched-collections': only collections containing a labelled entity are judged (the label
+	// covers one table of several on the page).
+	const inScope = label.precisionScope === 'matched-collections'
+		? new Set(rep.collections.filter((c) => c.members.some((m) => matchedIds.has(m))).flatMap((c) => c.members))
+		: null;
 	for (const e of rep.entities) {
 		if (!targetTypes.has(e.type)) continue;
+		if (inScope && !inScope.has(e.id)) continue;
 		// Entities the page itself declares (JSON-LD, microdata) but the labels do not list (e.g. the site's own
 		// publisher Organization) are page facts, not extractor inventions: reported, not counted as false.
 		if (e.classification === 'declared' && !matchedIds.has(e.id)) { s.entities.declaredUnlabeled = (s.entities.declaredUnlabeled ?? 0) + 1; continue; }

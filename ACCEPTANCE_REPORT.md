@@ -1,5 +1,94 @@
 # Signal — Acceptance Report
 
+## M7 — Page Quality and Discovery Readiness (2026-11-17)
+
+### Baseline, verified before any change
+The branch was at `1523f14` (M5): Rust 12/12, `feltkit test` 55/55, `tsc` clean. During M7, the real pages and their labels were committed **before** evaluation:
+- `a5d70af`: tuning pages and labels;
+- `3d71e47`: held-out pages and labels.
+
+### Final verification
+
+| Command | Result |
+|---|---|
+| `cargo test --manifest-path codecs/ghostpost-unicode/Cargo.toml` | **12 passed**, 0 failed |
+| `npx feltkit test` | **90 passed**, 0 failed, 0 skipped, 0 cancelled. The 55 M5 tests pass, with one M5 test file extended |
+| `npx tsc --noEmit -p .` | **0 errors** |
+| `node scripts/evaluate-pages.ts` | [`docs/page-quality.json`](docs/page-quality.json). The current measured metrics are identical to the run before the final extractor change (only representation byte counts moved) |
+| `node scripts/summarize-quality.ts` | The per-category and per-method tables in PAGE_QUALITY.md §2 |
+| `node scripts/analyze-size.ts` | [`docs/size-analysis.json`](docs/size-analysis.json) |
+| `node scripts/bench-storage.ts` | [`docs/storage-options.json`](docs/storage-options.json) (6.5 min, mostly the rejected columnar decoder) |
+| `npm run bench` | [`docs/bench.json`](docs/bench.json) |
+
+The 35 new tests:
+- **`tests/lib/page-quality.test.ts` (16):** every real page is scored against its independent label and must not fall below the committed measurement.
+- **`tests/lib/identity.test.ts` (9):** identity and change scenarios on the real books catalog.
+- **`tests/lib/discovery.test.ts` (8):** context provenance; four discovery steps equal to the generator truth; coverage; conflicts; absence semantics; change; rejection of undecidable intents.
+- **`tests/pages.test.ts` (+1):** `discovery:evaluate` through FeltKit, with owner-only access and invalid input.
+- **`tests/storage.test.ts` (1):** gzip storage plus legacy read.
+
+### Requirements
+
+| # | Requirement | Evidence | Result |
+|---|---|---|---|
+| 1 | Real-page evaluation suite with authorized access, provenance, independent expectations, sanitized fixtures | 16 pages and 2 recorded refusals; `*.provenance.json`; oracle labels committed before evaluation; arXiv and HN sanitized | ✅. No real-estate site and no real JSON-LD conflict page: the permitted sources had none (synthetic instead) |
+| 2 | Metrics per category and per method, outcome taxonomy, no single aggregate | PAGE_QUALITY.md §2 | ✅ |
+| 3 | Size causes, options A–E, benchmarked decision, traceability kept | PAGE_QUALITY.md §6. gzip chosen: 10.6× smaller, lossless, 14 ms decode | ✅ |
+| 4 | Identity and change scenarios; uncertainty represented, not invented | `tests/lib/identity.test.ts`, PAGE_QUALITY.md §5a | ✅ |
+| 5 | Discovery model and contracts reconciled with the architecture | DISCOVERY_MODEL.md; `lib/discovery`; `discovery:evaluate` | ✅. Persisted intents deferred to M8 |
+| 6 | Real-estate progressive scenario, synthetic, values never invented | DISCOVERY_MODEL.md §7; all 4 steps equal `truth.json` | ✅ |
+| 7 | Context and viewport semantics, with markers ≠ listings | `extractContext` sources; 20 markers vs 12 listings reported | ✅ |
+| 8 | Coverage states; no unproven exhaustiveness | `DiscoveryCoverage` | ✅ except `failed` (G-DISC-4) |
+| 9 | Incremental scanning strategy; browser-session vs background; no scheduler or extension | `plan[]` with `executesIn`; `skip_unchanged` via `factsRevision` | ✅. Proposals only |
+| 10 | Candidate statuses; missing ≠ match; ambiguity never satisfies | match / possible / non_match / out_of_scope plus the `changed` flag; the conflict tests | ✅ |
+| 11 | Architecture decisions, current vs future | CAPABILITY_ARCHITECTURE.md §6 | ✅ |
+| 12 | Deliverables | PAGE_QUALITY.md, PAGE_INTELLIGENCE.md (corrected), DISCOVERY_MODEL.md, CAPABILITY_ARCHITECTURE.md, CAPABILITY_CONTRACTS.md, GAP_REGISTER.md, EXTRACTION_PLAN.md, this report; fixtures with provenance; results; reproducible scripts | ✅ |
+
+### Headline measurements
+
+**Held-out first run (untuned; the only unbiased figures).** Attribute recall:
+
+| Page | Recall |
+|---|---|
+| countries | 0.000 |
+| tallest | 0.096 |
+| pyevents | 0.333 |
+| hockey | 1.000 |
+| wstables | 1.000 |
+| pypi | 1.000 |
+
+Entity recall was ≥ 0.989 on all six.
+
+**Current (after generic fixes):**
+- every page has attribute recall ≥ 0.976, except hn-item at 0.600;
+- traceability is ≥ 0.998 everywhere.
+
+PAGE_QUALITY.md has all the figures and the disclosures (label correction, scorer corrections, consumed held-out set).
+
+**Storage:** the 1,000-product representation is 3.43 MB as JSON and 324 KB stored (gzip). Encode takes 21 ms and decode 14 ms.
+
+**Correction to the M5 report.** M5 attributed the size to "per-value evidence". M7 measured that evidence *text* is only 3–7%. JSON keys (24–41%) and CSS locators (4–31%) dominate.
+
+**Observe cycle:** p50 51.3 ms, p95 71.6 ms (M5: 51.4 / 69.3), so gzip adds no measurable cost. Push cycle: p50 23.1 ms. Duplicate suppression is unchanged: 40 events, 20 suppressed, 40 notifications.
+
+### Defects found and fixed in M7
+1. **Money parsing:** `$1033.99` became 103; `$1 033,99` failed.
+2. **Quantity parsing:** `1,540 sqft` became 540.
+3. **Quadratic containment checks:** 3.5 s on a 1.4 MB page, now 0.4 s.
+4. **Order sensitivity:** `factsRevision` changed when a list was reordered (the digest is now order-insensitive).
+5. **Map markers vs listings:** the unlisted-marker count subtracted candidates, not listed cards (9 reported instead of 8). Found while checking DISCOVERY_MODEL.md against output; fixed and asserted.
+6. **Generic extraction failures** from the held-out run, listed in PAGE_QUALITY.md §3.
+
+### Not verified
+- **Unbiased accuracy after the fixes** (G-PAGE-9).
+- **Real listing sites** (G-DISC-2).
+- **Non-English pages** (G-PAGE-3).
+- **JavaScript-rendered real pages** (G-PAGE-1).
+- **Discovery execution**, i.e. plans run in a browser session or in the background (M8).
+- **`signal.discovery.evaluate` called through `/appport`.** It was tested through FeltKit's test client only.
+
+---
+
 ## M5 — Universal Page Intelligence (2026-11-17)
 
 ### Baseline, verified before any change

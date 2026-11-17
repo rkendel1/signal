@@ -1,0 +1,377 @@
+{
+ "synthetic-1000-products": {
+  "htmlBytes": 186626,
+  "representationBytes": 3430208,
+  "ratio": 18.38,
+  "entities": 1021,
+  "attributes": 6072,
+  "evidence": 7005,
+  "shares": {
+   "evidenceTotal": {
+    "bytes": 1479758,
+    "share": 0.431
+   },
+   "evidenceText": {
+    "bytes": 109181,
+    "share": 0.032
+   },
+   "evidenceLocator": {
+    "bytes": 587419,
+    "share": 0.171
+   },
+   "evidenceAttributes": {
+    "bytes": 149705,
+    "share": 0.044
+   },
+   "attributesTotal": {
+    "bytes": 1103461,
+    "share": 0.322
+   },
+   "attributeRaw": {
+    "bytes": 60273,
+    "share": 0.018
+   },
+   "attributeRawEqualToValue": {
+    "bytes": 21053,
+    "share": 0.006
+   },
+   "attributeValue": {
+    "bytes": 147963,
+    "share": 0.043
+   },
+   "attributeEvidenceRefs": {
+    "bytes": 115368,
+    "share": 0.034
+   },
+   "attributeMetadata": {
+    "bytes": 385177,
+    "share": 0.112
+   },
+   "entityMetadata": {
+    "bytes": 357992,
+    "share": 0.104
+   },
+   "relationships": {
+    "bytes": 405000,
+    "share": 0.118
+   },
+   "collections": {
+    "bytes": 23176,
+    "share": 0.007
+   },
+   "signals": {
+    "bytes": 0,
+    "share": 0
+   }
+  },
+  "jsonKeyBytes": {
+   "bytes": 1254734,
+   "share": 0.366
+  },
+  "locatorRedundancy": {
+   "locatorBytes": 587419,
+   "distinctSteps": 1011,
+   "avgLocatorChars": 82
+  }
+ },
+ "webscraper-laptops": {
+  "htmlBytes": 179185,
+  "representationBytes": 1483608,
+  "ratio": 8.28,
+  "entities": 471,
+  "attributes": 1309,
+  "evidence": 1898,
+  "shares": {
+   "evidenceTotal": {
+    "bytes": 851795,
+    "share": 0.574
+   },
+   "evidenceText": {
+    "bytes": 79028,
+    "share": 0.053
+   },
+   "evidenceLocator": {
+    "bytes": 432835,
+    "share": 0.292
+   },
+   "evidenceAttributes": {
+    "bytes": 165187,
+    "share": 0.111
+   },
+   "attributesTotal": {
+    "bytes": 318263,
+    "share": 0.215
+   },
+   "attributeRaw": {
+    "bytes": 45488,
+    "share": 0.031
+   },
+   "attributeRawEqualToValue": {
+    "bytes": 27222,
+    "share": 0.018
+   },
+   "attributeValue": {
+    "bytes": 60354,
+    "share": 0.041
+   },
+   "attributeEvidenceRefs": {
+    "bytes": 24871,
+    "share": 0.017
+   },
+   "attributeMetadata": {
+    "bytes": 83463,
+    "share": 0.056
+   },
+   "entityMetadata": {
+    "bytes": 182509,
+    "share": 0.123
+   },
+   "relationships": {
+    "bytes": 102725,
+    "share": 0.069
+   },
+   "collections": {
+    "bytes": 2959,
+    "share": 0.002
+   },
+   "signals": {
+    "bytes": 0,
+    "share": 0
+   }
+  },
+  "jsonKeyBytes": {
+   "bytes": 377920,
+   "share": 0.255
+  },
+  "locatorRedundancy": {
+   "locatorBytes": 432835,
+   "distinctSteps": 142,
+   "avgLocatorChars": 226
+  }
+ },
+ "wiki-population": {
+  "htmlBytes": 1390744,
+  "representationBytes": 1837863,
+  "ratio": 1.32,
+  "entities": 1873,
+  "attributes": 1730,
+  "evidence": 4693,
+  "shares": {
+   "evidenceTotal": {
+    "bytes": 815744,
+    "share": 0.444
+   },
+   "evidenceText": {
+    "bytes": 112354,
+    "share": 0.061
+   },
+   "evidenceLocator": {
+    "bytes": 75352,
+    "share": 0.041
+   },
+   "evidenceAttributes": {
+    "bytes": 205686,
+    "share": 0.112
+   },
+   "attributesTotal": {
+    "bytes": 320360,
+    "share": 0.174
+   },
+   "attributeRaw": {
+    "bytes": 29901,
+    "share": 0.016
+   },
+   "attributeRawEqualToValue": {
+    "bytes": 21304,
+    "share": 0.012
+   },
+   "attributeValue": {
+    "bytes": 28667,
+    "share": 0.016
+   },
+   "attributeEvidenceRefs": {
+    "bytes": 32870,
+    "share": 0.018
+   },
+   "attributeMetadata": {
+    "bytes": 116472,
+    "share": 0.063
+   },
+   "entityMetadata": {
+    "bytes": 482527,
+    "share": 0.263
+   },
+   "relationships": {
+    "bytes": 112232,
+    "share": 0.061
+   },
+   "collections": {
+    "bytes": 15058,
+    "share": 0.008
+   },
+   "signals": {
+    "bytes": 0,
+    "share": 0
+   }
+  },
+  "jsonKeyBytes": {
+   "bytes": 767339,
+   "share": 0.418
+  },
+  "locatorRedundancy": {
+   "locatorBytes": 75352,
+   "distinctSteps": 3351,
+   "avgLocatorChars": 14
+  }
+ },
+ "fake-jobs": {
+  "htmlBytes": 104429,
+  "representationBytes": 534146,
+  "ratio": 5.11,
+  "entities": 200,
+  "attributes": 850,
+  "evidence": 828,
+  "shares": {
+   "evidenceTotal": {
+    "bytes": 234193,
+    "share": 0.438
+   },
+   "evidenceText": {
+    "bytes": 17885,
+    "share": 0.033
+   },
+   "evidenceLocator": {
+    "bytes": 101835,
+    "share": 0.191
+   },
+   "evidenceAttributes": {
+    "bytes": 39505,
+    "share": 0.074
+   },
+   "attributesTotal": {
+    "bytes": 184885,
+    "share": 0.346
+   },
+   "attributeRaw": {
+    "bytes": 28296,
+    "share": 0.053
+   },
+   "attributeRawEqualToValue": {
+    "bytes": 18596,
+    "share": 0.035
+   },
+   "attributeValue": {
+    "bytes": 31596,
+    "share": 0.059
+   },
+   "attributeEvidenceRefs": {
+    "bytes": 16150,
+    "share": 0.03
+   },
+   "attributeMetadata": {
+    "bytes": 53593,
+    "share": 0.1
+   },
+   "entityMetadata": {
+    "bytes": 61947,
+    "share": 0.116
+   },
+   "relationships": {
+    "bytes": 41600,
+    "share": 0.078
+   },
+   "collections": {
+    "bytes": 0,
+    "share": 0
+   },
+   "signals": {
+    "bytes": 0,
+    "share": 0
+   }
+  },
+  "jsonKeyBytes": {
+   "bytes": 168465,
+   "share": 0.315
+  },
+  "locatorRedundancy": {
+   "locatorBytes": 101835,
+   "distinctSteps": 116,
+   "avgLocatorChars": 121
+  }
+ },
+ "heldout-countries": {
+  "htmlBytes": 203728,
+  "representationBytes": 981735,
+  "ratio": 4.82,
+  "entities": 254,
+  "attributes": 1809,
+  "evidence": 2098,
+  "shares": {
+   "evidenceTotal": {
+    "bytes": 522422,
+    "share": 0.532
+   },
+   "evidenceText": {
+    "bytes": 52880,
+    "share": 0.054
+   },
+   "evidenceLocator": {
+    "bytes": 222662,
+    "share": 0.227
+   },
+   "evidenceAttributes": {
+    "bytes": 55213,
+    "share": 0.056
+   },
+   "attributesTotal": {
+    "bytes": 301491,
+    "share": 0.307
+   },
+   "attributeRaw": {
+    "bytes": 18133,
+    "share": 0.018
+   },
+   "attributeRawEqualToValue": {
+    "bytes": 9389,
+    "share": 0.01
+   },
+   "attributeValue": {
+    "bytes": 15211,
+    "share": 0.015
+   },
+   "attributeEvidenceRefs": {
+    "bytes": 34371,
+    "share": 0.035
+   },
+   "attributeMetadata": {
+    "bytes": 116191,
+    "share": 0.118
+   },
+   "entityMetadata": {
+    "bytes": 68414,
+    "share": 0.07
+   },
+   "relationships": {
+    "bytes": 51865,
+    "share": 0.053
+   },
+   "collections": {
+    "bytes": 21178,
+    "share": 0.022
+   },
+   "signals": {
+    "bytes": 0,
+    "share": 0
+   }
+  },
+  "jsonKeyBytes": {
+   "bytes": 341534,
+   "share": 0.348
+  },
+  "locatorRedundancy": {
+   "locatorBytes": 222662,
+   "distinctSteps": 100,
+   "avgLocatorChars": 104
+  }
+ }
+}

@@ -41,14 +41,20 @@ export const LABELS: Array<{ re: RegExp; attribute: string; relate?: { type: str
 	{ re: /^(author|by|posted by|written by|byline|submitted by)$/i, attribute: 'author', relate: { type: 'Person', rel: 'author' } },
 	{ re: /^(location|job location|where)$/i, attribute: 'location' },
 	{ re: /^(salary|compensation|pay|pay range|salary range|base salary)$/i, attribute: 'compensation' },
-	{ re: /^(price|now|sale price|our price|cost)$/i, attribute: 'price' },
+	{ re: /^(price|now|sale price|our price|cost|price \((incl|including)[^)]*\))$/i, attribute: 'price' },
+	{ re: /^(price \((excl|excluding)[^)]*\)|price before tax|net price)$/i, attribute: 'priceExcludingTax' },
+	{ re: /^(number of reviews|reviews|review count|ratings)$/i, attribute: 'reviewCount' },
+	{ re: /^(phone|phone number|telephone|tel\.?|call)$/i, attribute: 'telephone' },
+	{ re: /^(website|web site|web|homepage|home page|site)$/i, attribute: 'website' },
+	{ re: /^(e-?mail|email address)$/i, attribute: 'email' },
+	{ re: /^(contact|contact us|contact information)$/i, attribute: 'contactPoint' },
 	{ re: /^(was|list price|original price|msrp|regular price)$/i, attribute: 'listPrice' },
 	{ re: /^(availability|status|stock)$/i, attribute: 'availability' },
 	{ re: /^(published|posted|date|updated|on)$/i, attribute: 'date' },
 	{ re: /^(requirements|qualifications|required skills|must have)$/i, attribute: 'requirements' },
 	{ re: /^(employment type|job type|type)$/i, attribute: 'employmentType' },
 	{ re: /^(rating|stars|score)$/i, attribute: 'rating' },
-	{ re: /^(sku|item|model|part number|mpn|isbn)$/i, attribute: 'sku' }
+	{ re: /^(sku|item|model|part number|mpn|isbn|upc|gtin|ean|item number)$/i, attribute: 'sku' }
 ];
 
 /** OpenGraph / meta → page attribute name. */
@@ -68,3 +74,25 @@ export const META: Record<string, { attribute: string; type: DataType }> = {
 
 /** Meta names never copied into a representation (credentials / anti-forgery tokens). */
 export const SECRET_META = /csrf|xsrf|token|nonce|session|secret|key|auth/i;
+
+/** Units → attribute (quantities such as "3 bd | 2 ba | 1,540 sqft"). Deterministic table; extend by rows. */
+export const UNITS: Array<{ re: RegExp; attribute: string; unit: string }> = [
+	{ re: /^(bd|bds|bed|beds|bedroom|bedrooms|br)$/i, attribute: 'numberOfBedrooms', unit: 'count' },
+	{ re: /^(ba|bath|baths|bathroom|bathrooms)$/i, attribute: 'numberOfBathrooms', unit: 'count' },
+	{ re: /^(sqft|sq\.? ?ft\.?|ft²|square feet)$/i, attribute: 'floorSize', unit: 'sqft' },
+	{ re: /^(m²|m2|sqm|sq\.? ?m\.?|square meters|square metres)$/i, attribute: 'floorSize', unit: 'm2' },
+	{ re: /^(acre|acres|ac)$/i, attribute: 'lotSize', unit: 'acre' },
+	{ re: /^(rooms?)$/i, attribute: 'numberOfRooms', unit: 'count' },
+	{ re: /^(floors?|stories|storeys)$/i, attribute: 'numberOfFloors', unit: 'count' },
+	{ re: /^(km|kilometers|kilometres)$/i, attribute: 'distance', unit: 'km' },
+	{ re: /^(mi|miles)$/i, attribute: 'distance', unit: 'mi' }
+];
+
+/** Label phrases written without a colon ("Built 1986", "No HOA", "Price cut $10,000"). */
+export const PREFIX_LABELS: Array<{ re: RegExp; attribute: string; kind: 'year' | 'money' | 'zero' | 'text' }> = [
+	{ re: /^(?:built|built in|year built|constructed)\s+(\d{4})$/i, attribute: 'yearBuilt', kind: 'year' },
+	{ re: /^(?:established|founded|since)\s+(\d{4})$/i, attribute: 'foundingDate', kind: 'year' },
+	{ re: /^(?:no hoa|hoa:?\s*(?:none|\$0(?:\.00)?))$/i, attribute: 'hoaFee', kind: 'zero' },
+	{ re: /^hoa(?: fee| dues)?:?\s*(.+)$/i, attribute: 'hoaFee', kind: 'money' },
+	{ re: /^(?:price (?:cut|reduced|reduction|drop)|reduced)[:\s]*(.+)$/i, attribute: 'priceReduction', kind: 'money' }
+];

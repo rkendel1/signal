@@ -64,6 +64,16 @@ export interface EntityResult {
 	note?: string;
 	candidates: number;
 	matches: EntityMatch[];
+	/** Entities whose continuity across observations cannot be established (ambiguous or positional identity):
+	 *  never reported as added/removed/changed. */
+	uncertain: Array<{ id: string; reason: string }>;
+}
+
+/** Continuity across observations needs a non-ambiguous, non-positional identity. */
+export function continuityOf(e: PageEntity): string | null {
+	if (e.identity?.ambiguous) return 'ambiguous identity: another entity on the page has the same type and name';
+	if (e.identity?.strength === 'positional') return 'positional identity: tied to the DOM path, which moves with the layout';
+	return null;
 }
 
 class Index {
@@ -144,12 +154,13 @@ function valueSatisfies(v: AttributeValue, p: AttrPredicate): boolean {
 	}
 }
 
-function predicate(ix: Index, prevIx: Index | null, e: PageEntity, p: AttrPredicate): { ok: boolean; values: AttributeValue[]; previous?: AttributeValue[] } {
+function predicate(ix: Index, prevIx: Index | null, e: PageEntity, p: AttrPredicate): { ok: boolean; values: AttributeValue[]; previous?: AttributeValue[]; uncertain?: true } {
 	const attrs = ix.resolve(e, p.attr);
 	const values = attrs.map((a) => a.value);
 	if (p.op === 'exists') return { ok: values.some((v) => v !== null), values };
 	if (p.op === 'absent') return { ok: values.every((v) => v === null), values };
 	if (['changed', 'unchanged', 'increased', 'decreased'].includes(p.op)) {
+		if (continuityOf(e)) return { ok: false, values, uncertain: true };
 		const before = prevIx?.byId.get(e.id);
 		if (!before) return { ok: false, values };
 		const prev = prevIx!.resolve(before, p.attr).map((a) => a.value);
@@ -169,7 +180,7 @@ function typeMatches(e: PageEntity, t: EntitySpec['type']): boolean {
 	return types.includes(e.type) || e.attributes.some((a) => a.name === 'additionalType' && types.includes(String(a.value)));
 }
 
-function specMatches(ix: Index, prevIx: Index | null, e: PageEntity, spec: EntitySpec, depth = 0): { ok: boolean; values: Record<string, AttributeValue[]>; previous: Record<string, AttributeValue[]> } {
+function specMatches(ix: Index, prevIx: Index | null, e: PageEntity, spec: EntitySpec, depth = 0): { ok: boolean; values: Record<string, AttributeValue[]>; previous: Record<string, AttributeValue[]>; uncertain?: true } {
 	const values: Record<string, AttributeValue[]> = {};
 	const previous: Record<string, AttributeValue[]> = {};
 	if (!typeMatches(e, spec.type)) return { ok: false, values, previous };
@@ -177,7 +188,7 @@ function specMatches(ix: Index, prevIx: Index | null, e: PageEntity, spec: Entit
 		const r = predicate(ix, prevIx, e, p);
 		values[p.attr] = r.values;
 		if (r.previous) previous[p.attr] = r.previous;
-		if (!r.ok) return { ok: false, values, previous };
+		if (!r.ok) return { ok: false, values, previous, ...(r.uncertain ? { uncertain: true as const } : {}) };
 	}
 	for (const r of spec.related ?? []) {
 		if (depth > 3) return { ok: false, values, previous };
@@ -194,20 +205,28 @@ function specMatches(ix: Index, prevIx: Index | null, e: PageEntity, spec: Entit
 }
 
 export function evaluateEntityCondition(c: EntityCondition, page: PageRepresentation | undefined, previous: PageRepresentation | undefined): EntityResult {
-	if (!page) return { matched: false, note: 'no page representation for this observation', candidates: 0, matches: [] };
+	if (!page) return { matched: false, note: 'no page representation for this observation', candidates: 0, matches: [], uncertain: [] };
 	const ix = new Index(page);
 	const prevIx = previous ? new Index(previous) : null;
 	const state = c.state ?? 'present';
-	if (state !== 'present' && !prevIx) return { matched: false, note: 'no previous observation (baseline)', candidates: 0, matches: [] };
+	if (state !== 'present' && !prevIx) return { matched: false, note: 'no previous observation (baseline)', candidates: 0, matches: [], uncertain: [] };
+	const uncertain: EntityResult['uncertain'] = [];
 	let pool: PageEntity[];
 	let poolIx = ix;
-	if (state === 'added') pool = page.entities.filter((e) => !prevIx!.byId.has(e.id));
-	else if (state === 'removed') { pool = previous!.entities.filter((e) => !ix.byId.has(e.id)); poolIx = prevIx!; }
-	else pool = page.entities;
+	if (state === 'added' || state === 'removed') {
+		const [from, other] = state === 'added' ? [page.entities, prevIx!] : [previous!.entities, ix];
+		poolIx = state === 'added' ? ix : prevIx!;
+		pool = [];
+		for (const e of from.filter((x) => !other.byId.has(x.id) && typeMatches(x, c.type))) {
+			const why = continuityOf(e);
+			if (why) uncertain.push({ id: e.id, reason: why }); else pool.push(e);
+		}
+	} else pool = page.entities;
 	const candidates = pool.filter((e) => typeMatches(e, c.type));
 	const matches: EntityMatch[] = [];
 	for (const e of candidates) {
 		const r = specMatches(poolIx, state === 'removed' ? null : prevIx, e, c);
+		if (r.uncertain) uncertain.push({ id: e.id, reason: continuityOf(e) ?? 'continuity unknown' });
 		if (!r.ok) continue;
 		const name = e.attributes.find((a) => a.name === 'name')?.value;
 		const attrNames = new Set((c.where ?? []).map((p) => p.attr));
@@ -220,7 +239,7 @@ export function evaluateEntityCondition(c: EntityCondition, page: PageRepresenta
 		const n = matches.length, v = c.count.value;
 		matched = { eq: n === v, gt: n > v, gte: n >= v, lt: n < v, lte: n <= v }[c.count.op];
 	}
-	return { matched, candidates: candidates.length, matches };
+	return { matched, candidates: candidates.length, matches, uncertain, ...(uncertain.length ? { note: `${uncertain.length} entit${uncertain.length === 1 ? 'y' : 'ies'} with uncertain continuity not evaluated for change` } : {}) };
 }
 
 export function validateEntityCondition(c: EntityCondition, depth = 0): void {

@@ -1,0 +1,176 @@
+{
+ "synthetic-1000-products": {
+  "htmlBytes": 186626,
+  "entities": 1021,
+  "A_json": {
+   "bytes": 3430208,
+   "ratioToHtml": 18.38
+  },
+  "Aplus_gzip": {
+   "bytes": 324209,
+   "base64Bytes": 432280,
+   "ratioToHtml": 1.737,
+   "encodeMs": 21.16,
+   "decodeMs": 14.17
+  },
+  "D_compact": {
+   "bytes": 1250886,
+   "encodeMs": 29.44,
+   "decodeWithEvidenceTextMs": 29819.12,
+   "losslessAfterRederivingEvidenceText": false
+  },
+  "Dplus_compact_gzip": {
+   "bytes": 267203,
+   "base64Bytes": 356272,
+   "ratioToHtml": 1.432,
+   "encodeMs": 18.99,
+   "decodeMs": 29626.83
+  },
+  "queryMsOnDecoded": 1.76
+ },
+ "webscraper-laptops": {
+  "htmlBytes": 179185,
+  "entities": 471,
+  "A_json": {
+   "bytes": 1483608,
+   "ratioToHtml": 8.28
+  },
+  "Aplus_gzip": {
+   "bytes": 114142,
+   "base64Bytes": 152192,
+   "ratioToHtml": 0.637,
+   "encodeMs": 7.25,
+   "decodeMs": 4.76
+  },
+  "D_compact": {
+   "bytes": 417125,
+   "encodeMs": 16.64,
+   "decodeWithEvidenceTextMs": 958.73,
+   "losslessAfterRederivingEvidenceText": false
+  },
+  "Dplus_compact_gzip": {
+   "bytes": 75856,
+   "base64Bytes": 101144,
+   "ratioToHtml": 0.423,
+   "encodeMs": 5.06,
+   "decodeMs": 795.86
+  },
+  "queryMsOnDecoded": 0.47
+ },
+ "wiki-population": {
+  "htmlBytes": 1390744,
+  "entities": 1873,
+  "A_json": {
+   "bytes": 1837863,
+   "ratioToHtml": 1.32
+  },
+  "Aplus_gzip": {
+   "bytes": 227655,
+   "base64Bytes": 303540,
+   "ratioToHtml": 0.164,
+   "encodeMs": 14.43,
+   "decodeMs": 9.6
+  },
+  "D_compact": {
+   "bytes": 744579,
+   "encodeMs": 13.67,
+   "decodeWithEvidenceTextMs": 5956.51,
+   "losslessAfterRederivingEvidenceText": false
+  },
+  "Dplus_compact_gzip": {
+   "bytes": 196174,
+   "base64Bytes": 261568,
+   "ratioToHtml": 0.141,
+   "encodeMs": 15.05,
+   "decodeMs": 6114.72
+  },
+  "queryMsOnDecoded": 0.74
+ },
+ "fake-jobs": {
+  "htmlBytes": 104429,
+  "entities": 200,
+  "A_json": {
+   "bytes": 534146,
+   "ratioToHtml": 5.11
+  },
+  "Aplus_gzip": {
+   "bytes": 51982,
+   "base64Bytes": 69312,
+   "ratioToHtml": 0.498,
+   "encodeMs": 5.84,
+   "decodeMs": 3.3
+  },
+  "D_compact": {
+   "bytes": 164865,
+   "encodeMs": 7.06,
+   "decodeWithEvidenceTextMs": 362.12,
+   "losslessAfterRederivingEvidenceText": false
+  },
+  "Dplus_compact_gzip": {
+   "bytes": 37892,
+   "base64Bytes": 50524,
+   "ratioToHtml": 0.363,
+   "encodeMs": 2.74,
+   "decodeMs": 316.38
+  },
+  "queryMsOnDecoded": 0.22
+ },
+ "heldout-countries": {
+  "htmlBytes": 203728,
+  "entities": 254,
+  "A_json": {
+   "bytes": 981735,
+   "ratioToHtml": 4.82
+  },
+  "Aplus_gzip": {
+   "bytes": 102297,
+   "base64Bytes": 136396,
+   "ratioToHtml": 0.502,
+   "encodeMs": 7.9,
+   "decodeMs": 5.18
+  },
+  "D_compact": {
+   "bytes": 281841,
+   "encodeMs": 7.52,
+   "decodeWithEvidenceTextMs": 1735.01,
+   "losslessAfterRederivingEvidenceText": false
+  },
+  "Dplus_compact_gzip": {
+   "bytes": 71118,
+   "base64Bytes": 94824,
+   "ratioToHtml": 0.349,
+   "encodeMs": 7.09,
+   "decodeMs": 1688.51
+  },
+  "queryMsOnDecoded": 0.55
+ },
+ "books-catalog": {
+  "htmlBytes": 51294,
+  "entities": 71,
+  "A_json": {
+   "bytes": 213249,
+   "ratioToHtml": 4.16
+  },
+  "Aplus_gzip": {
+   "bytes": 22312,
+   "base64Bytes": 29752,
+   "ratioToHtml": 0.435,
+   "encodeMs": 1.42,
+   "decodeMs": 1.02
+  },
+  "D_compact": {
+   "bytes": 65773,
+   "encodeMs": 1.82,
+   "decodeWithEvidenceTextMs": 30.41,
+   "losslessAfterRederivingEvidenceText": false
+  },
+  "Dplus_compact_gzip": {
+   "bytes": 17981,
+   "base64Bytes": 23976,
+   "ratioToHtml": 0.351,
+   "encodeMs": 0.98,
+   "decodeMs": 31.3
+  },
+  "queryMsOnDecoded": 0.08
+ }
+}

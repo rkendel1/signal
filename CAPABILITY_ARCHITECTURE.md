@@ -33,6 +33,7 @@ Signal is a **FeltKit application** (`npm create feltkit@latest signal`). That d
 |---|---|---|
 | **Signal Core**: codecs, detection, normalization, criteria, event generation | `lib/codecs`, `lib/interpret`, `lib/core` (`evaluate.ts`, `cycle.ts`) | Signal. Pure; usable outside FeltKit |
 | **Page Intelligence** (M5): what a page contains, before anyone says what matters | `lib/page` (`extract.ts`, `values.ts`, `vocab.ts`, `query.ts`); `feltkit/pages.ts` | Signal. Deterministic and site-agnostic; one dependency (cheerio, shared with `web-monitor`). See PAGE_INTELLIGENCE.md |
+| **Discovery** (M7): candidates across pages for an intent, with coverage and a scan plan | `lib/discovery/discover.ts` (pure); `feltkit/discovery.ts` (read-only query) | Signal. No store, no fetching. See DISCOVERY_MODEL.md |
 | **Signal Sources**: browser/DOM, text, JSON, web pages | `lib/sources` (HTTP), `monitors:push` (pushed text/json/dom), overlay (DOM) | Signal |
 | **Signal Runtime**: observation lifecycle, scheduling, state | `feltkit/monitors.ts` (lifecycle + state); scheduling is **not built** (G-PLAT-1) | Signal over FeltKit |
 | **Signal Experience**: overlay, evidence, reveal | `lib/overlay/overlay.js` | Signal (the host extension is not built, G-OVL-1) |
@@ -98,3 +99,20 @@ Recommendation: **do not run both.**
 - web-monitor has two assets Signal lacks: the extension host and a scheduler wiring.
 
 The convergence path is in `EXTRACTION_PLAN.md` M4. Its tests were not run during this work.
+
+## 6. M7 architecture decisions
+
+Each decision is stated as what is **current** (implemented and tested) and what is **future** (recommended, not built). Future items are scheduled in EXTRACTION_PLAN.md.
+
+| # | Topic | Current (M7) | Future |
+|---|---|---|---|
+| 1 | **Representation storage** | gzip of the canonical `signal.page/v1` JSON in Files, indexed in `signal_pages`. Lossless, deterministic, about 10× smaller, about 15 ms to decode. Raw bytes stay the authority (PAGE_QUALITY.md §6) | Revisit only if a measured workload is bound by decode time or storage. A columnar format was benchmarked and rejected (slow, a second schema, already drifted) |
+| 2 | **Identity** | `strong` / `weak` / `positional` strength. Strong occurrences merge; weak duplicates are marked ambiguous with `possiblySameAs`; change detection excludes uncertain identities. `digest` per entity, `factsRevision` per page | Cross-page identity for weak-keyed entities only via an explicit, reviewable mapping (G-PAGE-5), never by name similarity |
+| 3 | **Where discovery lives** | A pure library plus one read-only FeltKit query. It reuses `AttrPredicate` and the page store; it is not a new service or API | Stays in Signal. Other products consume it through the `signal.discovery.evaluate` capability |
+| 4 | **Discovery results** | Not stored. Recomputed from durable pages (`previousPageIds` recomputes the previous result). `resultDigest` makes results comparable | Store a result only when something must refer to it later (e.g. a notification). It would then be an evaluation record like `signal_evaluations`, not a new authority |
+| 5 | **Intents** | Supplied per call, versioned (`id` + `version`), validated (undecidable operators rejected) | M8: a `signal_intents` collection, immutable per version like `signal_criteria`. Monitoring an intent = a monitor whose condition is a discovery intent, reusing the event pipeline |
+| 6 | **Who executes scanning** | Discovery only proposes (`plan[]`, each with `executesIn`). Nothing is fetched by discovery | M8: `browser-session` proposals are executed by the user's browser via the overlay host (G-OVL-1). `background` proposals run through observation, which needs scheduled actions (G-PLAT-1). No separate crawler or scheduler in Signal |
+| 7 | **External data** | Caller-supplied `Enrichment`, labelled `external-estimate` / `external-record` with a source id and observation time; joined by exact URL; never overrides page facts | Enrichment providers as Resolver-bound, replaceable sources (G-RES-1), authorized like any source. Fuzzy joins only via reviewable mappings |
+| 8 | **Role of AI** | None in extraction, evaluation or discovery. All results are deterministic | A model may *propose* an intent from natural language, or a mapping for an unknown structure. Proposals become active only through validation and explicit acceptance (G-CRIT-1, G-PAGE-5). A model never decides a criterion |
+| 9 | **Coverage claims** | Explicit coverage with `exhaustive` true only with a declared total, every item examined and no further page, and the basis stated. Markers are counted, not assumed to be listings | Add `failed` / `refused` observations to coverage once discovery drives observation (M8) |
+| 10 | **Measuring quality** | Independent labels, tuning vs held-out splits, a preserved first run, per-category and per-method reports, and a regression floor test | A fresh unseen held-out set for each claim (G-PAGE-9), non-English pages (G-PAGE-3), and JavaScript-rendered real pages (G-PAGE-1) |

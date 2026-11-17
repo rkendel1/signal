@@ -273,9 +273,23 @@ const AVAIL = ['availability', 'offers.availability'];
 	const $ = html('heldout-tallest');
 	const table = $('table.wikitable').toArray().find((tb) => /Name/.test($(tb).find('tr').first().text()) && /Height/.test($(tb).find('tr').first().text()))!;
 	const ents: Ent[] = [];
-	$(table).find('tr').slice(2).each((_, tr) => {
-		const c = $(tr).children('td,th').toArray().map((x) => t($(x).text()).replace(/\[[^\]]*\]/g, '').trim());
-		if (c.length < 9) return;
+	// Correction after the first held-out run: the original oracle ignored rowspan (a country cell spanning
+	// several rows), producing impossible labels such as country "2018". Expand spans into a grid.
+	const trs = $(table).find('tr').toArray();
+	const grid: string[][] = [];
+	trs.forEach((tr, ri) => {
+		grid[ri] ??= [];
+		let ci = 0;
+		for (const cell of $(tr).children('td,th').toArray()) {
+			while (grid[ri][ci] !== undefined) ci++;
+			const rs = Number($(cell).attr('rowspan')) || 1, cs = Number($(cell).attr('colspan')) || 1;
+			const v = t($(cell).text()).replace(/\[[^\]]*\]/g, '').trim();
+			for (let dr = 0; dr < rs && ri + dr < trs.length; dr++) for (let dc = 0; dc < cs; dc++) (grid[ri + dr] ??= [])[ci + dc] = v;
+			ci += cs;
+		}
+	});
+	grid.slice(2).forEach((c) => {
+		if (c.length < 9 || !c[1]) return;
 		// columns: rank | name | m | ft | floors | image | city | country | year | comments | ref
 		ents.push({ match: { attr: 'name', value: c[1] }, acceptTypes: ['TableRow', 'Place', 'LandmarksOrHistoricalBuildings', 'Unknown'], attributes: {
 			city: { paths: ['city'], value: c[6], compare: 'text' },
@@ -283,5 +297,5 @@ const AVAIL = ['availability', 'offers.availability'];
 			year: { paths: ['year'], value: Number(c[8]), compare: 'number' }
 		} });
 	});
-	save('heldout-tallest', 'data_table', ents, ['Two-row header (Height: m | ft) shifts column positions; same buildings appear in several tables on the page.']);
+	save('heldout-tallest', 'data_table', ents, ['Two-row header (Height: m | ft) shifts column positions; same buildings appear in several tables on the page.', 'LABEL CORRECTION after the first held-out run: rowspan now expanded in the oracle (see docs/page-quality.heldout-first-run.json for the uncorrected run).'], { precisionScope: 'matched-collections' });
 }

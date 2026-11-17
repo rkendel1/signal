@@ -1,5 +1,6 @@
 /** Helpers shared by Signal's FeltKit function modules (not loaded as functions). */
 import { fail } from "@feltdb/feltkit";
+import { gunzipSync, gzipSync } from "node:zlib";
 import type { CriteriaDefinition, MatchedEvent, Observation } from "../lib/contracts/types.ts";
 import { canonicalJson } from "../lib/core/canonical.ts";
 import type { NetPolicy } from "../lib/sources/net-guard.ts";
@@ -62,7 +63,7 @@ export const isHtml = (contentType: string | undefined) => /html/i.test(contentT
 
 type MutationCtx = {
   db: { insert: (c: never, v: never) => Promise<string>; find: (c: never, f?: never) => Promise<any[]> };
-  services: { files: { upload: (f: { name: string; contentType: string; content: string; metadata: Record<string, string> }) => Promise<{ id: string }>; read: (id: string) => Promise<{ text: () => string | Promise<string> }> } };
+  services: { files: { upload: (f: { name: string; contentType: string; content: string | Uint8Array; metadata: Record<string, string> }) => Promise<{ id: string }>; read: (id: string) => Promise<{ text: () => string | Promise<string> }> } };
 };
 
 /** Store the exact observed bytes in Files and the observation record. Returns the evidence ref. */
@@ -89,9 +90,10 @@ export async function storePage(ctx: MutationCtx, obs: Observation, body: string
     html: body, locator: source.locator, baseUrl, observationId: obs.observationId, contentHash: obs.contentHash!,
     contentType: obs.contentType ?? null, observedAt: obs.observedAt, decoders: signalDecoders(),
   });
+  // Stored as gzip of the canonical JSON: the same document, ~10x smaller (docs/storage-options.json).
   const f = await ctx.services.files.upload({
-    name: `${obs.observationId}.page.json`, contentType: "application/json", content: json(representation),
-    metadata: { kind: "signal.page", observationId: obs.observationId, revision: representation.revision, schema: representation.schema },
+    name: `${obs.observationId}.page.json.gz`, contentType: "application/gzip", content: new Uint8Array(gzipSync(json(representation))),
+    metadata: { kind: "signal.page", encoding: "gzip", observationId: obs.observationId, revision: representation.revision, factsRevision: representation.factsRevision, schema: representation.schema },
   });
   const ref = `files:${f.id}`;
   const recordId = await ctx.db.insert(pages as never, {
@@ -104,5 +106,8 @@ export async function storePage(ctx: MutationCtx, obs: Observation, body: string
 }
 
 export async function readPage(ctx: MutationCtx, ref: string): Promise<PageRepresentation> {
-  return parse<PageRepresentation>(await (await ctx.services.files.read(ref.replace(/^files:/, ""))).text());
+  const f = await ctx.services.files.read(ref.replace(/^files:/, "")) as unknown as { bytes: Uint8Array; text: () => string };
+  // gzip magic (1f 8b) ⇒ compressed canonical JSON; otherwise a pre-M7 uncompressed representation.
+  const raw = f.bytes[0] === 0x1f && f.bytes[1] === 0x8b ? gunzipSync(f.bytes).toString("utf8") : f.text();
+  return parse<PageRepresentation>(raw);
 }

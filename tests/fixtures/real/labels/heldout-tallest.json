@@ -3,8 +3,10 @@
  "category": "data_table",
  "labeledWith": "scripts/label-real-pages.ts (site-specific oracle; independent of lib/page)",
  "notes": [
-  "Two-row header (Height: m | ft) shifts column positions; same buildings appear in several tables on the page."
+  "Two-row header (Height: m | ft) shifts column positions; same buildings appear in several tables on the page.",
+  "LABEL CORRECTION after the first held-out run: rowspan now expanded in the oracle (see docs/page-quality.heldout-first-run.json for the uncorrected run)."
  ],
+ "precisionScope": "matched-collections",
  "entities": [
   {
    "match": {
@@ -289,6 +291,41 @@
   {
    "match": {
     "attr": "name",
+    "value": "Tianjin CTF Finance Centre"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Tianjin",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2019,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
     "value": "CITIC Tower"
    },
    "acceptTypes": [
@@ -309,14 +346,14 @@
      "paths": [
       "country"
      ],
-     "value": "2018",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": null,
+     "value": 2018,
      "compare": "number"
     }
    }
@@ -414,14 +451,14 @@
      "paths": [
       "country"
      ],
-     "value": "2010",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": null,
+     "value": 2010,
      "compare": "number"
     }
    }
@@ -449,14 +486,14 @@
      "paths": [
       "country"
      ],
-     "value": "2023",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": null,
+     "value": 2023,
      "compare": "number"
     }
    }
@@ -709,6 +746,41 @@
   {
    "match": {
     "attr": "name",
+    "value": "Petronas Tower 2"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Kuala Lumpur",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "Malaysia",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 1998,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
     "value": "Zifeng Tower"
    },
    "acceptTypes": [
@@ -744,6 +816,41 @@
   {
    "match": {
     "attr": "name",
+    "value": "Suzhou International Financial Center"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Suzhou",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2019,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
     "value": "Wuhan Center"
    },
    "acceptTypes": [
@@ -764,14 +871,14 @@
      "paths": [
       "country"
      ],
-     "value": "2019",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2019,
      "compare": "number"
     }
    }
@@ -869,14 +976,14 @@
      "paths": [
       "country"
      ],
-     "value": "2010",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2010,
      "compare": "number"
     }
    }
@@ -1009,14 +1116,14 @@
      "paths": [
       "country"
      ],
-     "value": "2015",
+     "value": "United States",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2015,
      "compare": "number"
     }
    }
@@ -1114,14 +1221,14 @@
      "paths": [
       "country"
      ],
-     "value": "2025",
+     "value": "United States",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2025,
      "compare": "number"
     }
    }
@@ -1184,14 +1291,14 @@
      "paths": [
       "country"
      ],
-     "value": "1999",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 1999,
      "compare": "number"
     }
    }
@@ -1219,14 +1326,14 @@
      "paths": [
       "country"
      ],
-     "value": "2025",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2025,
      "compare": "number"
     }
    }
@@ -1429,14 +1536,14 @@
      "paths": [
       "country"
      ],
-     "value": "2020",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": null,
+     "value": 2020,
      "compare": "number"
     }
    }
@@ -1464,14 +1571,14 @@
      "paths": [
       "country"
      ],
-     "value": "2020",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": null,
+     "value": 2020,
      "compare": "number"
     }
    }
@@ -1562,21 +1669,21 @@
      "paths": [
       "city"
      ],
-     "value": "2018",
+     "value": "Shenzhen",
      "compare": "text"
     },
     "country": {
      "paths": [
       "country"
      ],
-     "value": "",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2018,
      "compare": "number"
     }
    }
@@ -1674,14 +1781,14 @@
      "paths": [
       "country"
      ],
-     "value": "2022",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2022,
      "compare": "number"
     }
    }
@@ -1702,21 +1809,21 @@
      "paths": [
       "city"
      ],
-     "value": "2020",
+     "value": "Shenzhen",
      "compare": "text"
     },
     "country": {
      "paths": [
       "country"
      ],
-     "value": "",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2020,
      "compare": "number"
     }
    }
@@ -1849,14 +1956,14 @@
      "paths": [
       "country"
      ],
-     "value": "2016",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": null,
+     "value": 2016,
      "compare": "number"
     }
    }
@@ -2059,14 +2166,14 @@
      "paths": [
       "country"
      ],
-     "value": "2025",
+     "value": "United Arab Emirates",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": null,
+     "value": 2025,
      "compare": "number"
     }
    }
@@ -2129,14 +2236,14 @@
      "paths": [
       "country"
      ],
-     "value": "2025",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2025,
      "compare": "number"
     }
    }
@@ -2164,14 +2271,14 @@
      "paths": [
       "country"
      ],
-     "value": "2021",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2021,
      "compare": "number"
     }
    }
@@ -2199,14 +2306,14 @@
      "paths": [
       "country"
      ],
-     "value": "1992",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": null,
+     "value": 1992,
      "compare": "number"
     }
    }
@@ -2304,14 +2411,14 @@
      "paths": [
       "country"
      ],
-     "value": "2019",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2019,
      "compare": "number"
     }
    }
@@ -2339,14 +2446,49 @@
      "paths": [
       "country"
      ],
-     "value": "2025",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2025,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Kempinski The Boulevard Dubai"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2017,
      "compare": "number"
     }
    }
@@ -2409,14 +2551,14 @@
      "paths": [
       "country"
      ],
-     "value": "2019",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2019,
      "compare": "number"
     }
    }
@@ -2444,14 +2586,14 @@
      "paths": [
       "country"
      ],
-     "value": "1990",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 1990,
      "compare": "number"
     }
    }
@@ -2564,6 +2706,41 @@
   {
    "match": {
     "attr": "name",
+    "value": "Ping An Finance Center Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Jinan",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2023,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
     "value": "Huiyun Center"
    },
    "acceptTypes": [
@@ -2584,14 +2761,14 @@
      "paths": [
       "country"
      ],
-     "value": "2023",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2023,
      "compare": "number"
     }
    }
@@ -2612,21 +2789,21 @@
      "paths": [
       "city"
      ],
-     "value": "2018",
+     "value": "Shenzhen",
      "compare": "text"
     },
     "country": {
      "paths": [
       "country"
      ],
-     "value": "",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2018,
      "compare": "number"
     }
    }
@@ -2654,14 +2831,49 @@
      "paths": [
       "country"
      ],
-     "value": "2025",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2025,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "City Tower 1"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2025,
      "compare": "number"
     }
    }
@@ -2682,21 +2894,21 @@
      "paths": [
       "city"
      ],
-     "value": "2017",
+     "value": "Dubai",
      "compare": "text"
     },
     "country": {
      "paths": [
       "country"
      ],
-     "value": "",
+     "value": "United Arab Emirates",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2017,
      "compare": "number"
     }
    }
@@ -2739,6 +2951,76 @@
   {
    "match": {
     "attr": "name",
+    "value": "Galaxy World Tower 2"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Shenzhen",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2023,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Il Primo Tower"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2022,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
     "value": "JW Marriott Marquis Dubai Tower 1"
    },
    "acceptTypes": [
@@ -2752,21 +3034,56 @@
      "paths": [
       "city"
      ],
-     "value": "2012",
+     "value": "Dubai",
      "compare": "text"
     },
     "country": {
      "paths": [
       "country"
      ],
-     "value": "",
+     "value": "United Arab Emirates",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2012,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "JW Marriott Marquis Dubai Tower 2"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2013,
      "compare": "number"
     }
    }
@@ -2787,21 +3104,21 @@
      "paths": [
       "city"
      ],
-     "value": "2000",
+     "value": "Dubai",
      "compare": "text"
     },
     "country": {
      "paths": [
       "country"
      ],
-     "value": "",
+     "value": "United Arab Emirates",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2000,
      "compare": "number"
     }
    }
@@ -2810,6 +3127,41 @@
    "match": {
     "attr": "name",
     "value": "Raffles City Chongqing T3N"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Chongqing",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "China",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2019,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
+    "value": "Raffles City Chongqing T4N"
    },
    "acceptTypes": [
     "TableRow",
@@ -2914,6 +3266,41 @@
   {
    "match": {
     "attr": "name",
+    "value": "The Marina Torch"
+   },
+   "acceptTypes": [
+    "TableRow",
+    "Place",
+    "LandmarksOrHistoricalBuildings",
+    "Unknown"
+   ],
+   "attributes": {
+    "city": {
+     "paths": [
+      "city"
+     ],
+     "value": "Dubai",
+     "compare": "text"
+    },
+    "country": {
+     "paths": [
+      "country"
+     ],
+     "value": "United Arab Emirates",
+     "compare": "text"
+    },
+    "year": {
+     "paths": [
+      "year"
+     ],
+     "value": 2011,
+     "compare": "number"
+    }
+   }
+  },
+  {
+   "match": {
+    "attr": "name",
     "value": "SkyTower at Pinnacle One Yonge"
    },
    "acceptTypes": [
@@ -3004,14 +3391,14 @@
      "paths": [
       "country"
      ],
-     "value": "2012",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": 0,
+     "value": 2012,
      "compare": "number"
     }
    }
@@ -3039,14 +3426,14 @@
      "paths": [
       "country"
      ],
-     "value": "2021",
+     "value": "China",
      "compare": "text"
     },
     "year": {
      "paths": [
       "year"
      ],
-     "value": null,
+     "value": 2021,
      "compare": "number"
     }
    }

@@ -135,3 +135,26 @@ test('every unrelated fixture becomes a representation through FeltKit (no site 
 		assert.equal(sum.truncated, false);
 	}
 });
+
+test('discovery over recorded pages: owner-only, read-only, previous pages give change detection', async (t) => {
+	const { ada, bob } = await setup(t);
+	const fx = (f: string) => readFileSync(new URL(`./fixtures/discovery/${f}`, import.meta.url), 'utf8');
+	const base = 'https://homes.example/search?south=39.74&west=-105.00&north=39.77&east=-104.96&sort=newest';
+	const sourceId = await ada.mutation(api.sources.register, { type: 'dom', locator: 'dom:riverside', strategy: 'manual' });
+	const p1 = await ada.mutation(api.pages.push, { sourceId, html: fx('neighborhood.html'), baseUrl: base }) as { pageId: string };
+	const p2 = await ada.mutation(api.pages.push, { sourceId, html: fx('neighborhood-later.html'), baseUrl: base }) as { pageId: string };
+	const intent = JSON.stringify({
+		schema: 'signal.intent/v1', id: 'riverside', version: 1, name: 'under 350k, 3+ beds', target: { type: ['RealEstateListing', 'SingleFamilyResidence'] },
+		criteria: [{ id: 'price', label: '< 350k', where: { attr: 'price', op: 'lt', value: 350000 } }, { id: 'beds', label: '3+ beds', where: { attr: 'numberOfBedrooms', op: 'gte', value: 3 } }]
+	});
+	const r = await ada.query(api.discovery.evaluate, { pageIds: [p2.pageId], previousPageIds: [p1.pageId], intent }) as any;
+	assert.equal(r.schema, 'signal.discovery/v1');
+	const st = Object.fromEntries(r.candidates.map((c: any) => [c.key.split('/').pop(), c.status]));
+	assert.deepEqual(st, { 'aspen-62': 'non_match', 'birch-300': 'possible', 'cedar-77': 'non_match', 'elm-121': 'match', 'juniper-3': 'match', 'maple-15': 'match', 'oak-48': 'match', 'pine-9': 'match' });
+	assert.deepEqual(r.candidates.find((c: any) => c.key.endsWith('oak-48')).changed.fields, ['price']);
+	assert.equal(r.coverage.exhaustive, true);
+	await assert.rejects(bob.query(api.discovery.evaluate, { pageIds: [p1.pageId], intent }), { code: 'FORBIDDEN' });
+	await assert.rejects(ada.query(api.discovery.evaluate, { pageIds: [p1.pageId], intent: '{' }), { code: 'INVALID_ARGUMENT' });
+	await assert.rejects(ada.query(api.discovery.evaluate, { pageIds: [p1.pageId], intent: intent.replace('"lt"', '"decreased"') }), { code: 'INVALID_ARGUMENT' });
+	assert.equal((await ada.query(api.pages.list, { sourceId }) as unknown[]).length, 2, 'discovery recorded nothing');
+});

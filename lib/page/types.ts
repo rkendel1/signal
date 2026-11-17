@@ -21,7 +21,7 @@
  */
 
 export const PAGE_SCHEMA = 'signal.page/v1' as const;
-export const EXTRACTOR_VERSION = 'page-extractor/1.0.0';
+export const EXTRACTOR_VERSION = 'page-extractor/1.1.0';
 
 export type Classification = 'declared' | 'semantic' | 'inferred' | 'unknown';
 export type ValueProvenance = 'observed' | 'normalized' | 'inferred';
@@ -58,7 +58,19 @@ export interface PageEntity {
 	type: string; // open vocabulary: schema.org type names where known, else 'Unknown'
 	classification: Classification;
 	typeBasis: { method: ExtractionMethod; rule: string }; // why this type
-	identity: { key: string; basis: '@id' | 'url' | 'sku' | 'name' | 'locator' | 'page' };
+	identity: {
+		key: string;
+		basis: '@id' | 'url' | 'sku' | 'name' | 'locator' | 'page';
+		/** strong: a source identifier (@id, url, sku) — repeated occurrences are the same entity.
+		 *  weak: a visible name — may collide. positional: a DOM path — moves when the layout moves. */
+		strength: 'strong' | 'weak' | 'positional';
+		/** Set when another entity on this page has the same type and weak key: continuity cannot be established. */
+		ambiguous?: true;
+		/** How many places on the page show this entity (strong identities merge occurrences). */
+		occurrences: number;
+	};
+	/** sha256 of the entity's facts (type + attribute names/values/raw), excluding evidence and layout. */
+	digest: string;
 	attributes: PageAttribute[];
 	evidenceRefs: string[];
 }
@@ -124,6 +136,8 @@ export interface PageRepresentation {
 	observedAt: string;
 	/** sha256 of the representation's content, excluding observation identity and time. */
 	revision: string;
+	/** sha256 of the page's facts only (entity ids + digests + relationship triples): unchanged when only layout changes. */
+	factsRevision: string;
 	language: string | null;
 	title: string | null;
 	entities: PageEntity[];

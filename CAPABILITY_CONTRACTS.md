@@ -152,6 +152,7 @@ What Signal guarantees is that the event and its evidence are durable *before* a
 | `pages:push` | mutation | `signal.pages.inspect` | `signal.pages.push` | `dom` sources: a rendered HTML snapshot |
 | `pages:record` | mutation | `signal.pages.inspect` | – | the atomic record step of `inspect` (hash-checked) |
 | `pages:get` / `pages:list` | query | `signal.pages.read` | – | full representation / summaries; ownership via `pageId`/`sourceId` |
+| `discovery:evaluate` | query | `signal.pages.read` | `signal.discovery.evaluate` (with `returns` schema) | M7. Read-only: `{pageIds[≤20], intent, previousPageIds?, enrichments?, scope?}` → `signal.discovery/v1`. Ownership is checked per page id in the handler |
 
 **Ownership** is enforced by the app's `authorize` hook for every function that takes `sourceId`, `monitorId`, `eventId` or `pageId`, and inside handlers for criteria. Admins are exempt. Roles (`feltkit/app.ts`): `member`, `viewer`, `agent`, `admin`.
 
@@ -175,7 +176,7 @@ Format v1 has no version byte and no integrity check. A successor format (v2: ma
 
 **Where it lives:**
 - Built for every `ok` HTML observation, by `monitors:record`/`push` and by `pages:record`/`push`.
-- Stored as canonical JSON in Files (`metadata.kind = "signal.page"`, `revision`, `observationId`).
+- Stored in Files as **gzip of the canonical JSON** since M7 (`metadata.kind = "signal.page"`, `encoding = "gzip"`, `revision`, `factsRevision`, `observationId`). Readers detect the gzip magic; pre-M7 uncompressed files remain readable.
 - Indexed in `signal_pages` (`observationId` unique, `revision`, counts, `truncated`).
 - Referenced from the interpretation (`interpretation.page = {ref, revision, entities, schema}`) and from events (`evidence.pageRef`, `evidence.pageRevision`).
 
@@ -203,3 +204,30 @@ Existing criteria and records are unchanged; the 28 M2 tests pass unmodified.
 - `null` (ambiguous or absent) values never satisfy comparisons.
 - Change operators need the same entity id in the previous representation; on the first observation they report "baseline".
 - Validation rejects unknown operators, malformed paths, bad ranges and nesting over 3.
+
+**M7 additions to `signal.page/v1`.** These are additive; existing fields are unchanged.
+
+| Field | Contract |
+|---|---|
+| `entity.identity.strength` | `strong` (@id, url, sku) \| `weak` (name) \| `positional` (locator) |
+| `entity.identity.ambiguous` | `true` when another entity on the page has the same type and weak key. Such entities are excluded from `changed`/`added`/`removed` and reported in `EntityResult.uncertain` |
+| `entity.identity.occurrences` | The number of places on the page that show this entity. Strong identities merge |
+| `entity.digest` | sha256 of type + attribute facts; order-insensitive; excludes evidence and layout |
+| `page.factsRevision` | sha256 of entity ids + digests + relationship triples (excluding `hasPart`). Unchanged by reordering or layout-only changes |
+| relationship `possiblySameAs` | Classification `unknown`: two weak-identity entities that may be the same thing. Never merged |
+| relationship `sameAs` | Now also links entities of different types sharing a strong URL identity |
+
+`EXTRACTOR_VERSION` is `page-extractor/1.1.0`.
+
+## 10. Discovery (M7) — `signal.intent/v1` → `signal.discovery/v1`
+
+Normative types are in [`lib/discovery/discover.ts`](lib/discovery/discover.ts). The model is described in [`DISCOVERY_MODEL.md`](DISCOVERY_MODEL.md).
+
+| Contract | Rules |
+|---|---|
+| `signal.intent/v1` | `{id, version, name, target.type[], criteria[], metrics?, preferences?}`. `criteria[].where` is M5's `AttrPredicate`, restricted to decidable operators (`eq neq lt lte gt gte contains exists between`); others are rejected by `validateIntent`. `metric` references a `metrics[].name`. `absent: 'false'` is the only way absence can decide a criterion |
+| `Formula` | `{attr}` \| `{const}` \| `{mul: […]}` \| `{add: […]}` \| `{div: [a, b]}` \| `{sub: [a, b]}`. Division by zero ⇒ no value. Combinations are bounded at 64 |
+| `Enrichment` | `{source: {id, name, method: external-estimate \| external-record, observedAt}, records: [{url, attribute, value}]}`. Joined by exact URL. Used only where the page states no value |
+| `signal.discovery/v1` | `{intent{id, version}, context, scope, candidates[], coverage, plan[], pages[{observationId, revision, factsRevision}], resultDigest}`. Deterministic: the same pages, intent and enrichments give the same `resultDigest` |
+| Candidate status | `match` (every criterion true, scope known) \| `possible` (no false, some unknown) \| `non_match` (some false) \| `out_of_scope`. `changed` is a separate flag listing the criteria whose normalized values differ from the previous result |
+| Criterion result | `true` \| `false` \| `unknown`, with `reason`, `values` and `provenance`. Conflicting descriptions decide only when all of them give the same outcome |

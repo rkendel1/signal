@@ -4,7 +4,7 @@ Each entry is **missing or limited functionality**, with evidence. *Platform* me
 
 Severity: **High** blocks a stated outcome · **Medium** limits a supported use · **Low** is a quality or completeness gap.
 
-**Still open after M5** (unchanged; not solved by page intelligence):
+**Still open after M7** (unchanged; not solved by page quality or discovery):
 - **G-PLAT-1:** no scheduled fetching.
 - **G-OVL-1:** no overlay host for third-party sites.
 - **G-PLAT-3:** no JSON field type. The page representation is stored as canonical JSON in Files, with an index row in FeltDB.
@@ -45,10 +45,25 @@ Severity: **High** blocks a stated outcome · **Medium** limits a supported use 
 | ID | Gap | Severity | Evidence | Proposed resolution |
 |---|---|---|---|---|
 | G-PAGE-1 | **No server-side rendering.** A static fetch sees only server-sent HTML. Dynamic content needs a browser-rendered snapshot pushed by a caller (`pages:push`, `monitors:push`) | Medium | `tests/pages.test.ts` "dynamic content": 0 products from the static fetch, 3 from the Chromium snapshot | A rendering component (FeltKit `components`, `network: egress`, headless Chromium) that pushes snapshots. Needs G-PLAT-1 for scheduling. Not built |
-| G-PAGE-2 | **Representation size is about 10–18× the HTML** (3.4 MB for a 1,000-product page), mostly per-value evidence | Medium | `docs/bench-pages.json` | Options: deduplicate evidence text, cap evidence per entity, or store evidence separately. Changing it trades traceability for size; a decision is needed |
+| ~~G-PAGE-2~~ | **Resolved in M7.** The size was measured (JSON keys 24–41%, locators 4–31%, evidence text only 3–7%). Storage is now gzip of the canonical JSON: 3.43 MB → 324 KB, lossless, about 15 ms decode. Traceability is kept | – | PAGE_QUALITY.md §6, `docs/size-analysis.json`, `docs/storage-options.json`, `tests/storage.test.ts` | The in-memory size is unchanged (the full representation is parsed to evaluate). Revisit only if a measured workload is bound by it |
 | G-PAGE-3 | **Heuristics are English-leaning:** labels, availability phrases, class hints, relative dates | Medium | `lib/page/vocab.ts`, `values.ts` | Add vocabulary rows per language (tables, not code) |
-| G-PAGE-4 | **Real-site quality not measured.** 8 synthetic fixtures; no precision/recall on live pages | Medium | ACCEPTANCE_REPORT | A labelled corpus of saved real pages and a measured scorecard per extractor version |
+| ~~G-PAGE-4~~ | **Resolved in M7** for 16 real pages in 10 categories: independent labels, held-out split, per-category and per-method metrics, regression floor | – | PAGE_QUALITY.md, `docs/page-quality*.json`, `tests/lib/page-quality.test.ts` | Continued by G-PAGE-9 |
 | G-PAGE-5 | **No reviewable mapping proposals.** Unknown structures are retained, but there is no workflow to propose and accept a new mapping (human- or AI-suggested) | Low | – | A `mappings` collection: proposals → explicit acceptance → deterministic rule tables. Models may propose, never decide |
-| G-PAGE-6 | **Identity stability depends on the key.** Locator-keyed entities (no name, url or sku) get new ids when the DOM moves, so `changed`/`added` see them as new | Low | PAGE_INTELLIGENCE §2 Identity | Better keys from collection position + content fingerprint. Documented today |
+| G-PAGE-6 | **Identity stability depends on the key.** Locator-keyed entities get new ids when the DOM moves. M7 made this *explicit*: `identity.strength = positional`, and such entities are reported as `uncertain` rather than added/removed. It is still not *solved* for positional identities | Low | `tests/lib/identity.test.ts` | Content fingerprints for positional entities, behind the same uncertainty rules |
 | G-PAGE-7 | **Partial structural coverage:** no shadow DOM in static HTML (cheerio sees none; the overlay does), no iframes, simple RDFa only (no `prefix`/CURIE expansion beyond stripping), no PDF/image/OCR content | Low | `lib/page/extract.ts` | Extend per need |
 | G-PAGE-8 | **Revision depends on observation time for relative dates.** Pages showing "3 hours ago" get a new revision every observation, because the inferred absolute time changes | Low | `values.ts parseDate` | Exclude inferred relative values from the revision hash, or keep the raw string only |
+
+## Page quality and discovery gaps (M7)
+
+| ID | Gap | Severity | Evidence | Proposed resolution |
+|---|---|---|---|---|
+| G-PAGE-9 | **The held-out set is consumed.** Fixes were informed by its failures, so the current held-out scores are not an unbiased estimate | Medium | PAGE_QUALITY.md §4 | A fresh held-out set, labelled and committed before evaluation, for each future quality claim. It should include non-English pages and real JSON-LD conflicts |
+| G-PAGE-10 | **Cross-row records.** HN puts one story across two table rows with no shared container: story recall 0.75, attributes 0.6, relationships 0.5/0.4 | Low | `docs/page-quality.json` hn-item | A rule joining adjacent rows only when the second row has no record of its own and references the first (e.g. the same item id in links). Must not merge unrelated rows |
+| G-PAGE-11 | **Sidebar facts are not linked to the main record.** PyPI "Meta" sections become separate records; the author relationship is missed (0/1). The sidebar is duplicated for desktop and mobile | Low | heldout-pypi | Attach section-level facts to the main record when the sections have no identity of their own; deduplicate identical hidden/visible duplicates |
+| G-PAGE-12 | **A land-lot card is typed `Product`** (T2: price + image) | Low | `tests/fixtures/discovery`, DISCOVERY_MODEL.md §9 | A real-estate cue set (acres/lot size + address) mapping to `RealEstateListing`/`Landform` before T2. Needs real examples, not a guess |
+| G-PAGE-13 | **Duplicate rows across tables.** The same buildings in several tables become distinct row entities (heldout-tallest: duplicate rate 0.76, entity precision 0.696) | Low | heldout-tallest | Keep them distinct (rows are real). Link rows with the same strong key across tables via `sameAs` when a link URL identifies the subject |
+| G-DISC-1 | **Discovery is not interactive.** Intents are not persisted; plans are proposals that nothing executes | Medium | DISCOVERY_MODEL.md §6, §9 | M8: `signal_intents` (immutable versions), plan execution in the browser session via the overlay host, background enrichment through observation |
+| G-DISC-2 | **Real listing sites not evaluated.** The real-estate scenario is synthetic because the sites' terms prohibit automated access | Medium | DISCOVERY_MODEL.md §7 | Evaluate on pages a user views in their own session (browser-session observation, M8), or with a licensed data provider |
+| G-DISC-3 | **Context encodings are a fixed list.** Bounds and filter parameter names come from a small table; other encodings report `unknown` | Low | `extractContext` | Vocabulary rows per encoding, plus user-supplied context |
+| G-DISC-4 | **Coverage omits failed or refused observations** of pages that discovery wanted, because discovery does not observe | Low | DISCOVERY_MODEL.md §5 | Add once discovery drives observation (M8) |
+| G-DISC-5 | **Geo scope is a bounding box only;** enrichment joins by exact URL only | Low | `lib/discovery/discover.ts` | Polygons when a caller needs them; fuzzy joins only via reviewable mappings |

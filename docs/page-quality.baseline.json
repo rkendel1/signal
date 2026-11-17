@@ -1,0 +1,828 @@
+{
+ "evaluatedAt": "2026-11-17T16:26:10.439Z",
+ "pages": [
+  {
+   "id": "arxiv-abs",
+   "category": "research_publication",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": null,
+   "falseEntityRate": null,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 0,
+   "attributePrecision": null,
+   "relationshipRecall": 0,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.763,
+   "attributes": {
+    "correct": 0,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 2,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 1,
+    "found": 1,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 0
+   },
+   "relationships": {
+    "expected": 8,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 8,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {},
+   "byCompare": {
+    "date": {
+     "correct": 0,
+     "total": 1
+    },
+    "text": {
+     "correct": 0,
+     "total": 1
+    }
+   },
+   "examples": [
+    {
+     "outcome": "attr_missed",
+     "entity": "Attention Is All You Need",
+     "detail": "datePublished (paths datePublished|date|citation_date)"
+    },
+    {
+     "outcome": "attr_missed",
+     "entity": "Attention Is All You Need",
+     "detail": "identifier (paths identifier|citation_arxiv_id|sku)"
+    },
+    {
+     "outcome": "rel_missed",
+     "entity": "Attention Is All You Need",
+     "detail": "author → Vaswani, Ashish"
+    },
+    {
+     "outcome": "rel_missed",
+     "entity": "Attention Is All You Need",
+     "detail": "author → Shazeer, Noam"
+    },
+    {
+     "outcome": "rel_missed",
+     "entity": "Attention Is All You Need",
+     "detail": "author → Parmar, Niki"
+    },
+    {
+     "outcome": "rel_missed",
+     "entity": "Attention Is All You Need",
+     "detail": "author → Uszkoreit, Jakob"
+    }
+   ],
+   "extractMs": 64,
+   "htmlBytes": 39541,
+   "representationBytes": 97108,
+   "truncated": true,
+   "entitiesExtracted": 30
+  },
+  {
+   "id": "books-catalog",
+   "category": "product_listing",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.985,
+   "attributes": {
+    "correct": 60,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 20,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 20,
+    "found": 20,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 20
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "structure": {
+     "correct": 40,
+     "not_understood": 0,
+     "ambiguous": 0
+    },
+    "html": {
+     "correct": 20,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "money": {
+     "correct": 20,
+     "total": 20
+    },
+    "availability": {
+     "correct": 20,
+     "total": 20
+    },
+    "number": {
+     "correct": 0,
+     "total": 20
+    },
+    "contains": {
+     "correct": 20,
+     "total": 20
+    }
+   },
+   "examples": [
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "A Light in the Attic",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Tipping the Velvet",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Soumission",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Sharp Objects",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    }
+   ],
+   "extractMs": 40.8,
+   "htmlBytes": 51294,
+   "representationBytes": 205439,
+   "truncated": false,
+   "entitiesExtracted": 71
+  },
+  {
+   "id": "books-detail",
+   "category": "product_detail",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 0.5,
+   "falseEntityRate": 0.5,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 0.4,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.969,
+   "attributes": {
+    "correct": 2,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 3,
+    "not_accessible": 1,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 1,
+    "found": 1,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 1,
+    "targetTypedExtracted": 2
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "structure": {
+     "correct": 2,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "money": {
+     "correct": 1,
+     "total": 1
+    },
+    "availability": {
+     "correct": 1,
+     "total": 1
+    },
+    "text": {
+     "correct": 0,
+     "total": 1
+    },
+    "number": {
+     "correct": 0,
+     "total": 2
+    },
+    "contains": {
+     "correct": 0,
+     "total": 1
+    }
+   },
+   "examples": [
+    {
+     "outcome": "attr_missed",
+     "entity": "A Light in the Attic",
+     "detail": "sku (paths sku|upc|gtin)"
+    },
+    {
+     "outcome": "attr_missed",
+     "entity": "A Light in the Attic",
+     "detail": "reviews (paths number_of_reviews|reviewCount|aggregateRating.reviewCount)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "A Light in the Attic",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_missed",
+     "entity": "A Light in the Attic",
+     "detail": "description (paths description)"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "Product Description",
+     "detail": "Product via T2: a price plus a product cue (availability, image, seller, brand, sku or rating)"
+    }
+   ],
+   "extractMs": 5.9,
+   "htmlBytes": 9279,
+   "representationBytes": 34969,
+   "truncated": false,
+   "entitiesExtracted": 12
+  },
+  {
+   "id": "fake-jobs",
+   "category": "job_listing",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0.18,
+   "attributeRecall": 0.667,
+   "attributePrecision": 0.667,
+   "relationshipRecall": 1,
+   "relationshipPrecision": 1,
+   "traceability": 1,
+   "textCoverage": 1,
+   "attributes": {
+    "correct": 200,
+    "not_understood": 100,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 100,
+    "found": 100,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 18,
+    "falseEntities": 0,
+    "targetTypedExtracted": 100
+   },
+   "relationships": {
+    "expected": 100,
+    "correct": 100,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 100,
+    "extractedCorrect": 100
+   },
+   "byMethod": {
+    "structure": {
+     "correct": 100,
+     "not_understood": 0,
+     "ambiguous": 0
+    },
+    "html": {
+     "correct": 100,
+     "not_understood": 100,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "text": {
+     "correct": 100,
+     "total": 100
+    },
+    "date": {
+     "correct": 100,
+     "total": 100
+    },
+    "contains": {
+     "correct": 0,
+     "total": 100
+    }
+   },
+   "examples": [
+    {
+     "outcome": "attr_not_understood",
+     "entity": "Senior Python Developer",
+     "detail": "url: got \"https://www.realpython.com/\" expected \"https://realpython.github.io/fake-jobs/jobs/senior-python-developer-0.html\""
+    },
+    {
+     "outcome": "attr_not_understood",
+     "entity": "Energy engineer",
+     "detail": "url: got \"https://www.realpython.com/\" expected \"https://realpython.github.io/fake-jobs/jobs/energy-engineer-1.html\""
+    },
+    {
+     "outcome": "attr_not_understood",
+     "entity": "Legal executive",
+     "detail": "url: got \"https://www.realpython.com/\" expected \"https://realpython.github.io/fake-jobs/jobs/legal-executive-2.html\""
+    },
+    {
+     "outcome": "attr_not_understood",
+     "entity": "Fitness centre manager",
+     "detail": "url: got \"https://www.realpython.com/\" expected \"https://realpython.github.io/fake-jobs/jobs/fitness-centre-manager-3.html\""
+    }
+   ],
+   "extractMs": 105.7,
+   "htmlBytes": 104429,
+   "representationBytes": 547770,
+   "truncated": false,
+   "entitiesExtracted": 200
+  },
+  {
+   "id": "hn-item",
+   "category": "discussion",
+   "entityRecall": 0,
+   "entityDetection": 0,
+   "entityPrecision": null,
+   "falseEntityRate": null,
+   "wrongTypeRate": null,
+   "duplicateRate": null,
+   "attributeRecall": 0,
+   "attributePrecision": null,
+   "relationshipRecall": 0,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.933,
+   "attributes": {
+    "correct": 0,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 5,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 4,
+    "found": 0,
+    "foundWrongType": 0,
+    "missed": 4,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 0
+   },
+   "relationships": {
+    "expected": 4,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 4,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {},
+   "byCompare": {},
+   "examples": [
+    {
+     "outcome": "entity_missed",
+     "entity": "Y Combinator",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "user2",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "user1",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "user3",
+     "detail": "key text is visible on the page"
+    }
+   ],
+   "extractMs": 7.3,
+   "htmlBytes": 6197,
+   "representationBytes": 12384,
+   "truncated": false,
+   "entitiesExtracted": 1
+  },
+  {
+   "id": "quotes",
+   "category": "posts_with_authors",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": 0,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.991,
+   "attributes": {
+    "correct": 10,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 10,
+    "found": 10,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 10
+   },
+   "relationships": {
+    "expected": 10,
+    "correct": 0,
+    "attributeOnly": 10,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "microdata": {
+     "correct": 10,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "text": {
+     "correct": 10,
+     "total": 10
+    }
+   },
+   "examples": [
+    {
+     "outcome": "rel_attribute_only",
+     "entity": "The world as we have created it is a pro",
+     "detail": "author → Albert Einstein kept as a text attribute"
+    },
+    {
+     "outcome": "rel_attribute_only",
+     "entity": "It is our choices, Harry, that show what",
+     "detail": "author → J.K. Rowling kept as a text attribute"
+    },
+    {
+     "outcome": "rel_attribute_only",
+     "entity": "There are only two ways to live your lif",
+     "detail": "author → Albert Einstein kept as a text attribute"
+    },
+    {
+     "outcome": "rel_attribute_only",
+     "entity": "The person, be it gentleman or lady, who",
+     "detail": "author → Jane Austen kept as a text attribute"
+    }
+   ],
+   "extractMs": 11,
+   "htmlBytes": 11064,
+   "representationBytes": 52616,
+   "truncated": false,
+   "entitiesExtracted": 21
+  },
+  {
+   "id": "usagov-agencies",
+   "category": "directory",
+   "entityRecall": 0,
+   "entityDetection": 0,
+   "entityPrecision": 0,
+   "falseEntityRate": 1,
+   "wrongTypeRate": null,
+   "duplicateRate": null,
+   "attributeRecall": 0,
+   "attributePrecision": null,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.284,
+   "attributes": {
+    "correct": 0,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 62,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 37,
+    "found": 0,
+    "foundWrongType": 0,
+    "missed": 37,
+    "duplicates": 0,
+    "falseEntities": 1,
+    "targetTypedExtracted": 1
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {},
+   "byCompare": {},
+   "examples": [
+    {
+     "outcome": "entity_missed",
+     "entity": "AbilityOne Commission",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "Access Board",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "Administration for Children and Families (ACF)",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "Administration for Community Living (ACL)",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "ent_7ce92746f90c98ed",
+     "detail": "Organization via json-ld @type"
+    }
+   ],
+   "extractMs": 30.5,
+   "htmlBytes": 100753,
+   "representationBytes": 61012,
+   "truncated": false,
+   "entitiesExtracted": 28
+  },
+  {
+   "id": "webscraper-laptops",
+   "category": "product_listing",
+   "entityRecall": 0,
+   "entityDetection": 0,
+   "entityPrecision": 0,
+   "falseEntityRate": 1,
+   "wrongTypeRate": null,
+   "duplicateRate": null,
+   "attributeRecall": 0,
+   "attributePrecision": null,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.902,
+   "attributes": {
+    "correct": 0,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 351,
+    "not_accessible": 117,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 117,
+    "found": 0,
+    "foundWrongType": 0,
+    "missed": 117,
+    "duplicates": 0,
+    "falseEntities": 117,
+    "targetTypedExtracted": 117
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {},
+   "byCompare": {},
+   "examples": [
+    {
+     "outcome": "entity_missed",
+     "entity": "Asus VivoBook X441NA-GA190",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "Prestigio SmartBook 133S Dark Grey",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "Prestigio SmartBook 133S Gold",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "Aspire E1-510",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "/test-sites/e-commerce/allinone/product/60",
+     "detail": "Product via microdata itemtype"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "/test-sites/e-commerce/allinone/product/61",
+     "detail": "Product via microdata itemtype"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "/test-sites/e-commerce/allinone/product/62",
+     "detail": "Product via microdata itemtype"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "/test-sites/e-commerce/allinone/product/32",
+     "detail": "Product via microdata itemtype"
+    }
+   ],
+   "extractMs": 144.8,
+   "htmlBytes": 179185,
+   "representationBytes": 1427850,
+   "truncated": false,
+   "entitiesExtracted": 471
+  },
+  {
+   "id": "wiki-night-train",
+   "category": "article",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": 1,
+   "relationshipPrecision": 1,
+   "traceability": 1,
+   "textCoverage": 0.487,
+   "attributes": {
+    "correct": 3,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 1,
+    "found": 1,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 1
+   },
+   "relationships": {
+    "expected": 2,
+    "correct": 2,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 2,
+    "extractedCorrect": 2
+   },
+   "byMethod": {
+    "json-ld": {
+     "correct": 3,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "contains": {
+     "correct": 1,
+     "total": 1
+    },
+    "date": {
+     "correct": 2,
+     "total": 2
+    }
+   },
+   "examples": [],
+   "extractMs": 19.2,
+   "htmlBytes": 74104,
+   "representationBytes": 116458,
+   "truncated": false,
+   "entitiesExtracted": 60
+  },
+  {
+   "id": "wiki-population",
+   "category": "data_table",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.529,
+   "attributes": {
+    "correct": 240,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 240,
+    "found": 240,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 240
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "table": {
+     "correct": 240,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "number": {
+     "correct": 240,
+     "total": 240
+    }
+   },
+   "examples": [],
+   "extractMs": 4292.1,
+   "htmlBytes": 1390744,
+   "representationBytes": 1855478,
+   "truncated": true,
+   "entitiesExtracted": 2000
+  }
+ ]
+}

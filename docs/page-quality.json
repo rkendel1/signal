@@ -1,0 +1,1196 @@
+{
+ "evaluatedAt": "2026-11-17T17:05:19.622Z",
+ "pages": [
+  {
+   "id": "arxiv-abs",
+   "category": "research_publication",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": 1,
+   "relationshipPrecision": 1,
+   "traceability": 1,
+   "textCoverage": 0.763,
+   "attributes": {
+    "correct": 2,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 1,
+    "found": 1,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 1
+   },
+   "relationships": {
+    "expected": 8,
+    "correct": 8,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 8,
+    "extractedCorrect": 8
+   },
+   "byMethod": {
+    "meta": {
+     "correct": 2,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "date": {
+     "correct": 1,
+     "total": 1
+    },
+    "text": {
+     "correct": 1,
+     "total": 1
+    }
+   },
+   "examples": [],
+   "split": "tuning",
+   "extractMs": 79.9,
+   "htmlBytes": 39541,
+   "representationBytes": 114184,
+   "truncated": true,
+   "entitiesExtracted": 39
+  },
+  {
+   "id": "books-catalog",
+   "category": "product_listing",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 1,
+   "attributes": {
+    "correct": 60,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 20,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 20,
+    "found": 20,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 20
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "structure": {
+     "correct": 40,
+     "not_understood": 0,
+     "ambiguous": 0
+    },
+    "html": {
+     "correct": 20,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "money": {
+     "correct": 20,
+     "total": 20
+    },
+    "availability": {
+     "correct": 20,
+     "total": 20
+    },
+    "number": {
+     "correct": 0,
+     "total": 20
+    },
+    "contains": {
+     "correct": 20,
+     "total": 20
+    }
+   },
+   "examples": [
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "A Light in the Attic",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Tipping the Velvet",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Soumission",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Sharp Objects",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    }
+   ],
+   "split": "tuning",
+   "extractMs": 50.4,
+   "htmlBytes": 51294,
+   "representationBytes": 213333,
+   "truncated": false,
+   "entitiesExtracted": 71
+  },
+  {
+   "id": "books-detail",
+   "category": "product_detail",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.906,
+   "attributes": {
+    "correct": 5,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 1,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 1,
+    "found": 1,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 1
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "structure": {
+     "correct": 2,
+     "not_understood": 0,
+     "ambiguous": 0
+    },
+    "table": {
+     "correct": 2,
+     "not_understood": 0,
+     "ambiguous": 0
+    },
+    "html": {
+     "correct": 1,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "money": {
+     "correct": 1,
+     "total": 1
+    },
+    "availability": {
+     "correct": 1,
+     "total": 1
+    },
+    "text": {
+     "correct": 1,
+     "total": 1
+    },
+    "number": {
+     "correct": 1,
+     "total": 2
+    },
+    "contains": {
+     "correct": 1,
+     "total": 1
+    }
+   },
+   "examples": [
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "A Light in the Attic",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    }
+   ],
+   "split": "tuning",
+   "extractMs": 4.6,
+   "htmlBytes": 9279,
+   "representationBytes": 25059,
+   "truncated": false,
+   "entitiesExtracted": 5
+  },
+  {
+   "id": "fake-jobs",
+   "category": "job_listing",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": 1,
+   "relationshipPrecision": 1,
+   "traceability": 1,
+   "textCoverage": 1,
+   "attributes": {
+    "correct": 300,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 100,
+    "found": 100,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 100
+   },
+   "relationships": {
+    "expected": 100,
+    "correct": 100,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 100,
+    "extractedCorrect": 100
+   },
+   "byMethod": {
+    "structure": {
+     "correct": 100,
+     "not_understood": 0,
+     "ambiguous": 0
+    },
+    "html": {
+     "correct": 200,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "text": {
+     "correct": 100,
+     "total": 100
+    },
+    "date": {
+     "correct": 100,
+     "total": 100
+    },
+    "contains": {
+     "correct": 100,
+     "total": 100
+    }
+   },
+   "examples": [],
+   "split": "tuning",
+   "extractMs": 127,
+   "htmlBytes": 104429,
+   "representationBytes": 534241,
+   "truncated": false,
+   "entitiesExtracted": 200
+  },
+  {
+   "id": "heldout-countries",
+   "category": "directory",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": null,
+   "falseEntityRate": null,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 0.997,
+   "attributePrecision": 0.997,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.995,
+   "attributes": {
+    "correct": 748,
+    "not_understood": 2,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 250,
+    "found": 250,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 0
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "label": {
+     "correct": 748,
+     "not_understood": 2,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "text": {
+     "correct": 250,
+     "total": 250
+    },
+    "number": {
+     "correct": 498,
+     "total": 500
+    }
+   },
+   "examples": [
+    {
+     "outcome": "attr_not_understood",
+     "entity": "Antarctica",
+     "detail": "area: got \"1.4E7\" expected 14000000"
+    },
+    {
+     "outcome": "attr_not_understood",
+     "entity": "Russia",
+     "detail": "area: got \"1.71E7\" expected 17100000"
+    }
+   ],
+   "split": "heldout",
+   "extractMs": 168.4,
+   "htmlBytes": 203728,
+   "representationBytes": 981838,
+   "truncated": false,
+   "entitiesExtracted": 254
+  },
+  {
+   "id": "heldout-hockey",
+   "category": "data_table",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.948,
+   "attributes": {
+    "correct": 75,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 25,
+    "found": 25,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 25
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "table": {
+     "correct": 75,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "number": {
+     "correct": 75,
+     "total": 75
+    }
+   },
+   "examples": [],
+   "split": "heldout",
+   "extractMs": 20.4,
+   "htmlBytes": 50806,
+   "representationBytes": 153621,
+   "truncated": false,
+   "entitiesExtracted": 50
+  },
+  {
+   "id": "heldout-pyevents",
+   "category": "event_listing",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.768,
+   "attributes": {
+    "correct": 18,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 6,
+    "found": 6,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 6
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "html": {
+     "correct": 12,
+     "not_understood": 0,
+     "ambiguous": 0
+    },
+    "structure": {
+     "correct": 6,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "date": {
+     "correct": 6,
+     "total": 6
+    },
+    "text": {
+     "correct": 6,
+     "total": 6
+    },
+    "contains": {
+     "correct": 6,
+     "total": 6
+    }
+   },
+   "examples": [],
+   "split": "heldout",
+   "extractMs": 11.8,
+   "htmlBytes": 39223,
+   "representationBytes": 37066,
+   "truncated": false,
+   "entitiesExtracted": 11
+  },
+  {
+   "id": "heldout-pypi",
+   "category": "product_detail",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": null,
+   "falseEntityRate": null,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": 0,
+   "relationshipPrecision": null,
+   "traceability": 0.998,
+   "textCoverage": 0.735,
+   "attributes": {
+    "correct": 1,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 1,
+    "found": 1,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 0
+   },
+   "relationships": {
+    "expected": 1,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 1,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "html": {
+     "correct": 1,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "date": {
+     "correct": 1,
+     "total": 1
+    }
+   },
+   "examples": [
+    {
+     "outcome": "rel_missed",
+     "entity": "requests 2.34.2",
+     "detail": "author → Kenneth Reitz"
+    }
+   ],
+   "split": "heldout",
+   "extractMs": 267.9,
+   "htmlBytes": 334197,
+   "representationBytes": 1016238,
+   "truncated": false,
+   "entitiesExtracted": 414
+  },
+  {
+   "id": "heldout-tallest",
+   "category": "data_table",
+   "entityRecall": 0.98,
+   "entityDetection": 0.98,
+   "entityPrecision": 0.696,
+   "falseEntityRate": 0.304,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0.76,
+   "attributeRecall": 0.976,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.333,
+   "attributes": {
+    "correct": 287,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 7,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 98,
+    "found": 96,
+    "foundWrongType": 0,
+    "missed": 2,
+    "duplicates": 73,
+    "falseEntities": 42,
+    "targetTypedExtracted": 138
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "table": {
+     "correct": 287,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "text": {
+     "correct": 192,
+     "total": 192
+    },
+    "number": {
+     "correct": 95,
+     "total": 96
+    }
+   },
+   "examples": [
+    {
+     "outcome": "attr_missed",
+     "entity": "Petronas Tower 2",
+     "detail": "year (paths year)"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "Huiyun Center",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "entity_missed",
+     "entity": "Galaxy World Tower 2",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "Burj Khalifa†",
+     "detail": "TableRow via T5: table row"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "Merdeka Maybank Tower†",
+     "detail": "TableRow via T5: table row"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "Shanghai Tower",
+     "detail": "TableRow via T5: table row"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "Mecca Royal Clock Tower",
+     "detail": "TableRow via T5: table row"
+    }
+   ],
+   "split": "heldout",
+   "extractMs": 654.5,
+   "htmlBytes": 1349020,
+   "representationBytes": 1846578,
+   "truncated": true,
+   "entitiesExtracted": 2000
+  },
+  {
+   "id": "heldout-wstables",
+   "category": "data_table",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.825,
+   "attributes": {
+    "correct": 12,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 6,
+    "found": 6,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 6
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "table": {
+     "correct": 12,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "text": {
+     "correct": 12,
+     "total": 12
+    }
+   },
+   "examples": [],
+   "split": "heldout",
+   "extractMs": 6.7,
+   "htmlBytes": 27135,
+   "representationBytes": 28127,
+   "truncated": false,
+   "entitiesExtracted": 7
+  },
+  {
+   "id": "hn-item",
+   "category": "discussion",
+   "entityRecall": 0.75,
+   "entityDetection": 0.75,
+   "entityPrecision": 0.75,
+   "falseEntityRate": 0.25,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 0.6,
+   "attributePrecision": 1,
+   "relationshipRecall": 0.5,
+   "relationshipPrecision": 0.4,
+   "traceability": 1,
+   "textCoverage": 0.9,
+   "attributes": {
+    "correct": 3,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 2,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 4,
+    "found": 3,
+    "foundWrongType": 0,
+    "missed": 1,
+    "duplicates": 0,
+    "falseEntities": 1,
+    "targetTypedExtracted": 4
+   },
+   "relationships": {
+    "expected": 4,
+    "correct": 2,
+    "attributeOnly": 0,
+    "missed": 2,
+    "extractedFromMatched": 5,
+    "extractedCorrect": 2
+   },
+   "byMethod": {
+    "text": {
+     "correct": 3,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "date": {
+     "correct": 3,
+     "total": 3
+    }
+   },
+   "examples": [
+    {
+     "outcome": "entity_missed",
+     "entity": "Y Combinator",
+     "detail": "key text is visible on the page"
+    },
+    {
+     "outcome": "rel_missed",
+     "entity": "user2",
+     "detail": "inReplyTo → Y Combinator"
+    },
+    {
+     "outcome": "false_entity",
+     "entity": "ent_1c47007097853628",
+     "detail": "SocialMediaPosting via T3b: author + date in a repeated structure"
+    }
+   ],
+   "split": "tuning",
+   "extractMs": 6.8,
+   "htmlBytes": 6197,
+   "representationBytes": 35140,
+   "truncated": false,
+   "entitiesExtracted": 13
+  },
+  {
+   "id": "quotes",
+   "category": "posts_with_authors",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": 1,
+   "relationshipPrecision": 1,
+   "traceability": 1,
+   "textCoverage": 0.991,
+   "attributes": {
+    "correct": 10,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 10,
+    "found": 10,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 10
+   },
+   "relationships": {
+    "expected": 10,
+    "correct": 10,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 10,
+    "extractedCorrect": 10
+   },
+   "byMethod": {
+    "microdata": {
+     "correct": 10,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "text": {
+     "correct": 10,
+     "total": 10
+    }
+   },
+   "examples": [],
+   "split": "tuning",
+   "extractMs": 6.5,
+   "htmlBytes": 11064,
+   "representationBytes": 60233,
+   "truncated": false,
+   "entitiesExtracted": 29
+  },
+  {
+   "id": "usagov-agencies",
+   "category": "directory",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.991,
+   "attributes": {
+    "correct": 62,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 37,
+    "found": 37,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 37,
+    "declaredUnlabeled": 1
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "label": {
+     "correct": 62,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "contains": {
+     "correct": 37,
+     "total": 37
+    },
+    "text": {
+     "correct": 25,
+     "total": 25
+    }
+   },
+   "examples": [],
+   "split": "tuning",
+   "extractMs": 52.9,
+   "htmlBytes": 100753,
+   "representationBytes": 290593,
+   "truncated": false,
+   "entitiesExtracted": 65
+  },
+  {
+   "id": "webscraper-laptops",
+   "category": "product_listing",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.916,
+   "attributes": {
+    "correct": 351,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 117,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 117,
+    "found": 117,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 117
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "microdata": {
+     "correct": 351,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "money": {
+     "correct": 117,
+     "total": 117
+    },
+    "contains": {
+     "correct": 117,
+     "total": 117
+    },
+    "number": {
+     "correct": 117,
+     "total": 234
+    }
+   },
+   "examples": [
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Asus VivoBook X441NA-GA190",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Prestigio SmartBook 133S Dark Grey",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Prestigio SmartBook 133S Gold",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    },
+    {
+     "outcome": "attr_not_accessible",
+     "entity": "Aspire E1-510",
+     "detail": "rating (paths rating|ratingValue|aggregateRating.ratingValue)"
+    }
+   ],
+   "split": "tuning",
+   "extractMs": 136.8,
+   "htmlBytes": 179185,
+   "representationBytes": 1483712,
+   "truncated": false,
+   "entitiesExtracted": 471
+  },
+  {
+   "id": "wiki-night-train",
+   "category": "article",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": 1,
+   "relationshipPrecision": 1,
+   "traceability": 1,
+   "textCoverage": 0.475,
+   "attributes": {
+    "correct": 3,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 1,
+    "found": 1,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 1
+   },
+   "relationships": {
+    "expected": 2,
+    "correct": 2,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 2,
+    "extractedCorrect": 2
+   },
+   "byMethod": {
+    "json-ld": {
+     "correct": 3,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "contains": {
+     "correct": 1,
+     "total": 1
+    },
+    "date": {
+     "correct": 2,
+     "total": 2
+    }
+   },
+   "examples": [],
+   "split": "tuning",
+   "extractMs": 20.3,
+   "htmlBytes": 74104,
+   "representationBytes": 117720,
+   "truncated": false,
+   "entitiesExtracted": 58
+  },
+  {
+   "id": "wiki-population",
+   "category": "data_table",
+   "entityRecall": 1,
+   "entityDetection": 1,
+   "entityPrecision": 1,
+   "falseEntityRate": 0,
+   "wrongTypeRate": 0,
+   "duplicateRate": 0,
+   "attributeRecall": 1,
+   "attributePrecision": 1,
+   "relationshipRecall": null,
+   "relationshipPrecision": null,
+   "traceability": 1,
+   "textCoverage": 0.331,
+   "attributes": {
+    "correct": 240,
+    "not_understood": 0,
+    "ambiguous": 0,
+    "missed": 0,
+    "not_accessible": 0,
+    "not_present": 0
+   },
+   "entities": {
+    "expected": 240,
+    "found": 240,
+    "foundWrongType": 0,
+    "missed": 0,
+    "duplicates": 0,
+    "falseEntities": 0,
+    "targetTypedExtracted": 240
+   },
+   "relationships": {
+    "expected": 0,
+    "correct": 0,
+    "attributeOnly": 0,
+    "missed": 0,
+    "extractedFromMatched": 0,
+    "extractedCorrect": 0
+   },
+   "byMethod": {
+    "table": {
+     "correct": 240,
+     "not_understood": 0,
+     "ambiguous": 0
+    }
+   },
+   "byCompare": {
+    "number": {
+     "correct": 240,
+     "total": 240
+    }
+   },
+   "examples": [],
+   "split": "tuning",
+   "extractMs": 414.2,
+   "htmlBytes": 1390744,
+   "representationBytes": 1837964,
+   "truncated": true,
+   "entitiesExtracted": 1873
+  }
+ ]
+}

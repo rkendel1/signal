@@ -1,45 +1,45 @@
 {
   "node": "v22.23.4",
   "platform": "linux/x64",
-  "wasmInitMs": 1.168,
+  "wasmInitMs": 1.054,
   "wasmBytes": 172100,
   "decodeSmallMs": {
     "n": 2000,
-    "p50": 0.01,
-    "p95": 0.03,
-    "max": 4.481
+    "p50": 0.011,
+    "p95": 0.019,
+    "max": 3.818
   },
   "decode10KbCompressedMs": {
     "n": 500,
-    "p50": 0.079,
-    "p95": 0.11,
-    "max": 2.009
+    "p50": 0.108,
+    "p95": 0.172,
+    "max": 1.079
   },
   "pageChars": 82929,
   "scanPage_ghostpostMs": {
     "n": 50,
-    "p50": 2.057,
-    "p95": 3.485,
-    "max": 3.832
+    "p50": 2.188,
+    "p95": 3.449,
+    "max": 4.361
   },
   "scanPage_invisibleMs": {
     "n": 50,
-    "p50": 0.397,
-    "p95": 0.817,
-    "max": 1.509
+    "p50": 0.371,
+    "p95": 0.761,
+    "max": 1.194
   },
   "payloadsFoundOnPage": 50,
   "evaluateMs": {
     "n": 2000,
-    "p50": 0.193,
-    "p95": 0.414,
-    "max": 3.51
+    "p50": 0.159,
+    "p95": 0.305,
+    "max": 2.524
   },
   "observeCycleMs": {
     "n": 60,
-    "p50": 51.375,
-    "p95": 69.349,
-    "max": 83.889
+    "p50": 51.332,
+    "p95": 71.62,
+    "max": 123.095
   },
   "outcomes": {
     "event_recorded": 40,
@@ -50,12 +50,12 @@
     "suppressed_duplicate": 20
   },
   "notifications": 40,
-  "heapDeltaMb": 4.7,
-  "rssMb": 199.3,
+  "heapDeltaMb": 3.2,
+  "rssMb": 201.3,
   "pushCycleMs": {
     "n": 60,
-    "p50": 21.545,
-    "p95": 34.309,
-    "max": 38.196
+    "p50": 23.051,
+    "p95": 33.48,
+    "max": 50.956
   }
 }

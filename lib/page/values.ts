@@ -15,7 +15,8 @@ export interface Typed {
 const SYMBOL_CURRENCY: Record<string, string> = { '$': 'USD', 'US$': 'USD', '€': 'EUR', '£': 'GBP', '¥': 'JPY', '₹': 'INR', 'C$': 'CAD', 'A$': 'AUD', 'CHF': 'CHF' };
 const CODES = 'USD|EUR|GBP|JPY|INR|CAD|AUD|CHF|CNY|SEK|NOK|DKK|NZD|MXN|BRL';
 const SYM = '(?:US\\$|C\\$|A\\$|\\$|€|£|¥|₹)';
-const NUM = '\\d{1,3}(?:[,.\\u00a0 ]\\d{3})*(?:[.,]\\d{1,2})?|\\d+(?:[.,]\\d{1,2})?';
+// Grouped thousands need at least one separator; otherwise plain digits (so "1033.99" is not read as "103").
+const NUM = '\\d{1,3}(?:[,.\\u00a0 ]\\d{3})+(?:[.,]\\d{1,2})?(?!\\d)|\\d+(?:[.,]\\d{1,2})?';
 const MONEY_RE = new RegExp(`(?:(${SYM})\\s?(${NUM})(\\s?[kK])?|(${NUM})(\\s?[kK])?\\s?(${SYM}|${CODES})|(${CODES})\\s?(${NUM})(\\s?[kK])?)`);
 const RANGE_RE = new RegExp(`(${SYM}|${CODES})?\\s?(${NUM})(\\s?[kK])?\\s*(?:-|–|—|to)\\s*(${SYM}|${CODES})?\\s?(${NUM})(\\s?[kK])?`, 'i');
 const PERIOD_RE = /\b(?:per|\/|a|an)\s*(hour|hr|year|yr|annum|month|mo|week|wk|day)\b/i;
@@ -25,7 +26,7 @@ function currencyOf(token: string | undefined): string | null {
 	return SYMBOL_CURRENCY[token] ?? (new RegExp(`^(${CODES})$`).test(token) ? token : null);
 }
 function amount(n: string, k?: string): number | null {
-	const v = parseNumber(n.replace(/[  ]/g, ','));
+	const v = parseNumber(n.replace(/[\u00a0 ]/g, ''));
 	return v === null ? null : k ? v * 1000 : v;
 }
 function period(text: string): string | undefined {
@@ -182,4 +183,17 @@ export function inferText(raw: string, observedAt: string): Typed {
 	if (/^-?\d{1,3}(?:,\d{3})*(?:\.\d+)?$|^-?\d+(?:\.\d+)?$/.test(t)) return { value: parseNumber(t), dataType: 'number', provenance: 'normalized' };
 	if (EMAIL_RE.test(t)) return { value: t.toLowerCase(), dataType: 'email', provenance: 'normalized' };
 	return { value: t, dataType: 'text', provenance: 'observed' };
+}
+
+/** "3 bd | 2 ba | 1,540 sqft" → quantities, using the UNITS table. Unknown units are not guessed. */
+export function parseQuantities(text: string, units: Array<{ re: RegExp; attribute: string; unit: string }>): Array<{ attribute: string; value: number; unit: string; raw: string }> {
+	const out: Array<{ attribute: string; value: number; unit: string; raw: string }> = [];
+	// Separators are | · • or ", " — never a bare comma, which is a thousands separator ("1,540 sqft").
+	for (const part of text.split(/\s*[|·•]\s*|,\s+(?=\d)|\s{2,}/)) {
+		const m = /^(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)\s*([A-Za-z²][A-Za-z².\s]{0,14})$/.exec(part.trim());
+		if (!m) continue;
+		const u = units.find((x) => x.re.test(m[2].trim()));
+		if (u) out.push({ attribute: u.attribute, value: Number(m[1].replace(/,/g, '')), unit: u.unit, raw: part.trim() });
+	}
+	return out;
 }
