@@ -32,6 +32,13 @@
 </section>
 
 <section id="work" hidden>
+	<h2>Signal on this site</h2>
+	<p class="muted">Shows your findings and notifications on this site, and lets Signal understand what it exposes. Signal asks for access to this one site.</p>
+	<div class="row"><button id="site-toggle" type="button">Show Signal on this site</button><span id="site-state" class="muted"></span></div>
+	<p class="muted" id="sites-list"></p>
+	<div class="row"><button id="tick" type="button" class="secondary">Check now</button><span id="tick-state" class="muted"></span></div>
+	<p class="muted">While the browser runs, the extension checks every minute: it refreshes your feeds that are due and shows new notifications. Nothing runs while the browser is closed.</p>
+
 	<h2>Capture into</h2>
 	<p class="muted">A browser-capture source. Captures are partial: only what the page showed you. An item missing from a later capture is not treated as removed.</p>
 	<select id="source" aria-label="Capture source"></select>

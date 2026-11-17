@@ -213,8 +213,13 @@ export const connect = app.mutation({
     if (!def.endpoint || !["feed", "detail"].includes(def.verdict)) fail("FAILED_PRECONDITION", "This is not a requestable feed. Use page capture for what the page shows.");
     if (!def.access.automatable) fail("FAILED_PRECONDITION", "The site's robots.txt disallows automated access to this endpoint. Signal will not poll it; capture pages you view instead.");
     const hasPlaceholders = /\{[a-z]+\}/.test(def.endpoint!.pathTemplate) || def.endpoint!.params.length > 0;
-    const url = a.url ?? (hasPlaceholders ? null : `${def.endpoint!.origin}${def.endpoint!.pathTemplate}`);
-    if (!url) fail("INVALID_ARGUMENT", "This feed takes parameters: give your own URL for it (for example, the one your browser used on the site).");
+    // A parameterised feed is instantiated with this user's own parameters: the URL their browser used, from their own analysis.
+    let url = a.url ?? (hasPlaceholders ? null : `${def.endpoint!.origin}${def.endpoint!.pathTemplate}`);
+    if (!url) {
+      const mine = (await ctx.db.find(siteAnalyses, { ownerId })).sort((x, y) => y.at.localeCompare(x.at));
+      for (const an of mine) { const c = parse<SiteAnalysis>(an.result).candidates.find((x) => x.key === f.feedKey && x.endpoint?.url); if (c) { url = c.endpoint!.url!; break; } }
+    }
+    if (!url) fail("INVALID_ARGUMENT", "This feed takes parameters: analyze a page of the site that uses it (so Signal knows your own parameters), or give its URL.");
     const m = matchesDefinition(def, url!);
     if (!m.ok) fail("INVALID_ARGUMENT", `That URL does not match this feed: ${m.reason}.`);
     const acquisition = a.acquisition ?? (def.access.auth === "public" ? "server" : "browser");

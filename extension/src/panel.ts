@@ -112,4 +112,34 @@ $('capture').addEventListener('click', async () => {
 $('signout').addEventListener('click', async () => { await conn?.client.signOut().catch(() => undefined); conn = await connect(conn!.origin, false); await afterConnect(); });
 for (const id of ['disconnect', 'disconnect-signin']) $(id).addEventListener('click', async () => { await forgetInstance(conn?.client); conn = null; status(''); show('connect'); });
 
-void start();
+// ------------------------------------------------------------------ ambient: which sites show the overlay
+const send = <T>(m: Record<string, unknown>) => chrome.runtime.sendMessage<{ ok: boolean; value?: T; error?: string }>(m);
+async function siteState() {
+	const sites = (await send<string[]>({ type: 'signal.sites' })).value ?? [];
+	let origin: string | null = null;
+	try { origin = new URL((await activeTab()).url!).origin; } catch { /* no web page */ }
+	const on = !!origin && sites.includes(origin);
+	$('site-toggle').textContent = on ? 'Hide Signal on this site' : 'Show Signal on this site';
+	($('site-toggle') as HTMLButtonElement).disabled = !origin;
+	$('site-state').textContent = origin ? (on ? `on for ${new URL(origin).host}` : '') : 'open a web page';
+	$('sites-list').textContent = sites.length ? `Enabled on: ${sites.map((o) => new URL(o).host).join(', ')}` : '';
+	return { origin, on };
+}
+$('site-toggle').addEventListener('click', async () => {
+	const { origin, on } = await siteState();
+	if (!origin) return;
+	// The permission prompt needs this click (a user gesture in an extension page).
+	if (!on && !(await chrome.permissions.request({ origins: [`${origin}/*`] }))) return status(`Access to ${origin} was not granted.`, true);
+	const tab = await activeTab();
+	const r = await send({ type: 'signal.enableSite', origin, on: !on, tabId: tab.id });
+	if (!r.ok) return status(r.error ?? 'failed', true);
+	await siteState();
+	status(on ? 'Signal hidden on this site.' : 'Signal is now shown on this site.');
+});
+$('tick').addEventListener('click', async () => {
+	$('tick-state').textContent = 'checking…';
+	const r = await send<{ refreshed?: number; shown?: number; connected?: boolean }>({ type: 'signal.tick' });
+	$('tick-state').textContent = r.ok ? (r.value?.connected === false ? 'not connected' : `${r.value?.refreshed ?? 0} feeds refreshed, ${r.value?.shown ?? 0} notifications`) : r.error ?? 'failed';
+});
+
+void start().then(() => siteState()).catch(() => undefined);

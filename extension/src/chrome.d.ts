@@ -7,6 +7,10 @@ declare namespace chrome {
 		const id: string;
 		function getURL(path: string): string;
 		function sendMessage<T = unknown>(message: unknown): Promise<T>;
+		function connect(info: { name: string }): Port;
+		function getManifest(): { version: string };
+		interface Port { name: string; sender?: MessageSender; postMessage(m: unknown): void; disconnect(): void; onMessage: { addListener(cb: (m: any) => void): void }; onDisconnect: { addListener(cb: () => void): void } }
+		const onConnect: { addListener(cb: (port: Port) => void): void };
 		interface MessageSender { id?: string; tab?: tabs.Tab; url?: string }
 		const onMessage: { addListener(cb: (message: any, sender: MessageSender, sendResponse: (r: unknown) => void) => boolean | void): void };
 		const onInstalled: { addListener(cb: () => void): void };
@@ -39,9 +43,24 @@ declare namespace chrome {
 		interface InjectionResult<T> { result?: T }
 		function executeScript<A extends unknown[], T>(i: { target: { tabId: number }; func: (...args: A) => T; args?: A; world?: 'ISOLATED' | 'MAIN' }): Promise<Array<InjectionResult<Awaited<T>>>>;
 		function executeScript(i: { target: { tabId: number }; files: string[]; world?: 'ISOLATED' | 'MAIN' }): Promise<Array<InjectionResult<unknown>>>;
+		function registerContentScripts(s: Array<{ id: string; matches: string[]; js: string[]; runAt?: 'document_idle' | 'document_end' | 'document_start'; persistAcrossSessions?: boolean }>): Promise<void>;
+		function unregisterContentScripts(f?: { ids?: string[] }): Promise<void>;
 	}
 	namespace notifications {
 		function create(id: string, o: { type: 'basic'; iconUrl: string; title: string; message: string; priority?: number }): Promise<string>;
+		function clear(id: string): void;
+		const onClicked: { addListener(cb: (id: string) => void): void };
+	}
+	namespace alarms {
+		function create(name: string, info: { periodInMinutes?: number; delayInMinutes?: number }): Promise<void>;
+		const onAlarm: { addListener(cb: (a: { name: string }) => void): void };
+	}
+	namespace action {
+		function setBadgeText(d: { text: string }): Promise<void>;
+		function setBadgeBackgroundColor(d: { color: string }): Promise<void>;
+	}
+	namespace tabs {
+		function create(p: { url: string; active?: boolean }): Promise<Tab>;
 	}
 	namespace sidePanel {
 		function setPanelBehavior(b: { openPanelOnActionClick: boolean }): Promise<void>;

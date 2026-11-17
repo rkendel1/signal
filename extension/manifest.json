@@ -1,8 +1,8 @@
 {
 	"manifest_version": 3,
 	"name": "Signal",
-	"version": "0.3.0",
-	"description": "Capture the page you are viewing into a Signal browser-capture source and see which of your findings it affects.",
+	"version": "0.4.0",
+	"description": "Signal where you work: findings and notifications on the sites you choose, an understanding of what those sites expose, and capture of what you see.",
 	"minimum_chrome_version": "116",
 	"background": {
 		"service_worker": "background.js",
@@ -23,7 +23,9 @@
 		"storage",
 		"activeTab",
 		"scripting",
-		"tabs"
+		"tabs",
+		"alarms",
+		"notifications"
 	],
 	"icons": {
 		"16": "icons/icon16.png",

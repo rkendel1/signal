@@ -41,11 +41,21 @@ export const context = app.query({
     const mine = (await ctx.db.find(sources, { ownerId })).filter((x) => x.status !== "removed" && ((site && "siteId" in site && x.siteId === site.siteId) || (x.kind === "page_capture" && hits.some((h) => h.sourceId === x.id))));
     const types = new Set(mine.map((x) => x.entityType));
     const watching = (await ctx.db.find(criteria, { ownerId })).filter((c) => !c.removed && types.has(c.entityType)).map((c) => ({ id: c.id, name: c.name, enabled: c.enabled, version: c.activeVersion }));
+    // Open findings built on this user's sources for this site (the site's feeds and captures), newest first.
+    const siteEntityIds = new Set<string>();
+    for (const src of mine) for (const l of await ctx.db.find(links, { sourceId: src.id })) siteEntityIds.add(l.entityId);
+    const siteFindings = [];
+    if (siteEntityIds.size) for (const f of await ctx.db.find(findings, { ownerId, status: "open" })) {
+      if (!siteEntityIds.has(f.entityId) || entityIds.has(f.entityId) || f.dismissedAt || (f.snoozedUntil && f.snoozedUntil > now)) continue;
+      if (!crit.has(f.criteriaId)) crit.set(f.criteriaId, await ctx.db.get(criteria, f.criteriaId));
+      siteFindings.push({ id: f.id, entityId: f.entityId, entityLabel: f.entityLabel ?? null, criteriaName: crit.get(f.criteriaId)?.name ?? "", status: f.status, change: f.change, qualification: f.qualification, summary: f.summary, confidence: f.confidence, lastChangedAt: f.lastChangedAt, snoozedUntil: null, acknowledged: Boolean(f.acknowledgedAt) });
+    }
+    siteFindings.sort((x, y) => y.lastChangedAt.localeCompare(x.lastChangedAt));
     const captureSources = (await ctx.db.find(sources, { ownerId })).filter((x) => x.kind === "page_capture" && x.status !== "removed").map((x) => ({ id: x.id, name: x.name, pageTypes: parse<{ pageTypes?: string[] }>(x.mapping).pageTypes ?? [] }));
     return {
       url, site,
       sources: mine.map((x) => ({ id: x.id, name: x.name, kind: x.kind, status: x.status, statusReason: x.statusReason ?? null, records: x.records, acquisition: x.acquisition ?? null, lastSuccessAt: x.lastSuccessAt ?? null, lastChangeAt: x.lastChangeAt ?? null, refresh: refreshStatement(x.kind, x.refreshMode, x.intervalMinutes), nextRefreshAt: x.refreshMode === "poll" && x.intervalMinutes ? new Date(Date.parse(x.lastRefreshAt ?? x.createdAt) + x.intervalMinutes * 60_000).toISOString() : null })),
-      entities: entityIds.size, findings: pageFindings.slice(0, 20), watching, captureSources,
+      entities: entityIds.size, findings: pageFindings.slice(0, 20), siteFindings: siteFindings.slice(0, 20), watching, captureSources,
       notices: { active: active.length, contextual: active.filter((n) => n.urls.includes(url)).length, items: active.slice(0, 15).map(view) },
       timing: { recognizeMs: tRecognize, totalMs: Math.round(performance.now() - t0) },
     };
