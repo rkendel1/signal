@@ -13,11 +13,11 @@
 <section id="connect" hidden>
 	<h2>Connect to your Signal instance</h2>
 	<form id="connect-form">
-		<label for="instance">Instance URL</label>
-		<input id="instance" type="url" placeholder="https://signal.example.com" required autocomplete="url">
+		<label for="instance">Your Signal server’s address (not the page to capture)</label>
+		<input id="instance" type="url" placeholder="http://localhost:3000" required autocomplete="url">
 		<button type="submit">Connect</button>
 	</form>
-	<p class="muted">Signal asks for access to that one address. Pages are read only when you capture them.</p>
+	<p class="muted">This is where your Signal app runs — locally after <code>npm run dev</code>, or your deployed instance. Signal asks for access to that one address. To read a page, open it in a tab and press “Capture this page” after connecting.</p>
 </section>
 
 <section id="signin" hidden>

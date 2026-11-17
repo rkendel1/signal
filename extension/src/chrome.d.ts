@@ -25,6 +25,7 @@ declare namespace chrome {
 	namespace permissions {
 		function request(p: { origins?: string[] }): Promise<boolean>;
 		function contains(p: { origins?: string[] }): Promise<boolean>;
+		function remove(p: { origins?: string[] }): Promise<boolean>;
 	}
 	namespace tabs {
 		interface Tab { id?: number; url?: string; title?: string; windowId: number; lastAccessed?: number }

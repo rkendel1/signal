@@ -42,12 +42,23 @@ export interface Connection { client: FeltKitClient; origin: string; session: Se
 /** Connect to an instance: host permission for that one origin, then check it is a Signal app. */
 export async function connect(origin: string, requestPermission = true): Promise<Connection> {
 	const pattern = `${origin}/*`;
+	let granted = false;
 	if (!(await chrome.permissions.contains({ origins: [pattern] }))) {
 		if (!requestPermission || !(await chrome.permissions.request({ origins: [pattern] }))) throw new Error(`Access to ${origin} was not granted.`);
+		granted = true;
 	}
+	const notSignal = async (why: string) => {
+		if (granted) await chrome.permissions.remove({ origins: [pattern] }).catch(() => undefined); // do not keep access to a site that is not the instance
+		return new Error(`${origin} is not a Signal instance (${why}). Enter the address where your Signal app runs, for example http://localhost:3000 after \`npm run dev\` — not the page you want to capture. Open that page in a tab and use “Capture this page”.`);
+	};
 	const client = createClient({ url: origin, session: 'bearer', tokens: await chromeTokenStore() });
-	const session = await client.session();
-	if (session.application !== 'signal') throw new Error(`${origin} is "${session.application}", not a Signal instance.`);
+	let session: SessionInfo;
+	try { session = await client.session(); } catch (e) {
+		if (e instanceof TypeError && /fetch/i.test(e.message)) throw new Error(`Could not reach ${origin}. Is your Signal app running there?`);
+		throw await notSignal(e instanceof SyntaxError ? 'it answered with a web page, not the FeltKit session API' : errorText(e));
+	}
+	if (!session || typeof session !== 'object' || !('application' in session)) throw await notSignal('no FeltKit session API');
+	if (session.application !== 'signal') throw await notSignal(`it is the FeltKit app "${session.application}"`);
 	await chrome.storage.local.set({ [K.instance]: origin });
 	return { client, origin, session };
 }

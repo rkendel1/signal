@@ -82,6 +82,16 @@ test('extension: connect, sign in, capture rendered pages, discover, re-capture 
 	await panel.goto(`chrome-extension://${extId}/panel.html`);
 	const statusText = () => panel.textContent('#status');
 
+	// A page address entered by mistake (an ordinary site answering /api/session with an HTML 404) is explained, not a JSON error.
+	site.set('/api/session', { status: 404, body: '<!DOCTYPE html><html><body>Page not found</body></html>' });
+	await panel.fill('#instance', `${site.url}/search`);
+	await panel.click('#connect-form button');
+	await panel.waitForFunction(() => document.getElementById('status')!.classList.contains('error'));
+	const wrong = String(await statusText());
+	assert.match(wrong, /is not a Signal instance \(it answered with a web page, not the FeltKit session API\)/);
+	assert.match(wrong, /not the page you want to capture/);
+	assert.doesNotMatch(wrong, /Unexpected token|JSON/);
+
 	// Connect and sign in (development instance: dev users).
 	await panel.fill('#instance', instance);
 	await panel.click('#connect-form button');
