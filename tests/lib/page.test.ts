@@ -21,6 +21,19 @@ const val = (e: PageEntity, name: string) => e.attributes.find((a) => a.name ===
 const byName = (r: PageRepresentation, type: string, name: string) => of(r, type).find((e) => val(e, 'name') === name)!;
 const related = (r: PageRepresentation, from: string, type: string) => r.relationships.filter((x) => x.from === from && x.type === type).map((x) => r.entities.find((e) => e.id === x.to)!);
 
+test('listing cards without headings: quantities split across <b>/<abbr> belong to the card, the <address> names it', () => {
+	const r = run('listing-cards');
+	const homes = of(r, 'RealEstateListing');
+	assert.equal(homes.length, 4, 'four cards, typed by price + accommodation quantities (not Product)');
+	assert.equal(of(r, 'ListItem').length, 0, 'the "3 bds / 2 ba / sqft" list states facts of the card, not records');
+	assert.equal(of(r, 'Product').length, 0);
+	const first = homes.find((h) => val(h, 'name') === '1 Main St, Town, RI 02893')!;
+	assert.deepEqual([val(first, 'numberOfBedrooms'), val(first, 'numberOfBathrooms'), val(first, 'floorSize'), val(first, 'address')], [3, 2, 1501, '1 Main St, Town, RI 02893']);
+	assert.deepEqual(val(first, 'price'), { amount: 374900, currency: 'USD' });
+	assert.deepEqual(val(first, 'priceReduction'), { amount: 20000, currency: 'USD' });
+	assert.equal(first.identity.strength, 'strong', 'identified by its detail-page link');
+});
+
 test('product listing: each product keeps its own price, availability and seller', () => {
 	const r = run('products');
 	const products = of(r, 'Product');

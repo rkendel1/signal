@@ -533,6 +533,14 @@ function recordFields(b: Builder, root: Element, opts: { excludeNested?: Set<Ele
 	// name: first heading
 	const heading = all.find((e) => /^h[1-6]$/.test(e.tagName) || e.attribs.role === 'heading');
 	if (heading && b.text(heading)) { add({ name: 'name', typed: { value: b.text(heading), dataType: 'text', provenance: 'observed' }, raw: b.text(heading), el: heading, method: 'html', confidence: 0.9 }); consumed.add(heading); }
+	// <address> is HTML's element for an address. In a record without a heading (a listing card), it also names the record.
+	const addr = all.find((e) => e.tagName === 'address' && !isHidden(e));
+	if (addr && b.text(addr)) {
+		const text = b.text(addr);
+		add({ name: 'address', typed: { value: text, dataType: 'text', provenance: 'observed' }, raw: text, el: addr, method: 'html', confidence: 0.9 });
+		if (!heading || !b.text(heading)) add({ name: 'name', typed: { value: text, dataType: 'text', provenance: 'observed' }, raw: text, el: addr, method: 'html', confidence: 0.6 });
+		consumed.add(addr);
+	}
 	// time elements
 	for (const t of all.filter((e) => e.tagName === 'time')) {
 		const raw = t.attribs.datetime ?? b.text(t);
@@ -568,6 +576,18 @@ function recordFields(b: Builder, root: Element, opts: { excludeNested?: Set<Ele
 		return visibleText(out.join(' ')).slice(0, b.limits.maxTextLength);
 	};
 	const hasConsumedChild = (el: Element): boolean => (el.children ?? []).some((c) => isEl(c) && (consumed.has(c) || hasConsumedChild(c)));
+	// A quantity split across inline markup (<b>3</b> <abbr>bds</abbr>) is one fact: read it from the smallest
+	// element whose whole text is exactly one quantity, before its parts are read on their own.
+	const INLINE = new Set(['b', 'strong', 'em', 'i', 'span', 'abbr', 'small', 'sup', 'sub', 'data']);
+	for (const el of all) {
+		if (consumed.has(el) || INLINE.has(el.tagName) || !(el.children ?? []).some(isEl) || !(el.children ?? []).every((c) => !isEl(c) || INLINE.has(c.tagName))) continue;
+		const text = b.text(el);
+		if (!text || text.length > 40) continue;
+		const q = parseQuantities(text, UNITS);
+		if (q.length !== 1) continue;
+		add({ name: q[0].attribute, typed: { value: q[0].value, dataType: 'number', provenance: 'normalized' }, raw: q[0].raw, el, method: 'text', confidence: 0.9 });
+		consumed.add(el);
+	}
 	for (const el of leafish) {
 		// Skip leaves inside an already-consumed element (ancestor walk: O(depth), not O(n)).
 		let anc: AnyNode | null = el.parent, inside = false;
@@ -851,6 +871,9 @@ function repeated(b: Builder, pageId: string | null): void {
 	// Record-like groups: members must yield at least two fields, including a name or a typed value.
 	const accepted: Array<{ parent: Element; sig: string; members: Element[]; fields: Field[][] }> = [];
 	for (const g of groups) {
+		// A list whose every item is one quantity ("3 bds", "2 ba", "1,570 sqft") states facts of its container,
+		// not records of its own: leave it to the container's fields.
+		if (g.members.every((m) => { const t = b.text(m); return t.length <= 40 && parseQuantities(t, UNITS).length === 1 && !/[a-z]{3,}\s+[a-z]{3,}/i.test(t.replace(/^[\d.,\s]+/, '').split(/\s+/).slice(1).join(' ')); })) continue;
 		const fields = g.members.map((m) => recordFields(b, m));
 		const recordLike = fields.filter((f) => f.length >= 2 && f.some((x) => x.name === 'name' || x.typed.dataType !== 'text')).length;
 		if (recordLike >= Math.ceil(g.members.length * 0.6)) accepted.push({ ...g, fields });

@@ -1,5 +1,5 @@
 {
- "evaluatedAt": "2026-11-17T17:05:19.622Z",
+ "evaluatedAt": "2026-11-17T19:03:04.055Z",
  "pages": [
   {
    "id": "arxiv-abs",
@@ -60,7 +60,7 @@
    },
    "examples": [],
    "split": "tuning",
-   "extractMs": 79.9,
+   "extractMs": 72.5,
    "htmlBytes": 39541,
    "representationBytes": 114184,
    "truncated": true,
@@ -159,7 +159,7 @@
     }
    ],
    "split": "tuning",
-   "extractMs": 50.4,
+   "extractMs": 40.9,
    "htmlBytes": 51294,
    "representationBytes": 213333,
    "truncated": false,
@@ -252,7 +252,7 @@
     }
    ],
    "split": "tuning",
-   "extractMs": 4.6,
+   "extractMs": 4.2,
    "htmlBytes": 9279,
    "representationBytes": 25059,
    "truncated": false,
@@ -326,7 +326,7 @@
    },
    "examples": [],
    "split": "tuning",
-   "extractMs": 127,
+   "extractMs": 125.7,
    "htmlBytes": 104429,
    "representationBytes": 534241,
    "truncated": false,
@@ -402,7 +402,7 @@
     }
    ],
    "split": "heldout",
-   "extractMs": 168.4,
+   "extractMs": 132.8,
    "htmlBytes": 203728,
    "representationBytes": 981838,
    "truncated": false,
@@ -463,7 +463,7 @@
    },
    "examples": [],
    "split": "heldout",
-   "extractMs": 20.4,
+   "extractMs": 19.4,
    "htmlBytes": 50806,
    "representationBytes": 153621,
    "truncated": false,
@@ -537,7 +537,7 @@
    },
    "examples": [],
    "split": "heldout",
-   "extractMs": 11.8,
+   "extractMs": 15.9,
    "htmlBytes": 39223,
    "representationBytes": 37066,
    "truncated": false,
@@ -556,7 +556,7 @@
    "attributePrecision": 1,
    "relationshipRecall": 0,
    "relationshipPrecision": null,
-   "traceability": 0.998,
+   "traceability": 1,
    "textCoverage": 0.735,
    "attributes": {
     "correct": 1,
@@ -604,9 +604,9 @@
     }
    ],
    "split": "heldout",
-   "extractMs": 267.9,
+   "extractMs": 232.3,
    "htmlBytes": 334197,
-   "representationBytes": 1016238,
+   "representationBytes": 1015159,
    "truncated": false,
    "entitiesExtracted": 414
   },
@@ -624,7 +624,7 @@
    "relationshipRecall": null,
    "relationshipPrecision": null,
    "traceability": 1,
-   "textCoverage": 0.333,
+   "textCoverage": 0.33,
    "attributes": {
     "correct": 287,
     "not_understood": 0,
@@ -705,11 +705,11 @@
     }
    ],
    "split": "heldout",
-   "extractMs": 654.5,
+   "extractMs": 651,
    "htmlBytes": 1349020,
-   "representationBytes": 1846578,
+   "representationBytes": 2381417,
    "truncated": true,
-   "entitiesExtracted": 2000
+   "entitiesExtracted": 1888
   },
   {
    "id": "heldout-wstables",
@@ -766,7 +766,7 @@
    },
    "examples": [],
    "split": "heldout",
-   "extractMs": 6.7,
+   "extractMs": 5.3,
    "htmlBytes": 27135,
    "representationBytes": 28127,
    "truncated": false,
@@ -843,7 +843,7 @@
     }
    ],
    "split": "tuning",
-   "extractMs": 6.8,
+   "extractMs": 8.8,
    "htmlBytes": 6197,
    "representationBytes": 35140,
    "truncated": false,
@@ -904,7 +904,7 @@
    },
    "examples": [],
    "split": "tuning",
-   "extractMs": 6.5,
+   "extractMs": 6.4,
    "htmlBytes": 11064,
    "representationBytes": 60233,
    "truncated": false,
@@ -970,7 +970,7 @@
    },
    "examples": [],
    "split": "tuning",
-   "extractMs": 52.9,
+   "extractMs": 51.5,
    "htmlBytes": 100753,
    "representationBytes": 290593,
    "truncated": false,
@@ -1060,7 +1060,7 @@
     }
    ],
    "split": "tuning",
-   "extractMs": 136.8,
+   "extractMs": 139,
    "htmlBytes": 179185,
    "representationBytes": 1483712,
    "truncated": false,
@@ -1080,7 +1080,7 @@
    "relationshipRecall": 1,
    "relationshipPrecision": 1,
    "traceability": 1,
-   "textCoverage": 0.475,
+   "textCoverage": 0.47,
    "attributes": {
     "correct": 3,
     "not_understood": 0,
@@ -1125,11 +1125,11 @@
    },
    "examples": [],
    "split": "tuning",
-   "extractMs": 20.3,
+   "extractMs": 18.5,
    "htmlBytes": 74104,
-   "representationBytes": 117720,
+   "representationBytes": 115397,
    "truncated": false,
-   "entitiesExtracted": 58
+   "entitiesExtracted": 55
   },
   {
    "id": "wiki-population",
@@ -1145,7 +1145,7 @@
    "relationshipRecall": null,
    "relationshipPrecision": null,
    "traceability": 1,
-   "textCoverage": 0.331,
+   "textCoverage": 0.33,
    "attributes": {
     "correct": 240,
     "not_understood": 0,
@@ -1186,11 +1186,11 @@
    },
    "examples": [],
    "split": "tuning",
-   "extractMs": 414.2,
+   "extractMs": 508,
    "htmlBytes": 1390744,
-   "representationBytes": 1837964,
+   "representationBytes": 1963136,
    "truncated": true,
-   "entitiesExtracted": 1873
+   "entitiesExtracted": 1600
   }
  ]
 }

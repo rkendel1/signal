@@ -108,6 +108,11 @@ The stages run in a fixed order. No site-specific code exists.
 
 **Known misfire (measured, G-PAGE-12):** a land-lot card (price + image, no bedrooms) is typed `Product` by T2.
 
+**Listing-card rules** (from a real capture that failed; synthetic fixture `listing-cards.html`):
+- A list whose every item is one quantity ("3 bds", "2 ba", "1,570 sqft") states facts of its container, not records.
+- A quantity split across inline markup (`<b>3</b> <abbr>bds</abbr>`) is read as one fact from the smallest element whose whole text is that quantity.
+- An `<address>` element gives an `address` attribute and, when the record has no heading, its name.
+
 **Other M7 rules** (each from a real-page failure; see PAGE_QUALITY.md §3):
 - the main record (the innermost container of the single h1) receives page-level property tables and labelled facts;
 - `Label:` elements with a sibling value are paired;
